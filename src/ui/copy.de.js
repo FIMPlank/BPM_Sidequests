@@ -225,7 +225,49 @@
       waehlen: 'Diesen Ort wählen',
       gewaehlt: 'Ihr Ort',
       ablaufTitel: 'Was in diesem Lauf passiert ist',
-      kontrollpunktSchritt: 'Freigabe durch einen Menschen'
+      kontrollpunktSchritt: 'Freigabe durch einen Menschen',
+
+      // — Teil 2: die Kombination —
+      kombiTitel: 'Drei Regeln, drei Orte',
+      kombiLead: 'Weisen Sie jeder Regel einen Ort zu. Die Mischung ergibt eine Architektur.',
+      spalteRegel: 'Regel',
+      regelnamen: {
+        eigen: 'Ihre Regel',
+        zahlung: 'Erstattungen über 1.000 €',
+        beleg: 'Belegpflicht'
+      },
+      offen: 'Noch nicht zugewiesen',
+      zuruecksetzen: 'Zuordnung zurücksetzen'
+    },
+
+    /**
+     * Die vier Muster in der Sprache des Whitepapers. Das Ergebnis wird
+     * benannt, nicht bewertet — auch dann, wenn es keine gute Idee war.
+     */
+    muster: {
+      satz: 'Sie haben gerade {muster} gebaut.',
+      m1: {
+        name: 'Muster 1 — Imperative Steuerung mit KI-Unterstützung',
+        beschreibung: 'Der Ablauf steht fest, die KI arbeitet innerhalb vorgegebener Schritte zu.',
+        einsatz: 'Typisch dort, wo jeder Schritt belegt sein muss: Zahlungsverkehr, Meldewesen.',
+        entartet: 'Sie haben den alten Prozess nachgebaut — mit Zusatzkosten für die KI.'
+      },
+      m2: {
+        name: 'Muster 2 — Deklarative Ziele, imperative Kontrollpunkte',
+        beschreibung: 'Der Agent wählt seinen Weg frei und muss an festen Punkten durch eine Freigabe.',
+        einsatz: 'Typisch dort, wo Tempo zählt, aber einzelne Entscheidungen einen Menschen brauchen.'
+      },
+      m3: {
+        name: 'Muster 3 — Deklarativer Handlungsraum mit Leitplanken',
+        beschreibung: 'Kein Mensch wartet. Die Werkzeuggrenze weist ab, was nicht erlaubt ist.',
+        einsatz: 'Typisch für Vorgänge mit hoher Stückzahl und klar beschreibbaren Grenzen.'
+      },
+      m4: {
+        name: 'Muster 4 — Freie Autonomie mit nachgelagerter Prüfung',
+        beschreibung: 'Nichts hält den Agenten auf. Abweichungen fallen erst im Protokoll auf.',
+        einsatz: 'Typisch für kleine Beträge, wo Prüfen teurer wäre als der mögliche Schaden.',
+        entartet: 'Sie prüfen nur noch, was schon passiert ist.'
+      }
     },
 
     screen4: {

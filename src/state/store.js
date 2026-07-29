@@ -44,7 +44,9 @@
       /** In Akt 1 gewaehlte, noch nicht eingeworfene Stoerung. */
       stoerungWahl: null,
       /** Der in Akt 4 gewaehlte Ort der Regel. */
-      platzierung: null
+      platzierung: null,
+      /** Akt 4, Teil 2: je Regel ein Ort. */
+      zuordnung: HR.muster.leereZuordnung()
     };
   }
 
@@ -157,6 +159,18 @@
         n = kopie(z);
         n.platzierung = HR.platzierung.PLATZIERUNGEN.indexOf(a.wert) === -1 ? null : a.wert;
         return n;
+
+      case 'zuordnung': {
+        if (HR.muster.REGELPLAETZE.indexOf(a.regel) === -1) return z;
+        if (HR.platzierung.PLATZIERUNGEN.indexOf(a.ort) === -1) return z;
+        n = kopie(z);
+        n.zuordnung = kopie(z.zuordnung);
+        n.zuordnung[a.regel] = a.ort;
+        return n;
+      }
+
+      case 'zuordnung_zuruecksetzen':
+        n = kopie(z); n.zuordnung = HR.muster.leereZuordnung(); return n;
 
       case 'antwort2':
         n = kopie(z); n.antwort2 = a.wert; return n;

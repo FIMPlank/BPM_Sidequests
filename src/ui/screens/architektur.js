@@ -89,6 +89,95 @@
     return h.join('');
   }
 
+  // — Teil 2: die Kombination ————————————————————————————————
+
+  /** Die drei Regeln der Kombination: die eigene plus zwei uebliche. */
+  var ZUSATZSAETZE = {
+    zahlung: 'Erstattungen über 1.000 € brauchen eine Freigabe',
+    beleg: 'Keine Abrechnung ohne geprüften Beleg'
+  };
+
+  function kombiRegeln(z) {
+    var wahl = regelDesBesuchers(z);
+    return {
+      eigen: wahl.regel,
+      zahlung: HR.compiler.uebersetzen(ZUSATZSAETZE.zahlung, { id: 'K-1' }).constraint,
+      beleg: HR.compiler.uebersetzen(ZUSATZSAETZE.beleg, { id: 'K-2' }).constraint
+    };
+  }
+
+  function zuordnungszeile(z, platz, regel) {
+    var e = HR.render.esc;
+    var s = HR.copy.akt4;
+    var gesetzt = z.zuordnung[platz];
+    var h = ['<tr class="zuordnung__zeile' + (gesetzt ? ' ist-gesetzt' : '') + '">'];
+    h.push('<th scope="row" class="zuordnung__regel">' +
+      '<span class="zuordnung__name">' + e(s.regelnamen[platz]) + '</span>' +
+      '<span class="zuordnung__text">' + e(regel.text_de) + '</span></th>');
+    HR.platzierung.PLATZIERUNGEN.forEach(function (ort) {
+      h.push('<td class="zuordnung__zelle">' +
+        HR.render.knopf('zuordnung', s.orte[ort], {
+          wert: platz + ':' + ort,
+          klasse: 'knopf--klein',
+          gedrueckt: gesetzt === ort
+        }) + '</td>');
+    });
+    h.push('</tr>');
+    return h.join('');
+  }
+
+  /** Das Ergebnis in der Sprache des Papiers — auch wenn es keins zum Vorzeigen ist. */
+  function musterkarte(z) {
+    var e = HR.render.esc;
+    var s = HR.copy.akt4;
+    var treffer = HR.muster.bestimmen(z.zuordnung);
+    if (!treffer) return '<p class="hinweis">' + e(s.offen) + '</p>';
+
+    var m = HR.copy.muster[treffer.schluessel];
+    var h = ['<div class="muster' + (treffer.entartet ? ' ist-entartet' : '') + '" role="status">'];
+    if (treffer.entartet && m.entartet) {
+      h.push('<p class="muster__satz">' + e(m.entartet) + '</p>');
+      h.push('<p class="muster__name">' + e(m.name) + '</p>');
+    } else {
+      h.push('<p class="muster__satz">' +
+        e(HR.copy.muster.satz.replace('{muster}', m.name)) + '</p>');
+    }
+    h.push('<p class="muster__beschreibung">' + e(m.beschreibung) + '</p>');
+    h.push('<p class="muster__einsatz">' + e(m.einsatz) + '</p>');
+    h.push('</div>');
+    return h.join('');
+  }
+
+  function kombination(z) {
+    var e = HR.render.esc;
+    var s = HR.copy.akt4;
+    var regeln = kombiRegeln(z);
+    var h = [];
+
+    h.push('<h2 class="abschnitt__titel">' + e(s.kombiTitel) + '</h2>');
+    h.push('<p class="hinweis">' + e(s.kombiLead) + '</p>');
+
+    h.push('<div class="logtabelle__rahmen"><table class="zuordnung"><thead><tr>');
+    h.push('<th scope="col">' + e(s.spalteRegel) + '</th>');
+    HR.platzierung.PLATZIERUNGEN.forEach(function (ort) {
+      h.push('<th scope="col">' + e(s.orte[ort]) + '</th>');
+    });
+    h.push('</tr></thead><tbody>');
+    HR.muster.REGELPLAETZE.forEach(function (platz) {
+      h.push(zuordnungszeile(z, platz, regeln[platz]));
+    });
+    h.push('</tbody></table></div>');
+
+    h.push(musterkarte(z));
+
+    if (HR.muster.vollstaendig(z.zuordnung)) {
+      h.push('<div class="steuerung">' +
+        HR.render.knopf('zuordnung-zuruecksetzen', s.zuruecksetzen, { klasse: 'knopf--still' }) +
+        '</div>');
+    }
+    return h.join('');
+  }
+
   function zeichnen(z) {
     var e = HR.render.esc;
     var s = HR.copy.akt4;
@@ -118,6 +207,8 @@
       h.push('<h2 class="abschnitt__titel">' + e(s.ablaufTitel) + '</h2>');
       h.push(HR.komponenten.logTabelle.kurz(gewaehlt.trajektorie));
     }
+
+    h.push(kombination(z));
 
     h.push('<div class="steuerung">');
     h.push(HR.render.knopf('akt', HR.copy.screen4.titel, { wert: 5 }));
@@ -157,13 +248,22 @@
   }
 
   HR.render.auf('platzierung', waehlen);
+  HR.render.auf('zuordnung', function (wert) {
+    var teile = String(wert).split(':');
+    HR.store.senden({ typ: 'zuordnung', regel: teile[0], ort: teile[1] });
+  });
+  HR.render.auf('zuordnung-zuruecksetzen', function () {
+    HR.store.senden({ typ: 'zuordnung_zuruecksetzen' });
+  });
 
   HR.render.bildschirm(4, {
     zeichnen: zeichnen,
     laeufe: laeufe,
     regelDesBesuchers: regelDesBesuchers,
     regelnFuerLauf: regelnFuerLauf,
+    kombiRegeln: kombiRegeln,
     waehlen: waehlen,
-    BEISPIELSATZ: BEISPIELSATZ
+    BEISPIELSATZ: BEISPIELSATZ,
+    ZUSATZSAETZE: ZUSATZSAETZE
   });
 })(window.HR = window.HR || {});

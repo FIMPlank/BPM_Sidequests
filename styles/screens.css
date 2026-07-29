@@ -382,3 +382,42 @@
     .ort:first-child { border-top: 0; }
   }
 }
+
+@layer screens {
+  /* Akt 4, Teil 2 — drei Regeln, drei Orte, ein Name fuer das Ergebnis. */
+  .zuordnung { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+  .zuordnung th, .zuordnung td {
+    text-align: left;
+    padding: var(--r2);
+    border-bottom: var(--haarlinie) solid var(--raster);
+    vertical-align: top;
+  }
+  .zuordnung thead th {
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--ink-leise);
+    font-weight: 500;
+  }
+  .zuordnung__regel { font-weight: 500; }
+  .zuordnung__name { display: block; }
+  .zuordnung__text { display: block; color: var(--ink-leise); font-size: 0.8125rem; }
+  .zuordnung__zeile.ist-gesetzt .zuordnung__name { color: var(--ink); }
+
+  .muster {
+    margin: var(--r3) 0;
+    padding: var(--r3);
+    border: var(--haarlinie) solid var(--ink);
+    max-width: 68ch;
+  }
+  .muster.ist-entartet { border-style: dashed; }
+  .muster__satz {
+    margin: 0 0 var(--r1);
+    font-family: var(--font-display);
+    font-size: 1.1875rem;
+    line-height: 1.35;
+  }
+  .muster__name { margin: 0 0 var(--r1); color: var(--ink-mittel); font-size: 0.9375rem; }
+  .muster__beschreibung { margin: 0 0 4px; }
+  .muster__einsatz { margin: 0; color: var(--ink-leise); font-size: 0.875rem; }
+}

@@ -113,3 +113,10 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - **Restrisiko** ist der ausgezahlte Betrag, wenn der Checker Verstoesse findet, sonst null. Konkret statt „hoch/mittel/niedrig“: im Nachgang stehen 520,00 € offen, an den beiden anderen Orten nichts.
 - Die guenstige Stelle (Leitplanke: schnell, billig, nichts offen) wird **nicht** beschriftet — dieselbe Zurueckhaltung wie beim Plot in der ersten Fassung. Sie soll sich aus den Zahlen ergeben.
 - Ohne eigene Regel greift der Akt auf die Beispielregel zurueck, damit `?akt=4` ohne Vorlauf funktioniert. Ein Hinweis sagt das an.
+
+## v2 — V2-08 (Akt 4, Teil 2: Kombination und Muster)
+- Die Zuordnung haengt **nur an den Anzahlen**, nicht daran, welche Regel wo steht. Was eine Architektur ausmacht, ist ihr Schwerpunkt; ob die Belegpflicht oder die Zahlungsgrenze am harten Punkt haengt, aendert das Muster nicht. Ein Test haelt die Vertauschbarkeit fest.
+- Die Zuordnungsregel in Worten: alles imperativ → Muster 1 (Randfall); alles nachgelagert → Muster 4 (Randfall); mindestens ein Kontrollpunkt *und* mindestens eine Leitplanke → Muster 2 (die These); kein Kontrollpunkt → Muster 3 oder 4, je nachdem ob Leitplanken oder Nachgang ueberwiegen; keine Leitplanke → Muster 1 oder 4 nach demselben Massstab. Alle 27 Belegungen werden erschoepfend geprueft, jede trifft eines der vier Muster.
+- Die beiden Randfaelle bekommen **statt** des „Sie haben gerade … gebaut“-Satzes ihren eigenen, unfreundlichen Satz, und darunter trotzdem den Musternamen. Ein Ergebnis zu benennen und ein Ergebnis zu loben sind zwei verschiedene Dinge.
+- Die beiden Zusatzregeln laufen durch `HR.compiler.uebersetzen`, also durch genau den Weg, den auch der Besucher benutzt. Haette ich sie als Objekte hingeschrieben, waere unbewiesen geblieben, dass sie im geschlossenen Schema ueberhaupt ausdrueckbar sind.
+- Die Mustertexte stehen in `copy.de.js`, nicht in `muster.js`. `muster.js` liefert nur den Schluessel — dieselbe Trennung wie im Rest des Hauses.
