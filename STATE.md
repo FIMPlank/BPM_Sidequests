@@ -17,7 +17,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 | V2-09 | done | 07 | Die Verschmelzung zu einer Fläche | 2026-07-29 | 7 Dateien |
 | V2-10 | done | 08 | Plot nach Akt 4 | 2026-07-29 | 4 Dateien |
 | V2-11 | done | 08 | Akt 5 — Spalte Platzierung, A/B-Vergleich | 2026-07-29 | 6 Dateien |
-| V2-12 | wip  | 11 | Vortragsmodus über fünf Akte | | |
+| V2-12 | done | 11 | Vortragsmodus über fünf Akte | 2026-07-29 | 5 Dateien |
 | V2-13 | todo | 12 | Textdurchgang | | |
 | V2-14 | todo | 13 | `DEMO.md`, `HANDOVER.md`, `README.md` | | |
 
@@ -36,3 +36,4 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 - V2-09: Eine Flaeche, Schranken mit Durchlass, 900 ms einmalig, reduzierte Bewegung mit Bildunterschrift. 323 Tests, 0 Fehler.
 - V2-10: Plot sammelt ueber die ganze Sitzung, in Akt 4. 329 Tests, 0 Fehler.
 - V2-11: Spalte Platzierung in Tabelle, CSV und JSON; Vergleich Akt 2 gegen die Architektur. 339 Tests, 0 Fehler, 42 Suiten geladen.
+- V2-12: Tastaturlauf im Browser durchgespielt, Pille in der Fusszeile. 343 Tests, 0 Fehler.

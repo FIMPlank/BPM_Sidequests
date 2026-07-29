@@ -7,6 +7,33 @@
     return HR.config.modus === 'live' ? HR.copy.seite.modusLive : HR.copy.seite.modusMock;
   }
 
+  function klick(auswahl) {
+    var knopf = document.querySelector(auswahl);
+    if (knopf && !knopf.disabled) { knopf.click(); return true; }
+    return false;
+  }
+
+  /**
+   * Die Zifferntasten bedeuten in jedem Akt das, was dort zur Wahl steht:
+   * in Akt 1 die drei Stoerungen, in Akt 4 die drei Orte der Regel.
+   * @returns {boolean} ob die Taste hier eine Bedeutung hatte
+   */
+  function ziffer(n, akt) {
+    if (akt === 1) {
+      var id = HR.imperative.STOERUNGEN[n - 1];
+      if (!id) return false;
+      // Waehlen und laufen lassen: im Vortrag soll eine Taste einen Schritt tun.
+      var gewaehlt = klick('[data-aktion="stoerung-waehlen"][data-wert="' + id + '"]');
+      return gewaehlt && klick('[data-aktion="prozess-starten"]');
+    }
+    if (akt === 4) {
+      var ort = HR.platzierung.PLATZIERUNGEN[n - 1];
+      if (!ort) return false;
+      return klick('[data-aktion="platzierung"][data-wert="' + ort + '"]');
+    }
+    return false;
+  }
+
   function tastatur(ev) {
     if (!HR.config.vortrag) return;
     var ziel = ev.target;
@@ -16,9 +43,7 @@
     else if (ev.key === 'ArrowLeft') HR.store.senden({ typ: 'akt', n: Math.max(HR.store.AKT_MIN, z.akt - 1) });
     else if (ev.key === 'r') HR.store.senden({ typ: 'reset' });
     else if (ev.key >= '1' && ev.key <= '3') {
-      var id = HR.imperative.STOERUNGEN[Number(ev.key) - 1];
-      var knopf = document.querySelector('[data-aktion="stoerung-waehlen"][data-wert="' + id + '"]');
-      if (knopf && !knopf.disabled) knopf.click();
+      if (!ziffer(Number(ev.key), z.akt)) return;
     } else return;
     ev.preventDefault();
   }

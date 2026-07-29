@@ -566,4 +566,43 @@
     });
   });
 
+  describe('Vortragsmodus', function () {
+    it('nennt die Bedienung fuer beide Akte', function () {
+      var t = HR.copy.seite.vortragHinweis;
+      expect(t).toContain('Akt 1');
+      expect(t).toContain('Akt 4');
+      expect(t.indexOf('Bildschirm')).toBe(-1);
+    });
+    it('reicht mit den Pfeiltasten ueber alle sechs Flaechen', function () {
+      var z = anfang();
+      for (var i = 0; i < 5; i++) {
+        z = red(z, { typ: 'akt', n: Math.min(HR.store.AKT_MAX, z.akt + 1) });
+      }
+      expect(z.akt).toBe(5);
+      expect(red(z, { typ: 'akt', n: Math.min(HR.store.AKT_MAX, z.akt + 1) }).akt).toBe(5);
+      for (var j = 0; j < 6; j++) {
+        z = red(z, { typ: 'akt', n: Math.max(HR.store.AKT_MIN, z.akt - 1) });
+      }
+      expect(z.akt).toBe(0);
+    });
+    it('bietet in Akt 1 drei Stoerungen und in Akt 4 drei Orte an', function () {
+      expect(HR.imperative.STOERUNGEN.length).toBe(3);
+      expect(HR.platzierung.PLATZIERUNGEN.length).toBe(3);
+      var akt1 = HR.screens[1].zeichnen(anfang());
+      HR.imperative.STOERUNGEN.forEach(function (id) {
+        expect(akt1).toContain('data-aktion="stoerung-waehlen" data-wert="' + id + '"');
+      });
+      var akt4 = HR.screens[4].zeichnen(anfang());
+      HR.platzierung.PLATZIERUNGEN.forEach(function (ort) {
+        expect(akt4).toContain('data-aktion="platzierung" data-wert="' + ort + '"');
+      });
+    });
+    it('haelt die Modus-Pille aus dem Kopf heraus', function () {
+      // Der Kopf traegt Marke, Fallzeile und Aktleiste — sonst nichts.
+      var kopf = document.querySelector('.kopf');
+      if (!kopf) return;              // in der Testseite gibt es keinen Kopf
+      expect(kopf.querySelector('#modus-pille')).toBeFalsy();
+    });
+  });
+
 })(window.HR = window.HR || {});

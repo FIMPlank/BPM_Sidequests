@@ -15,7 +15,7 @@
       weiter: 'Weiter',
       zurueck: 'Zurück',
       zumInhalt: 'Zum Inhalt springen',
-      vortragHinweis: 'Pfeiltasten wechseln den Bildschirm, 1 bis 3 werfen eine Störung ein, r setzt zurück.'
+      vortragHinweis: 'Pfeiltasten wechseln den Akt. 1 bis 3 wirft in Akt 1 eine Störung ein und wählt in Akt 4 einen Ort. r setzt zurück.'
     },
 
     /**

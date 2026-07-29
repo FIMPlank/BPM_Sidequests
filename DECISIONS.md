@@ -137,3 +137,9 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Der Export legt die Spalte auf **jeden Schritt** und laesst die Trajektorie im Zustand unberuehrt (Kopie je Schritt). Ein Test prueft beides: der Wiedereinlesevorgang findet die Spalte, der Ursprungslauf hat sie nicht.
 - Der Vergleich heisst jetzt, was er ist: `Akt 2 — ohne Ihre Regel` gegen `Ihre Architektur`. Die Verdrahtung war schon richtig (Akt 2 setzt `vergleichsbasis`, Akt 4 setzt `mitNutzerregel`), nur die Beschriftung sprach noch von „Lauf A“ und „Lauf B“.
 - **Luecke im Gatter geschlossen:** eine Testdatei mit Syntaxfehler laesst die Gesamtzahl *sinken*, statt rot zu werden — der Lauf bleibt gruen. Genau das ist hier einmal passiert. Das Gatter zaehlt jetzt zusaetzlich die geladenen Suiten gegen die `describe`-Aufrufe in den Dateien.
+
+## v2 — V2-12 (Vortragsmodus)
+- Die Zifferntasten bedeuten im Akt das, was dort zur Wahl steht: in Akt 1 die drei Stoerungen, in Akt 4 die drei Orte. In allen anderen Akten tun sie nichts und geben das Ereignis weiter — sonst haette eine Taste je nach Flaeche einen unsichtbaren Effekt.
+- In Akt 1 waehlt eine Ziffer die Stoerung **und** startet den Lauf. Im Vortrag soll ein Tastendruck einen Schritt der Erzaehlung tun; zwei Tasten fuer einen Gedanken waeren eine Bedienungsanleitung.
+- Die Modus-Pille steht jetzt in der Fusszeile. Sie ist eine Fussnote — im Kopf hat sie mit der Fallzeile um Aufmerksamkeit konkurriert.
+- Nachgemessen im Browser mit echten Tastenereignissen: Wahl → Akt 1, `2` wirft `beleg_fehlt` ein (Varianten 2), dreimal rechts → Akt 4, `1` und `3` waehlen Orte, rechts → Akt 5 und dort Anschlag, sechsmal links → Akt 0.
