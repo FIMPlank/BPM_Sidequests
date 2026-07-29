@@ -15,7 +15,7 @@
     letter-spacing: -0.018em;
     font-size: 1.0625rem;
   }
-  .kopf__unterzeile { color: var(--ink-45); font-size: 0.875rem; }
+  .kopf__unterzeile { color: var(--ink-leise); font-size: 0.875rem; }
   .kopf__rechts { display: flex; align-items: center; gap: var(--r2); flex-wrap: wrap; }
 
   .schrittnav { display: flex; gap: 2px; }
@@ -23,7 +23,7 @@
     display: flex; align-items: center; gap: 6px;
     background: none; border: 0;
     padding: 6px var(--r1);
-    color: var(--ink-45);
+    color: var(--ink-leise);
     font-size: 0.8125rem;
     border-bottom: 2px solid transparent;
   }
@@ -69,18 +69,19 @@
     font-size: var(--label-size);
     letter-spacing: var(--label-tracking);
     text-transform: uppercase;
-    color: var(--ink-45);
+    color: var(--ink-leise);
     margin-right: var(--r1);
   }
 
   .fuss {
     border-top: var(--haarlinie) solid var(--raster);
     padding: var(--r3);
-    color: var(--ink-45);
+    color: var(--ink-leise);
     font-size: 0.875rem;
   }
   .fuss p { margin: 0 0 var(--r1); max-width: none; }
-  .fuss a { color: var(--ink-70); }
+  .fuss a { color: var(--ink-mittel); }
+  .fuss__vortrag { color: var(--ink-mittel); font-size: 0.8125rem; }
 
   @media (max-width: 860px) {
     .clash { grid-template-columns: 1fr; }

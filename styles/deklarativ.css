@@ -17,11 +17,11 @@
   }
   .regelsatz__id {
     font-size: 0.75rem;
-    color: var(--deklarativ);
+    color: var(--deklarativ-text);
     flex: 0 0 auto;
     min-width: 3.2em;
   }
-  .regelsatz__text { color: var(--ink-70); }
+  .regelsatz__text { color: var(--ink-mittel); }
   .regelsatz--eigen .regelsatz__id { color: var(--ink); }
 
   .raum-panel { margin-top: var(--r3); }
@@ -31,12 +31,12 @@
     text-transform: uppercase;
     font-family: var(--font-body);
     font-weight: 600;
-    color: var(--ink-45);
+    color: var(--ink-leise);
     margin-bottom: var(--r1);
   }
   .raum-panel__hinweis {
     font-size: 0.875rem;
-    color: var(--ink-45);
+    color: var(--ink-leise);
     max-width: 42ch;
     margin-top: var(--r1);
   }
@@ -72,10 +72,10 @@
   .raum__marke {
     font-family: var(--font-mono);
     font-size: 9px;
-    fill: var(--ink-45);
+    fill: var(--ink-leise);
     font-variant-numeric: tabular-nums;
   }
-  .raum__marke.ist-besucht { fill: var(--ink-70); }
+  .raum__marke.ist-besucht { fill: var(--ink-mittel); }
 
   .spur__segment {
     stroke: var(--deklarativ);

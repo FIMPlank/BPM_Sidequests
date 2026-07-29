@@ -4,7 +4,7 @@
   padding: var(--r4) var(--r3) var(--r8);
 }
 .testseite h1 { font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.2rem); }
-.testseite__hinweis { color: var(--ink-70); }
+.testseite__hinweis { color: var(--ink-mittel); }
 
 .t-summary {
   font-family: var(--font-mono);
@@ -17,7 +17,7 @@
 .t-suite { margin-top: var(--r3); }
 .t-suite h2 {
   font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;
-  color: var(--ink-70); font-family: var(--font-body); font-weight: 600;
+  color: var(--ink-mittel); font-family: var(--font-body); font-weight: 600;
 }
 .t-suite ul { list-style: none; margin: 0; padding: 0; }
 .t-suite li {

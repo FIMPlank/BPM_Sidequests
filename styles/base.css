@@ -28,7 +28,7 @@
   p { margin: 0 0 var(--r2); max-width: var(--mass); }
 
   /* Emphase traegt die Farbe, nicht die Strichstaerke. */
-  strong { font-weight: 400; color: var(--deklarativ); }
+  strong { font-weight: 400; color: var(--deklarativ-text); }
   em { font-style: normal; color: var(--imperativ); }
 
   code, kbd, samp, .mono {

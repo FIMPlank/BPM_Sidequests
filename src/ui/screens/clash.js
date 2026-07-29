@@ -68,6 +68,9 @@
     h.push('</div>');
 
     h.push('<p class="statuszeile" role="status">' + e(statuszeile(z)) + '</p>');
+    if (!HR.render.bewegungErlaubt()) {
+      h.push('<p class="hinweis">' + e(HR.copy.a11y.reduziert) + '</p>');
+    }
 
     if (z.stoerungGeworfen) {
       h.push('<div class="uebergang"><p>' + e(s.weiterAngebot) + '</p>' +

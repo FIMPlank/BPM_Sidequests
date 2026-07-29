@@ -12,7 +12,7 @@
   .fsm__nr {
     font-family: var(--font-mono);
     font-size: 10px;
-    fill: var(--ink-45);
+    fill: var(--ink-leise);
   }
 
   .fsm__knoten {

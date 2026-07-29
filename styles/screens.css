@@ -1,7 +1,7 @@
 @layer screens {
   .screen h1 { margin-bottom: var(--r2); }
   .lead {
-    color: var(--ink-70);
+    color: var(--ink-mittel);
     font-size: 1.125rem;
     max-width: 58ch;
   }
@@ -21,7 +21,7 @@
     font-size: var(--label-size);
     letter-spacing: var(--label-tracking);
     text-transform: uppercase;
-    color: var(--ink-45);
+    color: var(--ink-leise);
   }
   .instrument__wert {
     margin: 4px 0 0;
@@ -37,7 +37,7 @@
     font-size: 0.8125rem;
     font-weight: 400;
     letter-spacing: 0;
-    color: var(--ink-45);
+    color: var(--ink-leise);
     margin-left: 4px;
   }
   .instrument.ist-warn .instrument__wert { color: var(--verstoss); }
@@ -56,13 +56,13 @@
     flex: 1 1 22rem;
     font: inherit;
     padding: 9px var(--r2);
-    border: var(--haarlinie) solid var(--ink-45);
+    border: var(--haarlinie) solid var(--ink-leise);
     border-radius: var(--radius);
     background: var(--paper-hoch);
     color: var(--ink);
     min-width: 0;
   }
-  .editor__feld::placeholder { color: var(--ink-45); }
+  .editor__feld::placeholder { color: var(--ink-leise); }
 
   .entwurf {
     margin-top: var(--r2);
@@ -76,10 +76,10 @@
     font-size: var(--label-size);
     letter-spacing: var(--label-tracking);
     text-transform: uppercase;
-    color: var(--ink-45);
+    color: var(--ink-leise);
   }
   .entwurf__text { margin: 0 0 var(--r2); }
-  .entwurf__beispiel { margin: 0; color: var(--ink-70); font-size: 0.9375rem; }
+  .entwurf__beispiel { margin: 0; color: var(--ink-mittel); font-size: 0.9375rem; }
   .entwurf__knoepfe { display: flex; gap: var(--r1); flex-wrap: wrap; }
 
   .regelspalten {
@@ -91,11 +91,11 @@
   .regelsatz__form {
     display: block;
     font-size: 0.75rem;
-    color: var(--ink-45);
+    color: var(--ink-leise);
     margin-top: 2px;
   }
   .knopf--klein { padding: 3px var(--r1); font-size: 0.75rem; }
-  .hinweis { color: var(--ink-45); font-size: 0.9375rem; }
+  .hinweis { color: var(--ink-leise); font-size: 0.9375rem; }
 
   .durchsetzung { margin-top: var(--r4); padding-top: var(--r2); border-top: var(--haarlinie) solid var(--raster); }
   .durchsetzung__titel {
@@ -106,31 +106,31 @@
   }
   .durchsetzung__schalter { display: flex; gap: 0; flex-wrap: wrap; }
   .durchsetzung__schalter .knopf { border-radius: 0; }
-  .durchsetzung__schalter .knopf + .knopf { border-left: 0; }
-  .durchsetzung__hinweis { color: var(--ink-70); margin-top: var(--r1); font-size: 0.9375rem; }
+  .durchsetzung__schalter .knopf + .knopf { margin-left: -1px; }
+  .durchsetzung__hinweis { color: var(--ink-mittel); margin-top: var(--r1); font-size: 0.9375rem; }
 
   .plot-panel { max-width: 420px; }
   .plot { width: 100%; height: auto; display: block; }
-  .plot__achse { fill: none; stroke: var(--ink-45); stroke-width: 1; }
+  .plot__achse { fill: none; stroke: var(--ink-leise); stroke-width: 1; }
   .plot__reihe { fill: none; stroke-width: 2; stroke-linecap: round; }
   .plot__reihe.ist-verstoesse, .plot__punkt.ist-verstoesse { stroke: var(--verstoss); fill: var(--verstoss); }
   .plot__reihe.ist-kosten, .plot__punkt.ist-kosten { stroke: var(--deklarativ); fill: var(--deklarativ); }
   .plot__punkt { stroke: none; }
-  .plot__marke { font-family: var(--font-mono); font-size: 9px; fill: var(--ink-45); }
+  .plot__marke { font-family: var(--font-mono); font-size: 9px; fill: var(--ink-leise); }
   .plot__legende { display: flex; gap: var(--r2); font-size: 0.8125rem; margin-top: 0; }
   .plot__key.ist-verstoesse { color: var(--verstoss); }
-  .plot__key.ist-kosten { color: var(--deklarativ); }
-  .plot__leer { color: var(--ink-45); }
+  .plot__key.ist-kosten { color: var(--deklarativ-text); }
+  .plot__leer { color: var(--ink-leise); }
 
   .zustimmung {
     margin-top: var(--r6);
     padding-top: var(--r2);
     border-top: var(--haarlinie) solid var(--raster);
-    color: var(--ink-45);
+    color: var(--ink-leise);
     font-size: 0.875rem;
     max-width: none;
   }
-  .zustimmung__zusatz { color: var(--ink-45); }
+  .zustimmung__zusatz { color: var(--ink-leise); }
 
   /* — Screen 4 — */
   .logtabelle__rahmen { overflow-x: auto; border: var(--haarlinie) solid var(--raster); margin-bottom: var(--r2); }
@@ -148,7 +148,7 @@
     font-size: var(--label-size);
     letter-spacing: var(--label-tracking);
     text-transform: uppercase;
-    color: var(--ink-45);
+    color: var(--ink-leise);
     font-weight: 600;
     padding: var(--r1);
     border-bottom: var(--haarlinie) solid var(--raster);
@@ -158,27 +158,32 @@
   .logtabelle td { padding: 5px var(--r1); border-bottom: var(--haarlinie) solid var(--raster); vertical-align: top; }
   .logtabelle__input { max-width: 22ch; overflow-wrap: anywhere; }
   .logzeile[data-aktion] { cursor: pointer; }
+  .logzeile[data-aktion]:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
   .logzeile[data-aktion]:hover { background: var(--paper-hoch); }
   .logzeile.ist-geblockt td { color: var(--verstoss); }
   .logzeile__beleg td { background: var(--paper-hoch); }
   .beleg { list-style: none; margin: 0; padding: 0; }
-  .beleg li { padding: 2px 0; color: var(--ink-70); }
+  .beleg li { padding: 2px 0; color: var(--ink-mittel); }
 
   .check { display: inline-block; white-space: nowrap; }
   .check--erfuellt { color: var(--gruen); }
   .check--verletzt { color: var(--verstoss); }
-  .check--nicht_anwendbar, .check--leer { color: var(--ink-45); }
+  .check--nicht_anwendbar, .check--leer { color: var(--ink-leise); }
 
   .logtabelle--diff tr.ist-anders td { background: var(--deklarativ-weich); }
-  .diff__status { color: var(--ink-45); }
-  .diff__leer { color: var(--ink-45); }
+  .diff__status { color: var(--ink-leise); }
+  .diff__leer { color: var(--ink-leise); }
 
   .selbstcheck { margin-top: var(--r8); padding-top: var(--r3); border-top: 2px solid var(--ink); }
   .selbstcheck__titel { font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.85rem); }
   .selbstcheck__liste { max-width: var(--mass); padding-left: 1.4em; }
-  .selbstcheck__liste li { margin-bottom: var(--r1); color: var(--ink-70); }
+  .selbstcheck__liste li { margin-bottom: var(--r1); color: var(--ink-mittel); }
 
   @media (max-width: 860px) {
     .regelspalten { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    /* Fuenf Anzeigen auf zwei Spalten: die letzte nimmt die ganze Breite. */
+    .instrument:last-child { grid-column: 1 / -1; }
   }
 }

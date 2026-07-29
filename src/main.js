@@ -31,6 +31,16 @@
     var pille = document.getElementById('modus-pille');
     if (pille) pille.textContent = modusText();
 
+    if (HR.config.vortrag) {
+      var fuss = document.querySelector('.fuss');
+      if (fuss) {
+        var p = document.createElement('p');
+        p.className = 'fuss__vortrag mono';
+        p.textContent = HR.copy.seite.vortragHinweis;
+        fuss.insertBefore(p, fuss.firstChild);
+      }
+    }
+
     var marke = document.querySelector('.kopf__titel');
     if (marke) marke.textContent = HR.copy.seite.titel;
     var unter = document.querySelector('.kopf__unterzeile');

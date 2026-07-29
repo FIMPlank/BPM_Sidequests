@@ -59,3 +59,8 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Die RLS-Policies begrenzen zusaetzlich die Feldlaengen. Der anon-Schluessel ist oeffentlich; die Datenbank muss auch dann sinnvoll bleiben, wenn jemand ihn direkt benutzt.
 - `select`, `update` und `delete` sind fuer `anon` ausdruecklich entzogen. Die Auswertung laeuft ueber das Dashboard.
 - Die Aufbewahrungsgrenze steht als aufrufbare SQL-Funktion in der Datei, nicht als Scheduler-Job — ein Job waere ein weiterer Einrichtungsschritt.
+
+## Phase 9
+- Die beiden Grautoene wurden umbenannt und nachgezogen, weil `--ink-45` mit 2,9:1 unter der Schwelle lag. Der Name nennt jetzt die Rolle, nicht die Mischung.
+- Ocker bleibt als Flaeche und als Linie unveraendert; nur fuer Text gibt es die abgedunkelte Variante. Sonst haette die rechte Seite ihre Waerme verloren.
+- Bei reduzierter Bewegung wird die Animation nicht nur abgeschaltet, sondern durch eine Textzeile ersetzt. Ohne sie wirkt der harte Stopp links wie ein Fehler.

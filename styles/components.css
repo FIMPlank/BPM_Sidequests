@@ -1,7 +1,7 @@
 @layer components {
   .knopf {
     background: var(--paper-hoch);
-    border: var(--haarlinie) solid var(--ink-45);
+    border: var(--haarlinie) solid var(--ink-leise);
     padding: 9px var(--r2);
     font-size: 0.9375rem;
     line-height: 1.2;
@@ -11,7 +11,7 @@
   .knopf:hover:not(:disabled) { border-color: var(--ink); background: var(--paper); }
   .knopf:disabled { opacity: 0.45; cursor: not-allowed; }
   .knopf--haupt { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .knopf--haupt:hover:not(:disabled) { background: var(--ink-70); color: var(--paper); }
+  .knopf--haupt:hover:not(:disabled) { background: var(--ink-mittel); color: var(--paper); }
   .knopf--still { border-color: var(--raster); }
   .knopf[aria-pressed="true"] {
     background: var(--imperativ-weich);
@@ -57,7 +57,7 @@
     font-size: var(--label-size);
     letter-spacing: var(--label-tracking);
     text-transform: uppercase;
-    color: var(--ink-45);
+    color: var(--ink-leise);
   }
   .zaehler-zeile__wert {
     font-family: var(--font-display);
@@ -71,7 +71,7 @@
 
   .statuszeile {
     min-height: 1.6em;
-    color: var(--ink-70);
+    color: var(--ink-mittel);
     margin: var(--r1) 0 0;
   }
 
@@ -103,7 +103,7 @@
     letter-spacing: var(--label-tracking);
     text-transform: uppercase;
     font-weight: 600;
-    color: var(--ink-45);
+    color: var(--ink-leise);
     margin: var(--r4) 0 var(--r1);
   }
 
@@ -111,7 +111,7 @@
   .ergebnis__betrag { margin: 0; }
   .ergebnis__label {
     font-size: var(--label-size); letter-spacing: var(--label-tracking);
-    text-transform: uppercase; color: var(--ink-45);
+    text-transform: uppercase; color: var(--ink-leise);
   }
 
   .ablauf { list-style: none; margin: 0; padding: 0; border-top: var(--haarlinie) solid var(--raster); }
@@ -123,9 +123,9 @@
     border-bottom: var(--haarlinie) solid var(--raster);
     font-size: 0.8125rem;
   }
-  .ablauf__nr { color: var(--ink-45); }
-  .ablauf__input { color: var(--ink-70); overflow-wrap: anywhere; }
-  .ablauf__ergebnis { color: var(--ink-70); }
+  .ablauf__nr { color: var(--ink-leise); }
+  .ablauf__input { color: var(--ink-mittel); overflow-wrap: anywhere; }
+  .ablauf__ergebnis { color: var(--ink-mittel); }
   .ablauf__zeile.ist-geblockt .ablauf__ergebnis,
   .ablauf__zeile.ist-geblockt .ablauf__tool { color: var(--verstoss); }
 
@@ -138,7 +138,7 @@
   .pruefpanel__label {
     margin: 0;
     font-size: var(--label-size); letter-spacing: var(--label-tracking);
-    text-transform: uppercase; color: var(--ink-45);
+    text-transform: uppercase; color: var(--ink-leise);
   }
   .pruefpanel__wert {
     font-family: var(--font-display);
@@ -149,7 +149,7 @@
     margin: 4px 0 var(--r1);
     font-variant-numeric: tabular-nums;
   }
-  .pruefpanel__text { margin: 0; color: var(--ink-70); }
+  .pruefpanel__text { margin: 0; color: var(--ink-mittel); }
   .pruefpanel.ist-verletzt .pruefpanel__wert { color: var(--verstoss); }
 
   .frage { margin-top: var(--r4); padding-top: var(--r3); border-top: 2px solid var(--ink); }

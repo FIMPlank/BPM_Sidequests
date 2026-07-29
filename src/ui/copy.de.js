@@ -14,7 +14,8 @@
       modusVortrag: 'Modus: Vortrag',
       weiter: 'Weiter',
       zurueck: 'Zurück',
-      zumInhalt: 'Zum Inhalt springen'
+      zumInhalt: 'Zum Inhalt springen',
+      vortragHinweis: 'Pfeiltasten wechseln den Bildschirm, 1 bis 3 werfen eine Störung ein, r setzt zurück.'
     },
 
     schritte: ['Der Clash', 'Der Preis der Autonomie', 'Sie modellieren', 'Der Audit'],
