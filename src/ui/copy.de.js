@@ -464,5 +464,110 @@
     return teile.join(', ');
   };
 
+  // ——————————————————————————————————————————————————————————————
+  // BLOCK INTERAKTION — bewusst am Ende und in einem eigenen Zweig.
+  //
+  // Alles, was zur Staffelung dichter Flaechen, zu den Aufklappern, zu den
+  // Textfassungen der Zeichnungen und zur staendigen Navigation gehoert,
+  // steht hier und nur hier. Der grosse Textblock darueber bleibt davon
+  // unberuehrt.
+  // ——————————————————————————————————————————————————————————————
+
+  t.interaktion = {
+    aufklapper: {
+      technisch: 'Technische Details anzeigen',
+      beschreibung: 'Die Zeichnung in Worten'
+    },
+
+    /** Akt 3 laeuft in fuenf Schritten ab. Der Zustand sagt, wo der Besucher steht. */
+    stufen: {
+      titel: 'Ihr Weg durch diesen Akt',
+      titelMuster: 'Schritt {n} — {name}',
+      zaehlung: 'Schritt {n} von {gesamt}',
+      namen: [
+        'Regel schreiben',
+        'Auslegung prüfen',
+        'Fall ausführen',
+        'Ergebnis ansehen',
+        'Technische Details'
+      ],
+      /** Was zu tun ist, damit der jeweilige Schritt aufgeht. Index gleich Schrittnummer. */
+      wartet: {
+        2: 'Schreiben Sie einen Satz und lassen Sie ihn prüfen. Dann steht hier, wie er gelesen wurde.',
+        3: 'Übernehmen Sie eine geprüfte Regel. Dann läuft derselbe Fall noch einmal, mit Ihrer Regel.',
+        4: 'Lassen Sie den Fall laufen. Dann steht hier Schritt für Schritt, was der Agent getan hat.'
+      },
+      schrittEingabe: 'Beschreiben Sie in einem Satz, was gelten soll.',
+      schrittAusfuehren: 'Derselbe Fall, dieselben zwei Störungen — diesmal mit Ihren Regeln.',
+      schrittErgebnis: 'Das ist der Lauf, den Ihre Regel erzeugt hat.',
+      schrittTechnik: 'Die Zahlen hinter dem Lauf. Sie sind für das Verständnis nicht nötig.'
+    },
+
+    /** Das imperative Diagramm, in Worten beschrieben. */
+    fsmText: {
+      titel: 'Das feste Modell in Worten',
+      grund: 'Das Modell schreibt sechs Schritte in fester Reihenfolge vor.',
+      nochNichts: 'Bisher ist kein Schritt erledigt.',
+      erledigt: 'Erledigt sind: {liste}.',
+      aktuell: 'An der Reihe ist: {name}.',
+      gestoppt: 'Der Ablauf steht bei „{name}“. Für diese Lage ist kein Übergang vorgesehen, es braucht eine weitere Prozessvariante.',
+      fertig: 'Alle sechs Schritte sind erledigt.',
+      varianten: 'Modellierte Varianten bisher: {n}.'
+    },
+
+    /** Der Handlungsraum, in Worten beschrieben. */
+    raumText: {
+      titel: 'Der Handlungsraum in Worten',
+      regeln: 'Im Raum gelten {n} Regeln. Sie lassen {prozent} % der ursprünglichen Freiheit übrig.',
+      keineSpur: 'Der Agent ist noch nicht gelaufen. Es gibt keine Spur zu beschreiben.',
+      spur: 'Der Agent hat {n} Schritte getan: {liste}.',
+      abgewiesen: 'Abgewiesen wurde dabei: {liste}.',
+      keineAbweisung: 'Kein Aufruf wurde abgewiesen.',
+      ziel: 'Die Spur endet bei: {name}.',
+      schranken: 'Als harte Schranke steht im Raum: {liste}.'
+    },
+
+    /** Was in Akt 4 hinter den Aufklapper wandert. */
+    akt4: {
+      schritte: 'Schritte im Lauf',
+      kontext: 'Anteil Kontext',
+      mechanik: 'Wie dieser Ort arbeitet',
+      ablauf: 'Den Ablauf im Einzelnen anzeigen'
+    },
+
+    /** Die drei Bedienelemente, die in jedem Akt im Kopf stehen. */
+    nav: {
+      bereich: 'Seitenwerkzeuge',
+      hilfe: 'Hilfe',
+      startseite: 'Startseite',
+      zuruecksetzen: 'Simulation zurücksetzen',
+      hilfeAbsaetze: [
+        'Diese Seite ist eine Simulation. Sie spielt eine Reisekostenabrechnung in fünf Akten durch. Es wird nichts gebucht, gesendet oder gezahlt.',
+        'Über die Leiste im Kopf springen Sie zwischen den Akten. Jeder Akt beginnt mit einem Satz, der sagt, worum es geht, und endet mit einer kurzen Rücknahme.',
+        'In Akt 3 schreiben Sie selbst eine Regel, in Akt 4 entscheiden Sie, an welcher Stelle sie greift. Akt 5 zeigt das Protokoll des Laufs.',
+        'Technische Zahlen stehen hinter „Technische Details anzeigen“ und bleiben eingeklappt, bis Sie sie aufklappen.',
+        '„Startseite“ führt zurück zum Auftrag. „Simulation zurücksetzen“ beginnt sofort von vorn; es geht nichts verloren, was nicht in wenigen Klicks wieder da wäre.'
+      ]
+    }
+  };
+
+  /**
+   * Fuellt eine Vorlage: {name} wird durch werte.name ersetzt.
+   * @param {string} vorlage @param {Object} werte @returns {string}
+   */
+  t.interaktion.fuellen = function (vorlage, werte) {
+    return String(vorlage).replace(/\{(\w+)\}/g, function (ganz, schluessel) {
+      var v = werte ? werte[schluessel] : undefined;
+      return (v === undefined || v === null) ? ganz : String(v);
+    });
+  };
+
+  /** Ueberschrift eines Schritts in Akt 3, etwa „Schritt 2 — Auslegung prüfen“. */
+  t.interaktion.schrittTitel = function (n) {
+    return t.interaktion.fuellen(t.interaktion.stufen.titelMuster, {
+      n: n, name: t.interaktion.stufen.namen[n - 1]
+    });
+  };
+
   HR.copy = t;
 })(window.HR = window.HR || {});

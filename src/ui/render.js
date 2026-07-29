@@ -106,6 +106,8 @@
     letzterAkt = zustand.akt;
     aktleisteZeichnen(zustand);
     fallZeileZeichnen();
+    // Hilfe, Startseite und Ruecksetzen haengen im Kopf und gelten fuer alle Akte.
+    if (HR.komponenten && HR.komponenten.globalNav) HR.komponenten.globalNav.einhaengen(document);
   }
 
   /**

@@ -105,6 +105,56 @@
     return s.join('');
   }
 
+  /**
+   * Derselbe Raum in Worten: wie eng er ist, welchen Weg der Agent genommen
+   * hat, wo er abgewiesen wurde und wo er stehen geblieben ist. Das SVG traegt
+   * ein aria-label — das hier ist die ausfuehrliche Fassung fuer alle, die den
+   * Weg lieber beschrieben bekommen, als ihn zu sehen.
+   * @param {{regeln:Array, trajektorie:Array, bisSchritt:number, kontrollpunkte:Array}} opt
+   * @returns {string} HTML (Aufklapper)
+   */
+  function textFassung(opt) {
+    opt = opt || {};
+    var s = HR.copy.interaktion.raumText;
+    var f = HR.copy.interaktion.fuellen;
+    var namen = HR.copy.screen1.raumKnoten;
+    var regeln = opt.regeln || [];
+    var traj = opt.trajektorie || [];
+    var bis = (opt.bisSchritt === undefined || opt.bisSchritt === null) ? traj.length - 1 : opt.bisSchritt;
+
+    var saetze = [f(s.regeln, {
+      n: regeln.length,
+      prozent: HR.freedom.freiheitsgrade(regeln).prozent
+    })];
+
+    var gegangen = [], abgewiesen = [], letzter = null;
+    for (var i = 0; i <= bis && i < traj.length; i++) {
+      var name = namen[traj[i].tool] || traj[i].tool;
+      if (traj[i].guardrail && traj[i].guardrail.blocked) { abgewiesen.push(name); continue; }
+      gegangen.push(name);
+      letzter = name;
+    }
+
+    if (!gegangen.length && !abgewiesen.length) {
+      saetze.push(s.keineSpur);
+    } else {
+      saetze.push(f(s.spur, { n: gegangen.length, liste: gegangen.join(' → ') }));
+      saetze.push(abgewiesen.length ? f(s.abgewiesen, { liste: abgewiesen.join(', ') }) : s.keineAbweisung);
+      if (letzter) saetze.push(f(s.ziel, { name: letzter }));
+    }
+
+    var punkte = (opt.kontrollpunkte || []).filter(function (r) { return r && namen[r.target]; });
+    if (punkte.length) {
+      saetze.push(f(s.schranken, {
+        liste: punkte.map(function (r) { return namen[r.target]; }).join(', ')
+      }));
+    }
+
+    return HR.komponenten.disclosure.textfassung(s.titel, saetze, 'raum');
+  }
+
   HR.komponenten = HR.komponenten || {};
-  HR.komponenten.handlungsraum = { zeichnen: zeichnen, ANKER: ANKER, faktor: faktor };
+  HR.komponenten.handlungsraum = {
+    zeichnen: zeichnen, textFassung: textFassung, ANKER: ANKER, faktor: faktor
+  };
 })(window.HR = window.HR || {});

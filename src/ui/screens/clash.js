@@ -64,6 +64,7 @@
     h.push(seitenmarke(z, 'imperativ'));
     h.push('<p class="panel__label" id="panel-imperativ-label">' + e(HR.copy.label.imperativ) + '</p>');
     h.push(HR.komponenten.fsmDiagramm.zeichnen(z.fsm));
+    h.push(HR.komponenten.fsmDiagramm.textFassung(z.fsm));
     if (z.fsm.gestoppt) {
       h.push('<p class="badge badge--verstoss" role="status">' + e(s.fsmBadge) + '</p>');
     }
@@ -86,7 +87,13 @@
       trajektorie: z.lauf ? z.lauf.trajectory : [],
       bisSchritt: z.spurSchritt
     }));
-    h.push('<p class="raum-panel__hinweis">' + e(s.raumHinweis) + '</p></div>');
+    h.push('<p class="raum-panel__hinweis">' + e(s.raumHinweis) + '</p>');
+    h.push(HR.komponenten.handlungsraum.textFassung({
+      regeln: z.regeln,
+      trajektorie: z.lauf ? z.lauf.trajectory : [],
+      bisSchritt: z.spurSchritt
+    }));
+    h.push('</div>');
     h.push('</section>');
 
     h.push('</div>');

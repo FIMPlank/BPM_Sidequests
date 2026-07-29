@@ -70,15 +70,26 @@
       '" aria-labelledby="' + titelId + '">');
     if (gewaehlt) h.push('<p class="ort__marke">' + e(s.gewaehlt) + '</p>');
     h.push('<h3 class="ort__titel" id="' + titelId + '">' + e(s.orteLang[lauf.ort]) + '</h3>');
-    h.push('<p class="ort__hinweis">' + e(s.ortHinweis[lauf.ort]) + '</p>');
 
+    // Drei Zahlen, sonst nichts. Der Vergleich der Orte ist der ganze Akt —
+    // alles, was daneben steht, macht ihn nur schwerer.
     h.push('<dl class="masse">');
-    h.push(mass(s.masse.zeit, HR.latency.text(lauf.zeit.minuten),
-      lauf.zeit.schritte + ' ' + s.schritteEinheit));
-    h.push(mass(s.masse.kosten, HR.copy.euro(lauf.centGesamt / 100),
-      s.kontextanteil + ' ' + HR.tokens.centText(lauf.centKontext) + ' ' + HR.copy.screen3.einheitCent));
+    h.push(mass(s.masse.zeit, HR.latency.text(lauf.zeit.minuten)));
+    h.push(mass(s.masse.kosten, HR.copy.euro(lauf.centGesamt / 100)));
     h.push(mass(s.masse.risiko, r.wert, r.zusatz));
     h.push('</dl>');
+
+    // Aufschluesselung und Mechanik dahinter: wer sie sucht, klappt sie auf.
+    var i4 = HR.copy.interaktion.akt4;
+    h.push(HR.komponenten.disclosure.technisch(
+      '<dl class="masse masse--technisch">' +
+      mass(i4.schritte, lauf.zeit.schritte + ' ' + s.schritteEinheit) +
+      mass(i4.kontext, HR.tokens.centText(lauf.centKontext) + ' ' + HR.copy.screen3.einheitCent) +
+      '</dl>' +
+      '<p class="ort__hinweis"><span class="ort__mechanik">' + e(i4.mechanik) + '</span> ' +
+      e(s.ortHinweis[lauf.ort]) + '</p>',
+      { name: 'ort-' + lauf.ort, klasse: 'aufklapper--ort' }
+    ));
 
     h.push('<div class="ort__fuss">');
     // Dreimal „Diesen Ort wählen" — welcher Ort gemeint ist, steht nur in der Karte.
@@ -229,6 +240,11 @@
     }));
     h.push('<p class="flaeche__hinweis">' +
       e(bewegung ? s.flaecheHinweis : HR.copy.a11y.verschmolzen) + '</p>');
+    h.push(HR.komponenten.handlungsraum.textFassung({
+      regeln: z.regeln,
+      trajektorie: gewaehlt ? gewaehlt.trajektorie : [],
+      kontrollpunkte: kontrollpunkte(z)
+    }));
     h.push('</div>');
     return h.join('');
   }
@@ -274,8 +290,15 @@
     var gewaehlt = null;
     alle.forEach(function (l) { if (l.ort === z.platzierung) gewaehlt = l; });
     if (gewaehlt) {
+      // Der rohe Werkzeug-Input ist Beleg, nicht Botschaft: er steht bereit,
+      // aber er draengt sich nicht vor die drei Zahlen darueber.
       h.push('<h2 class="abschnitt__titel">' + e(s.ablaufTitel) + '</h2>');
-      h.push(HR.komponenten.logTabelle.kurz(gewaehlt.trajektorie));
+      h.push(HR.komponenten.disclosure.zeichnen({
+        titel: HR.copy.interaktion.akt4.ablauf,
+        klasse: 'aufklapper--ablauf',
+        name: 'akt4-ablauf',
+        inhalt: HR.komponenten.logTabelle.kurz(gewaehlt.trajektorie)
+      }));
       // Dieselbe Form wie in Akt 1 und Akt 2: Beobachtung, Grund, Bedeutung.
       h.push(HR.render.befundMarkup(HR.copy.befund.akt4));
     }
