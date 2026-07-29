@@ -17,7 +17,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 | V2-09 | done | 07 | Die Verschmelzung zu einer Fläche | 2026-07-29 | 7 Dateien |
 | V2-10 | done | 08 | Plot nach Akt 4 | 2026-07-29 | 4 Dateien |
 | V2-11 | done | 08 | Akt 5 — Spalte Platzierung, A/B-Vergleich | 2026-07-29 | 6 Dateien |
-| V2-12 | todo | 11 | Vortragsmodus über fünf Akte | | |
+| V2-12 | wip  | 11 | Vortragsmodus über fünf Akte | | |
 | V2-13 | todo | 12 | Textdurchgang | | |
 | V2-14 | todo | 13 | `DEMO.md`, `HANDOVER.md`, `README.md` | | |
 
