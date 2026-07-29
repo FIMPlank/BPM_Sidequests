@@ -84,6 +84,8 @@
     }
     aktleisteZeichnen(zustand);
     fallZeileZeichnen();
+    // Hilfe, Startseite und Ruecksetzen haengen im Kopf und gelten fuer alle Akte.
+    if (HR.komponenten && HR.komponenten.globalNav) HR.komponenten.globalNav.einhaengen(document);
   }
 
   /** Ein Satz zu Beginn des Akts. Er sagt, worum es hier geht, und sonst nichts. */

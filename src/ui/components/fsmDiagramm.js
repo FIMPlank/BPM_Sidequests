@@ -55,6 +55,43 @@
     return teile.join('');
   }
 
+  /**
+   * Dieselbe Zeichnung in Worten. Das aria-label am SVG sagt, was das Bild
+   * ist; hier steht, was es gerade zeigt — welche Schritte erledigt sind, wo
+   * die Kette steht und woran sie haengt.
+   * @param {Automat} fsm
+   * @returns {string} HTML (Aufklapper)
+   */
+  function textFassung(fsm) {
+    var s = HR.copy.interaktion.fsmText;
+    var f = HR.copy.interaktion.fuellen;
+    var namen = HR.copy.screen1.knoten;
+    var kette = HR.imperative.KNOTEN;
+    var erledigt = Math.min(fsm.verlauf.length, kette.length);
+    var saetze = [s.grund];
+
+    if (!erledigt) {
+      saetze.push(s.nochNichts);
+    } else {
+      saetze.push(f(s.erledigt, {
+        liste: kette.slice(0, erledigt).map(function (id) { return namen[id]; }).join(', ')
+      }));
+    }
+
+    if (fsm.gestoppt) {
+      saetze.push(f(s.gestoppt, { name: namen[kette[Math.min(erledigt, kette.length - 1)]] }));
+    } else if (erledigt >= kette.length) {
+      saetze.push(s.fertig);
+    } else {
+      saetze.push(f(s.aktuell, { name: namen[kette[erledigt]] }));
+    }
+
+    saetze.push(f(s.varianten, { n: fsm.varianten }));
+    return HR.komponenten.disclosure.textfassung(s.titel, saetze, 'fsm');
+  }
+
   HR.komponenten = HR.komponenten || {};
-  HR.komponenten.fsmDiagramm = { zeichnen: zeichnen, BREITE: BREITE, HOEHE: HOEHE };
+  HR.komponenten.fsmDiagramm = {
+    zeichnen: zeichnen, textFassung: textFassung, BREITE: BREITE, HOEHE: HOEHE
+  };
 })(window.HR = window.HR || {});

@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="styles/deklarativ.css">
 <link rel="stylesheet" href="styles/components.css">
 <link rel="stylesheet" href="styles/screens.css">
+<link rel="stylesheet" href="styles/interaction.css">
 </head>
 <body>
 
@@ -25,6 +26,8 @@
     <div class="kopf__marke">
       <span class="kopf__titel">Handlungsraum-Sandbox</span>
     </div>
+    <!-- Hilfe, Startseite, Zuruecksetzen — in jedem Akt an derselben Stelle. -->
+    <div class="kopf__nav" id="globalnav"></div>
   </div>
   <!-- Der Fall. Ein Satz, in jedem Akt derselbe. -->
   <p class="kopf__fall" id="fallzeile">Reisekostenabrechnung Nr. 2847 · Frau Berger · Kundentermin Hamburg · 2 Nächte</p>
@@ -82,6 +85,8 @@
 <script src="src/ui/components/zaehler.js"></script>
 <script src="src/ui/components/plot.js"></script>
 <script src="src/ui/components/logTabelle.js"></script>
+<script src="src/ui/components/disclosure.js"></script>
+<script src="src/ui/components/globalNav.js"></script>
 <script src="src/ui/screens/auftrag.js"></script>
 <script src="src/ui/screens/clash.js"></script>
 <script src="src/ui/screens/preis.js"></script>
