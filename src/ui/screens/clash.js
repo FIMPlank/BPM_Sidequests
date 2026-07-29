@@ -101,7 +101,7 @@
     HR.store.senden({ typ: 'fsm_reset' });
     HR.store.senden({ typ: 'lauf_start' });
     laufen([]).then(function (ergebnis) {
-      HR.store.senden({ typ: 'lauf_fertig', ergebnis: ergebnis, kontext: { vergleichsbasis: true, regeln: HR.store.holen().regeln } });
+      HR.store.senden({ typ: 'lauf_fertig', ergebnis: ergebnis, kontext: { regeln: HR.store.holen().regeln, screen: 1 } });
       HR.store.senden({ typ: 'gestartet' });
       var schritte = [];
       for (var i = 0; i < ergebnis.trajectory.length; i++) {

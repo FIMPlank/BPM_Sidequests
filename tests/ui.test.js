@@ -171,4 +171,57 @@
       expect(html(z)).toContain('Jetzt kommt die Realität dazwischen');
     });
   });
+
+  describe('Screen 2 — Der Preis der Autonomie', function () {
+    function html(z) { return HR.screens[2].zeichnen(z); }
+    function nachLauf() {
+      var sys = HR.compiler.systemRegeln();
+      var e = HR.agent.mock.laufSynchron(HR.agent.anfrage({
+        disturbances: HR.screens[2].STOERUNGEN, constraints: sys, enforcement: 'runtime'
+      }));
+      return red(anfang(), { typ: 'lauf_fertig', ergebnis: e,
+        kontext: { regeln: sys, screen: 2, vergleichsbasis: true } });
+    }
+
+    it('wirft beide Stoerungen zusammen ein', function () {
+      expect(HR.screens[2].STOERUNGEN.length).toBe(2);
+      expect(html(anfang())).toContain('Genehmiger im Urlaub');
+    });
+    it('zeigt vor dem Lauf weder Ergebnis noch Frage', function () {
+      expect(html(anfang()).indexOf('frage__text')).toBe(-1);
+    });
+    it('meldet nach dem Lauf das erreichte Ziel', function () {
+      expect(html(nachLauf())).toContain('Ziel erreicht');
+    });
+    it('zeigt den Ablauf inklusive Selbstfreigabe', function () {
+      expect(html(nachLauf())).toContain('selbst_freigeben');
+    });
+    it('meldet ehrlich null Verstoesse', function () {
+      var h = html(nachLauf());
+      expect(h).toContain('pruefpanel__wert mono">0<');
+      expect(h).toContain('Alle hinterlegten Regeln wurden eingehalten');
+    });
+    it('warnt an keiner Stelle vor dem Agenten', function () {
+      var h = html(nachLauf()).toLowerCase();
+      expect(h.indexOf('achtung')).toBe(-1);
+      expect(h.indexOf('warnung')).toBe(-1);
+      expect(h.indexOf('vorsicht')).toBe(-1);
+    });
+    it('stellt danach die eine Frage', function () {
+      expect(html(nachLauf())).toContain('Sind Sie damit einverstanden?');
+    });
+    it('bietet Ja und Nein an', function () {
+      var h = html(nachLauf());
+      expect(h).toContain('data-aktion="preis-antwort" data-wert="ja"');
+      expect(h).toContain('data-aktion="preis-antwort" data-wert="nein"');
+    });
+    it('antwortet auf Ja mit dem Verweis auf die Innenrevision', function () {
+      var z = red(nachLauf(), { typ: 'antwort2', wert: 'ja' });
+      expect(html(z)).toContain('Innenrevision');
+    });
+    it('zeigt den erstatteten Betrag', function () {
+      expect(html(nachLauf())).toContain('520,00 €');
+    });
+  });
+
 })(window.HR = window.HR || {});

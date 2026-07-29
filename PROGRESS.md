@@ -23,3 +23,8 @@ Gate: **134 Tests, 0 Fehler**. Belegt: Grundlauf 0 Verstoesse; Screen-2-Lauf Zie
 ## Phase 3 — GRUEN
 Huelle, Zustandsspeicher (`src/state/store.js`), Renderhilfe (`src/ui/render.js`), Texte (`src/ui/copy.de.js`), Komponenten `fsmDiagramm` und `handlungsraum`, Screen 1 (`src/ui/screens/clash.js`), Stile (`layout`, `imperativ`, `deklarativ`, `components`, `screens`).
 Gate: **164 Tests, 0 Fehler**; zusaetzlich per Screenshot geprueft. Beide Paneele zeichnen, jede Stoerung laesst den Automaten hart stehen (Badge plus Verstoss-Knoten), der Agent plant um, der Variantenzaehler steigt.
+
+## Phase 4 — GRUEN
+Screen 2 (`src/ui/screens/preis.js`) plus Stile fuer Chips, Ablaufliste, Pruefpanel und die Frage.
+Gate: **174 Tests, 0 Fehler**. Der Beat sitzt: Ziel erreicht, `selbst_freigeben` sichtbar im Ablauf, Pruefpanel meldet `0`, danach genau eine Frage. Ein Test stellt sicher, dass nirgends gewarnt wird.
+Der Screen-2-Lauf ist zugleich Lauf A fuer den Vergleich auf Screen 4.

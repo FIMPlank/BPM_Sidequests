@@ -87,4 +87,84 @@
     gap: var(--r2);
   }
   .uebergang p { margin: 0; }
+
+  .chips { list-style: none; display: flex; flex-wrap: wrap; gap: var(--r1); margin: var(--r1) 0 var(--r3); padding: 0; }
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    padding: 6px var(--r2);
+    border: var(--haarlinie) solid var(--raster);
+    background: var(--paper-hoch);
+  }
+
+  .abschnitt__titel {
+    font-family: var(--font-body);
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink-45);
+    margin: var(--r4) 0 var(--r1);
+  }
+
+  .ergebnis { display: flex; flex-wrap: wrap; align-items: center; gap: var(--r3); margin-top: var(--r3); }
+  .ergebnis__betrag { margin: 0; }
+  .ergebnis__label {
+    font-size: var(--label-size); letter-spacing: var(--label-tracking);
+    text-transform: uppercase; color: var(--ink-45);
+  }
+
+  .ablauf { list-style: none; margin: 0; padding: 0; border-top: var(--haarlinie) solid var(--raster); }
+  .ablauf__zeile {
+    display: grid;
+    grid-template-columns: 2.2em 13em 1fr 7em;
+    gap: var(--r2);
+    padding: 5px 0;
+    border-bottom: var(--haarlinie) solid var(--raster);
+    font-size: 0.8125rem;
+  }
+  .ablauf__nr { color: var(--ink-45); }
+  .ablauf__input { color: var(--ink-70); overflow-wrap: anywhere; }
+  .ablauf__ergebnis { color: var(--ink-70); }
+  .ablauf__zeile.ist-geblockt .ablauf__ergebnis,
+  .ablauf__zeile.ist-geblockt .ablauf__tool { color: var(--verstoss); }
+
+  .pruefpanel {
+    margin-top: var(--r4);
+    padding: var(--r3);
+    border: var(--haarlinie) solid var(--raster);
+    background: var(--paper-hoch);
+  }
+  .pruefpanel__label {
+    margin: 0;
+    font-size: var(--label-size); letter-spacing: var(--label-tracking);
+    text-transform: uppercase; color: var(--ink-45);
+  }
+  .pruefpanel__wert {
+    font-family: var(--font-display);
+    font-size: var(--display-size);
+    font-weight: var(--display-weight);
+    letter-spacing: var(--display-tracking);
+    line-height: 1;
+    margin: 4px 0 var(--r1);
+    font-variant-numeric: tabular-nums;
+  }
+  .pruefpanel__text { margin: 0; color: var(--ink-70); }
+  .pruefpanel.ist-verletzt .pruefpanel__wert { color: var(--verstoss); }
+
+  .frage { margin-top: var(--r4); padding-top: var(--r3); border-top: 2px solid var(--ink); }
+  .frage__text {
+    font-family: var(--font-display);
+    font-size: var(--display-size);
+    font-weight: var(--display-weight);
+    letter-spacing: var(--display-tracking);
+    line-height: var(--display-leading);
+    margin: 0 0 var(--r2);
+  }
+  .frage__knoepfe { display: flex; gap: var(--r1); }
+
+  @media (max-width: 700px) {
+    .ablauf__zeile { grid-template-columns: 2em 1fr; }
+    .ablauf__input, .ablauf__ergebnis { grid-column: 2; }
+  }
 }

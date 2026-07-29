@@ -68,6 +68,10 @@
         genehmiger_urlaub: 'Genehmiger im Urlaub'
       },
       laufen: 'Agent laufen lassen',
+      erneut: 'Erneut laufen lassen',
+      stoerungTitel: 'Eingeworfene Störungen',
+      ablaufTitel: 'Was der Agent getan hat',
+      betragLabel: 'Erstatteter Betrag',
       zielErreicht: 'Ziel erreicht',
       erstattet: 'Erstattung ausgezahlt',
       pruefungTitel: 'Regelverstöße',
@@ -172,6 +176,16 @@
       agentNeu: 'Der Agent hat einen neuen Pfad durch den Handlungsraum gewählt.',
       reduziert: 'Bewegung ist reduziert: die Darstellung wechselt ohne Animation.'
     }
+  };
+
+  /** Betrag in deutscher Schreibweise. */
+  t.euro = function (n) {
+    return Number(n || 0).toFixed(2).replace('.', ',') + ' €';
+  };
+
+  /** Simulierte Laufzeit als Sekundenangabe. */
+  t.zeit = function (ms) {
+    return '+' + (Number(ms || 0) / 1000).toFixed(1).replace('.', ',') + ' s';
   };
 
   /** Werkzeugnamen bleiben technisch — sie stehen im Log und in den Regeln. */
