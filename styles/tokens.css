@@ -43,7 +43,7 @@
 
     /* 8px-Raster — die imperative Seite haelt sich strikt daran. */
     --r1: 8px;  --r2: 16px; --r3: 24px; --r4: 32px;
-    --r6: 48px; --r8: 64px;
+    --r5: 40px; --r6: 48px; --r8: 64px;
 
     --haarlinie: 1px;
     --radius: 2px;
