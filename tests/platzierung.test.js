@@ -170,4 +170,85 @@
       expect(html(z)).toContain('kontrollpunkt');
     });
   });
+  describe('Die verschmolzene Flaeche', function () {
+    function anfang() { return HR.store.anfang(); }
+    function red(s, a) { return HR.store.reduzieren(s, a); }
+    function html(s) { return HR.screens[4].zeichnen(s); }
+
+    it('zeichnet eine einzige Flaeche, keine zwei Panels', function () {
+      var h = html(anfang());
+      expect(h.split('class="fusion').length - 1).toBe(1);
+      expect(h.split('<svg class="raum').length - 1).toBe(1);
+    });
+
+    it('laesst in Akt 4 keine Naht stehen', function () {
+      var h = html(anfang());
+      expect(h.indexOf('class="clash"')).toBe(-1);
+      expect(h.indexOf('panel--imperativ')).toBe(-1);
+      expect(h.indexOf('panel--deklarativ')).toBe(-1);
+    });
+
+    it('setzt die imperative Kette als Schranken in den Raum', function () {
+      var s = anfang();
+      s = red(s, { typ: 'zuordnung', regel: 'eigen', ort: 'imperativ' });
+      s = red(s, { typ: 'zuordnung', regel: 'zahlung', ort: 'imperativ' });
+      s = red(s, { typ: 'zuordnung', regel: 'beleg', ort: 'leitplanke' });
+      var h = html(s);
+      expect(h.split('class="schranke"').length - 1).toBe(2);
+      expect(h).toContain('schranke__wand');
+      expect(h).toContain('schranke__pfosten');
+    });
+
+    it('laesst je Schranke genau einen Durchlass', function () {
+      var markup = HR.komponenten.fusion.zeichnen({
+        regeln: HR.compiler.systemRegeln(),
+        trajektorie: [],
+        kontrollpunkte: [{ id: 'U-1', target: 'hotel_buchen' }]
+      });
+      // Zwei Wandstuecke links und rechts, dazwischen die beiden Pfosten.
+      expect(markup.split('schranke__wand').length - 1).toBe(2);
+      expect(markup.split('schranke__pfosten').length - 1).toBe(2);
+    });
+
+    it('setzt jede Schranke auf die Hoehe ihres Werkzeugs', function () {
+      var anker = HR.komponenten.handlungsraum.ANKER;
+      var s = HR.komponenten.fusion.schranken([{ id: 'U-1', target: 'erstattung_ausloesen' }]);
+      expect(s.length).toBe(1);
+      expect(s[0].y).toBe(anker.erstattung_ausloesen.y - 14);
+    });
+
+    it('ordnet mehrere Schranken von oben nach unten', function () {
+      var s = HR.komponenten.fusion.schranken([
+        { id: 'A', target: 'erstattung_ausloesen' },
+        { id: 'B', target: 'reiseantrag_stellen' }
+      ]);
+      expect(s[0].id === undefined ? s[0].regelId : s[0].regelId).toBe('B');
+      expect(s[1].regelId).toBe('A');
+    });
+
+    it('uebergeht Regeln ohne Platz im Raum', function () {
+      expect(HR.komponenten.fusion.schranken([{ id: 'X', target: 'gibt_es_nicht' }]).length).toBe(0);
+      expect(HR.komponenten.fusion.schranken(null).length).toBe(0);
+    });
+
+    it('laesst die Spur des Agenten durch die Schranken laufen', function () {
+      var s = red(anfang(), { typ: 'platzierung', wert: 'imperativ' });
+      var h = html(s);
+      expect(h).toContain('class="schranke"');
+      expect(h).toContain('spur__segment');
+    });
+
+    it('bietet bei reduzierter Bewegung eine Bildunterschrift an', function () {
+      expect(HR.copy.a11y.verschmolzen).toContain('in einer Fläche');
+      expect(typeof HR.screens[4].nach).toBe('function');
+    });
+
+    it('markiert die Verschmelzung nur, wenn sie laufen soll', function () {
+      var mit = HR.komponenten.fusion.zeichnen({ regeln: [], trajektorie: [], kontrollpunkte: [], verschmilzt: true });
+      var ohne = HR.komponenten.fusion.zeichnen({ regeln: [], trajektorie: [], kontrollpunkte: [], verschmilzt: false });
+      expect(mit).toContain('fusion ist-verschmilzt');
+      expect(ohne.indexOf('ist-verschmilzt')).toBe(-1);
+    });
+  });
+
 })(window.HR = window.HR || {});

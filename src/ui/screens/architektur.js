@@ -178,6 +178,59 @@
     return h.join('');
   }
 
+  // — Die verschmolzene Flaeche ————————————————————————————————
+
+  /**
+   * Einmal je Sitzung. Danach steht die Flaeche verschmolzen da und wird
+   * nicht bei jedem Neuzeichnen erneut zusammengeschoben.
+   */
+  var verschmolzen = false;
+
+  /** Welche Regeln stehen als harter Kontrollpunkt im Raum? */
+  function kontrollpunkte(z) {
+    var regeln = kombiRegeln(z);
+    var out = [];
+    HR.muster.REGELPLAETZE.forEach(function (platz) {
+      if (z.zuordnung[platz] === 'imperativ') out.push(regeln[platz]);
+    });
+    // Solange nichts zugewiesen ist, zeigt Teil 1 seine eigene Wahl.
+    if (!out.length && z.platzierung === 'imperativ') out.push(regeln.eigen);
+    return out;
+  }
+
+  function flaeche(z) {
+    var e = HR.render.esc;
+    var s = HR.copy.akt4;
+    var gewaehlt = null;
+    laeufe(z).forEach(function (l) { if (l.ort === z.platzierung) gewaehlt = l; });
+    var bewegung = HR.render.bewegungErlaubt();
+
+    var h = ['<div class="flaeche">'];
+    h.push('<h2 class="abschnitt__titel">' + e(s.flaecheTitel) + '</h2>');
+    h.push(HR.komponenten.fusion.zeichnen({
+      regeln: z.regeln,
+      trajektorie: gewaehlt ? gewaehlt.trajektorie : [],
+      kontrollpunkte: kontrollpunkte(z),
+      verschmilzt: bewegung && !verschmolzen
+    }));
+    h.push('<p class="flaeche__hinweis">' +
+      e(bewegung ? s.flaecheHinweis : HR.copy.a11y.verschmolzen) + '</p>');
+    h.push('</div>');
+    return h.join('');
+  }
+
+  /** Nach dem Zeichnen: die Verschmelzung laeuft genau einmal, rund 900 ms. */
+  function nach(el) {
+    if (verschmolzen) return;
+    if (!HR.render.bewegungErlaubt()) { verschmolzen = true; return; }
+    var knoten = el.querySelector ? el.querySelector('.fusion.ist-verschmilzt') : null;
+    if (!knoten) return;
+    window.setTimeout(function () {
+      verschmolzen = true;
+      if (knoten.classList) knoten.classList.remove('ist-verschmilzt');
+    }, 900);
+  }
+
   function zeichnen(z) {
     var e = HR.render.esc;
     var s = HR.copy.akt4;
@@ -209,6 +262,8 @@
     }
 
     h.push(kombination(z));
+
+    h.push(flaeche(z));
 
     h.push('<div class="steuerung">');
     h.push(HR.render.knopf('akt', HR.copy.screen4.titel, { wert: 5 }));
@@ -258,6 +313,8 @@
 
   HR.render.bildschirm(4, {
     zeichnen: zeichnen,
+    nach: nach,
+    kontrollpunkte: kontrollpunkte,
     laeufe: laeufe,
     regelDesBesuchers: regelDesBesuchers,
     regelnFuerLauf: regelnFuerLauf,

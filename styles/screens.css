@@ -421,3 +421,48 @@
   .muster__beschreibung { margin: 0 0 4px; }
   .muster__einsatz { margin: 0; color: var(--ink-leise); font-size: 0.875rem; }
 }
+
+@layer screens {
+  /* Die verschmolzene Flaeche in Akt 4: eine Zeichnung, keine Naht. */
+  .flaeche { margin: var(--r4) 0; }
+  .fusion { max-width: 340px; margin: 0 auto; }
+  .fusion .raum { display: block; width: 100%; height: auto; }
+  .flaeche__hinweis {
+    max-width: 46ch;
+    margin: var(--r2) auto 0;
+    color: var(--ink-leise);
+    font-size: 0.875rem;
+    text-align: center;
+  }
+
+  .schranke__wand {
+    stroke: var(--ink);
+    stroke-width: 2;
+    stroke-linecap: butt;
+  }
+  .schranke__pfosten { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+  .schranke__marke {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    fill: var(--ink-leise);
+  }
+
+  /*
+   * Die Verschmelzung: die Schranken kommen einmal von aussen herein und
+   * setzen sich in den Raum. Rund 900 ms, danach steht das Bild.
+   */
+  .fusion.ist-verschmilzt .schranke {
+    animation: schranke-hinein 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--schranke-i, 0) * 90ms);
+  }
+  @keyframes schranke-hinein {
+    from { opacity: 0; transform: scaleX(0.1); }
+    to   { opacity: 1; transform: scaleX(1); }
+  }
+  .fusion.ist-verschmilzt .schranke { transform-origin: 150px center; transform-box: fill-box; }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* Kein Zusammenschieben: die Flaeche steht sofort verschmolzen da. */
+    .fusion.ist-verschmilzt .schranke { animation: none; opacity: 1; transform: none; }
+  }
+}

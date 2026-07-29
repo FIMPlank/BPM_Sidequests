@@ -237,7 +237,11 @@
         beleg: 'Belegpflicht'
       },
       offen: 'Noch nicht zugewiesen',
-      zuruecksetzen: 'Zuordnung zurücksetzen'
+      zuruecksetzen: 'Zuordnung zurücksetzen',
+
+      // — Die verschmolzene Flaeche —
+      flaecheTitel: 'Eine Fläche',
+      flaecheHinweis: 'Die Schranken sind die harten Kontrollpunkte. Dazwischen sucht der Agent seinen Weg selbst.'
     },
 
     /**
@@ -309,7 +313,8 @@
     a11y: {
       fsmGestoppt: 'Das imperative Modell ist stehen geblieben: für diese Störung ist keine Transition definiert.',
       agentNeu: 'Der Agent hat einen neuen Pfad durch den Handlungsraum gewählt.',
-      reduziert: 'Bewegung ist reduziert: die Darstellung wechselt ohne Animation.'
+      reduziert: 'Bewegung ist reduziert: die Darstellung wechselt ohne Animation.',
+      verschmolzen: 'Beide Seiten stehen hier in einer Fläche: Handlungsraum mit harten Schranken darin.'
     }
   };
 

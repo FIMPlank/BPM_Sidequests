@@ -120,3 +120,11 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Die beiden Randfaelle bekommen **statt** des „Sie haben gerade … gebaut“-Satzes ihren eigenen, unfreundlichen Satz, und darunter trotzdem den Musternamen. Ein Ergebnis zu benennen und ein Ergebnis zu loben sind zwei verschiedene Dinge.
 - Die beiden Zusatzregeln laufen durch `HR.compiler.uebersetzen`, also durch genau den Weg, den auch der Besucher benutzt. Haette ich sie als Objekte hingeschrieben, waere unbewiesen geblieben, dass sie im geschlossenen Schema ueberhaupt ausdrueckbar sind.
 - Die Mustertexte stehen in `copy.de.js`, nicht in `muster.js`. `muster.js` liefert nur den Schluessel — dieselbe Trennung wie im Rest des Hauses.
+
+## v2 — V2-09 (Die verschmolzene Flaeche)
+- **Eine Zeichnung, keine Naht.** Akt 4 enthaelt weder `.clash` noch die beiden `.panel`-Haelften; ein Test prueft, dass keines der drei Kennzeichen uebrig ist. Der Handlungsraum bleibt, die imperative Kette formt sich in ihm neu.
+- Der Spezifikationstext sagt „hard vertical gate bars“. In dieser Zeichnung laeuft der Fall von oben (Antrag) nach unten (Erstattung); eine Schranke *quer* dazu ist waagerecht. Umgesetzt ist deshalb eine **Tuer**: zwei Wandstuecke waagerecht, dazwischen ein Durchlass, markiert von zwei senkrechten Pfosten. Damit ist beides erfuellt — senkrechte Balken, und die Spur muss hindurch. Die Alternative waere gewesen, die Geometrie des Signaturelements zu drehen; das haette Akt 1 und Akt 3 mitgerissen.
+- `fusion.js` setzt die Schranken in das vorhandene SVG des Handlungsraums, statt es nachzubauen. Ein Nachbau haette die Ankertabelle verdoppelt und waere beim naechsten Eingriff auseinandergelaufen.
+- Die Verschmelzung laeuft **einmal je Sitzung**, nicht bei jedem Neuzeichnen: ein Merker im Modul, nach 900 ms wird die Klasse entfernt. Im Browser nachgemessen: 0 ms und 300 ms „verschmilzt/0.9s“, 1400 ms „fertig“.
+- Bei `prefers-reduced-motion` steht die Flaeche sofort verschmolzen da, und statt des Hinweistextes erscheint die Bildunterschrift aus `a11y.verschmolzen`. Ebenfalls im Browser nachgemessen (`--force-prefers-reduced-motion`).
+- Welche Regeln zu Schranken werden, ergibt sich aus der Zuordnung in Teil 2; solange dort nichts steht, zeigt die Flaeche die Wahl aus Teil 1. So ist sie nie leer und nie erfunden.

@@ -14,7 +14,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 | V2-06 | done | 00 | `src/domain/latency.js` | 2026-07-29 | 4 Dateien |
 | V2-07 | done | 05, 06 | Akt 4, Teil 1 — Platzierung | 2026-07-29 | 8 Dateien |
 | V2-08 | done | 07 | Akt 4, Teil 2 — Kombination und Muster | 2026-07-29 | 8 Dateien |
-| V2-09 | wip  | 07 | Die Verschmelzung zu einer Fläche | | |
+| V2-09 | done | 07 | Die Verschmelzung zu einer Fläche | 2026-07-29 | 7 Dateien |
 | V2-10 | todo | 08 | Plot nach Akt 4 | | |
 | V2-11 | todo | 08 | Akt 5 — Spalte Platzierung, A/B-Vergleich | | |
 | V2-12 | todo | 11 | Vortragsmodus über fünf Akte | | |
@@ -33,3 +33,4 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 - V2-06: 11 Tests fuer die Durchlaufzeit, rein und ohne DOM. 272 Tests, 0 Fehler.
 - V2-07: Drei Orte, drei Wege (9/8/7 Schritte), 12h18 vs 8h16 vs 4h14, 520 EUR Restrisiko nur im Nachgang. 294 Tests, 0 Fehler.
 - V2-08: 27 Belegungen, vier Muster, erschoepfend geprueft; beide Randfaelle mit eigenem Satz. 313 Tests, 0 Fehler.
+- V2-09: Eine Flaeche, Schranken mit Durchlass, 900 ms einmalig, reduzierte Bewegung mit Bildunterschrift. 323 Tests, 0 Fehler.
