@@ -251,4 +251,65 @@
     });
   });
 
+  describe('Der Plot in Akt 4', function () {
+    function anfang() { return HR.store.anfang(); }
+    function red(s, a) { return HR.store.reduzieren(s, a); }
+    function html(s) { return HR.screens[4].zeichnen(s); }
+
+    var sys = HR.compiler.systemRegeln();
+    function lauf(regeln) {
+      return HR.agent.mock.laufSynchron(HR.agent.anfrage({
+        disturbances: ['hotel_ausgebucht', 'genehmiger_urlaub'],
+        constraints: regeln, enforcement: 'runtime'
+      }));
+    }
+
+    it('steht in Akt 4 und nicht mehr in Akt 3', function () {
+      expect(html(anfang())).toContain('plot-panel');
+      expect(HR.screens[3].zeichnen(anfang()).indexOf('plot-panel')).toBe(-1);
+    });
+
+    it('sammelt ueber die ganze Sitzung, nicht je Akt', function () {
+      var s = anfang();
+      // ein Lauf aus Akt 1, einer aus Akt 2, einer aus Akt 3, einer aus Akt 4
+      [1, 2, 3, 4].forEach(function (akt) {
+        s = red(s, { typ: 'lauf_fertig', ergebnis: lauf(sys), kontext: { regeln: sys, screen: akt } });
+      });
+      expect(s.historie.length).toBe(4);
+      var h = html(s);
+      // je Lauf ein Punkt in jeder der beiden Reihen
+      expect(h.split('plot__punkt').length - 1).toBe(8);
+    });
+
+    it('zeigt ohne Lauf den Hinweis statt eines leeren Plots', function () {
+      expect(html(anfang())).toContain('Führen Sie einen Lauf aus');
+    });
+
+    it('sagt an, dass der Plot aus allen Akten kommt', function () {
+      expect(html(anfang())).toContain('aus allen Akten');
+    });
+
+    it('traegt Regeln gegen Verstoesse und Kosten ab', function () {
+      var s = red(anfang(), { typ: 'lauf_fertig', ergebnis: lauf(sys), kontext: { regeln: sys } });
+      var h = html(s);
+      expect(h).toContain('ist-verstoesse');
+      expect(h).toContain('ist-kosten');
+      expect(h).toContain('Regeln');
+    });
+
+    it('nimmt auch die Laeufe aus der Platzierung auf', function () {
+      var s = anfang();
+      var wahl = HR.screens[4].regelDesBesuchers(s);
+      var e = HR.platzierung.lauf('leitplanke', {
+        regel: wahl.regel,
+        regeln: HR.screens[4].regelnFuerLauf(s, wahl),
+        stoerungen: HR.platzierung.STOERUNGEN
+      });
+      s = red(s, { typ: 'lauf_fertig', ergebnis: e.ergebnis,
+        kontext: { regeln: HR.screens[4].regelnFuerLauf(s, wahl), akt: 4, platzierung: 'leitplanke' } });
+      expect(s.historie.length).toBe(1);
+      expect(s.historie[0].regeln).toBe(4);
+    });
+  });
+
 })(window.HR = window.HR || {});

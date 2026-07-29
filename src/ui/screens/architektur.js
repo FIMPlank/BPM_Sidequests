@@ -265,6 +265,12 @@
 
     h.push(flaeche(z));
 
+    // Der Plot sammelt ueber die ganze Sitzung: jeder Lauf aus jedem Akt
+    // setzt hier einen Punkt. Erst dadurch wird die Form sichtbar.
+    h.push('<h2 class="abschnitt__titel">' + e(HR.copy.screen3.plotTitel) + '</h2>');
+    h.push('<p class="hinweis">' + e(s.plotHinweis) + '</p>');
+    h.push('<div class="plot-panel">' + HR.komponenten.plot.zeichnen(z.historie) + '</div>');
+
     h.push('<div class="steuerung">');
     h.push(HR.render.knopf('akt', HR.copy.screen4.titel, { wert: 5 }));
     h.push('</div>');

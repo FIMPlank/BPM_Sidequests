@@ -128,3 +128,6 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Die Verschmelzung laeuft **einmal je Sitzung**, nicht bei jedem Neuzeichnen: ein Merker im Modul, nach 900 ms wird die Klasse entfernt. Im Browser nachgemessen: 0 ms und 300 ms „verschmilzt/0.9s“, 1400 ms „fertig“.
 - Bei `prefers-reduced-motion` steht die Flaeche sofort verschmolzen da, und statt des Hinweistextes erscheint die Bildunterschrift aus `a11y.verschmolzen`. Ebenfalls im Browser nachgemessen (`--force-prefers-reduced-motion`).
 - Welche Regeln zu Schranken werden, ergibt sich aus der Zuordnung in Teil 2; solange dort nichts steht, zeigt die Flaeche die Wahl aus Teil 1. So ist sie nie leer und nie erfunden.
+
+## v2 — V2-10 (Plot in Akt 4)
+- Der Plot musste nicht umgebaut werden: `z.historie` sammelte schon immer jeden Lauf aus jedem Akt. In Akt 3 sah man davon nur ein Bruchstueck. In Akt 4 steht er an der richtigen Stelle — dort, wo es um die Form der Kurve geht, nicht um einen einzelnen Lauf. Eine Zeile sagt an, dass die Punkte aus allen Akten kommen.

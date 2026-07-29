@@ -241,7 +241,8 @@
 
       // — Die verschmolzene Flaeche —
       flaecheTitel: 'Eine Fläche',
-      flaecheHinweis: 'Die Schranken sind die harten Kontrollpunkte. Dazwischen sucht der Agent seinen Weg selbst.'
+      flaecheHinweis: 'Die Schranken sind die harten Kontrollpunkte. Dazwischen sucht der Agent seinen Weg selbst.',
+      plotHinweis: 'Ein Punkt je Lauf dieser Sitzung — aus allen Akten, nicht nur aus diesem.'
     },
 
     /**
