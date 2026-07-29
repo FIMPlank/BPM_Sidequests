@@ -1,2 +1,90 @@
 @layer components {
+  .knopf {
+    background: var(--paper-hoch);
+    border: var(--haarlinie) solid var(--ink-45);
+    padding: 9px var(--r2);
+    font-size: 0.9375rem;
+    line-height: 1.2;
+    border-radius: var(--radius);
+    transition: background var(--takt-schnell) linear, border-color var(--takt-schnell) linear;
+  }
+  .knopf:hover:not(:disabled) { border-color: var(--ink); background: var(--paper); }
+  .knopf:disabled { opacity: 0.45; cursor: not-allowed; }
+  .knopf--haupt { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .knopf--haupt:hover:not(:disabled) { background: var(--ink-70); color: var(--paper); }
+  .knopf--still { border-color: var(--raster); }
+  .knopf[aria-pressed="true"] {
+    background: var(--imperativ-weich);
+    border-color: var(--imperativ);
+    color: var(--ink);
+  }
+
+  .panel__label {
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 0 0 var(--r2);
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    padding: 6px var(--r1);
+    margin: var(--r2) 0 0;
+    border: var(--haarlinie) solid var(--raster);
+    max-width: 44ch;
+  }
+  .badge--verstoss {
+    border-color: var(--verstoss);
+    color: var(--verstoss);
+    background: var(--verstoss-weich);
+  }
+  .badge--gut { border-color: var(--gruen); color: var(--gruen); }
+
+  .zaehler-zeile {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--r2);
+    margin: var(--r3) 0 0;
+    padding-top: var(--r1);
+    border-top: var(--haarlinie) solid var(--raster);
+    max-width: 340px;
+  }
+  .zaehler-zeile__name {
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--ink-45);
+  }
+  .zaehler-zeile__wert {
+    font-family: var(--font-display);
+    font-variant-numeric: tabular-nums;
+    font-size: 2rem;
+    font-weight: var(--display-weight);
+    letter-spacing: var(--display-tracking);
+    line-height: 1;
+    color: var(--imperativ);
+  }
+
+  .statuszeile {
+    min-height: 1.6em;
+    color: var(--ink-70);
+    margin: var(--r1) 0 0;
+  }
+
+  .uebergang {
+    margin-top: var(--r3);
+    padding: var(--r3);
+    border: var(--haarlinie) solid var(--raster);
+    background: var(--paper-hoch);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--r2);
+  }
+  .uebergang p { margin: 0; }
 }

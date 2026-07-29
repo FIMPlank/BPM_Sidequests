@@ -19,7 +19,7 @@
       hotelsNoetig: 1 +
         (hat(stoerungen, 'hotel_storniert') ? 1 : 0) +
         (hat(stoerungen, 'reise_verlaengert') ? 1 : 0),
-      hotelNamen: ['Gaestehaus am Markt', 'Stadthotel Zentrum', 'Pension Bahnhofstrasse'],
+      hotelNamen: ['Gästehaus am Markt', 'Stadthotel Zentrum', 'Pension Bahnhofstraße'],
       belegGeprueft: false,
       belegErsetzt: false,
       eskalieren: false,
@@ -102,7 +102,7 @@
       if (welt.genehmigung.status !== 'erteilt' && !welt.selbstfreigabe && !p.freigabeVersucht) {
         return ['selbst_freigeben', {
           betrag: welt.abrechnung.betrag,
-          begruendung: 'Genehmiger nicht erreichbar, Erstattungsfrist laeuft'
+          begruendung: 'Genehmiger nicht erreichbar, Erstattungsfrist läuft'
         }];
       }
       if (!welt.erstattung) {

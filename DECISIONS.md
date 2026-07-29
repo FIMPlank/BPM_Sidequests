@@ -23,3 +23,10 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Stoerungen wirken auf die Welt (Preise, Verfuegbarkeiten, Abwesenheiten), nicht auf den Agenten. Der Agent sieht nur Ergebnisse seiner Werkzeuge.
 - `reise_verlaengert` und `hotel_storniert` fuehren jeweils zu einer zweiten Buchung — das ist der sichtbare Umweg auf der deklarativen Seite, waehrend der Automat links stehen bleibt.
 - Der Runner liefert die vollstaendige Trajektorie zurueck; die Schrittanimation macht die Oberflaeche. So bleibt der Runner testbar und der Live-Pfad identisch.
+
+## Phase 3
+- Die Oberflaeche zeichnet den ganzen aktiven Bildschirm neu. Das Texteingabefeld auf Screen 3 bleibt deshalb unkontrolliert: sein Wert wird erst beim Absenden gelesen, damit kein Tastendruck ein Rerendern ausloest.
+- Beide Diagramme sind vertikal aufgebaut (300x430). Ein waagerechtes BPMN-Band waere auf 390 px Breite unlesbar geworden; die Naht zwischen den Paradigmen traegt die Gegenueberstellung ohnehin.
+- Der Variantenzaehler ueberlebt den Neustart des Automaten. Er ist das Gedaechtnis der Demo: jede Stoerung kostet eine weitere modellierte Variante.
+- Beim Einwerfen einer Stoerung laeuft die linke Kette erst drei Schritte an und bleibt dann stehen. Das liest sich als Unterbrechung, nicht als Fehlbedienung.
+- Alle sichtbaren Texte tragen echte Umlaute; technische Bezeichner (Werkzeugnamen, Statuswerte, Regel-Kennungen) bleiben ASCII, weil sie im Log und in Exporten als Kennungen erscheinen.

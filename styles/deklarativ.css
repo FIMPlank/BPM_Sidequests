@@ -1,2 +1,117 @@
+/* Rechte Seite: Gelaende. Keine Bahnen, weiche Hoehenlinien, offene Flaeche. */
 @layer deklarativ {
+  .panel--deklarativ .panel__label { color: var(--deklarativ); }
+
+  .regelsaetze {
+    list-style: none;
+    margin: 0 0 var(--r3);
+    padding: 0;
+    max-width: 46ch;
+  }
+  .regelsatz {
+    display: flex;
+    gap: var(--r2);
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: var(--haarlinie) solid var(--raster);
+  }
+  .regelsatz__id {
+    font-size: 0.75rem;
+    color: var(--deklarativ);
+    flex: 0 0 auto;
+    min-width: 3.2em;
+  }
+  .regelsatz__text { color: var(--ink-70); }
+  .regelsatz--eigen .regelsatz__id { color: var(--ink); }
+
+  .raum-panel { margin-top: var(--r3); }
+  .raum-panel__titel {
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--ink-45);
+    margin-bottom: var(--r1);
+  }
+  .raum-panel__hinweis {
+    font-size: 0.875rem;
+    color: var(--ink-45);
+    max-width: 42ch;
+    margin-top: var(--r1);
+  }
+
+  .raum { width: 100%; height: auto; max-width: 340px; display: block; }
+
+  #raum-schraffur line { stroke: var(--raster); stroke-width: 1; }
+
+  .raum__verloren {
+    fill: url(#raum-schraffur);
+    stroke: var(--raster);
+    stroke-width: 1;
+    stroke-dasharray: 2 4;
+  }
+
+  .raum__band {
+    stroke: var(--deklarativ);
+    fill: var(--deklarativ);
+    transition: rx var(--takt-pfad) var(--ease-weich), ry var(--takt-pfad) var(--ease-weich);
+  }
+  /* Das aeussere Band ist deckend: es verdeckt die Schraffur des aufgegebenen Raums. */
+  .raum__band--0 {
+    fill: color-mix(in srgb, var(--deklarativ) 7%, var(--paper));
+    fill-opacity: 1;
+    stroke-opacity: 0.5;
+  }
+  .raum__band--1 { fill-opacity: 0.07; stroke-opacity: 0.28; }
+  .raum__band--2 { fill-opacity: 0.08; stroke-opacity: 0.18; }
+
+  .raum__anker { fill: var(--raster); transition: fill var(--takt-schnell) linear; }
+  .raum__anker.ist-besucht { fill: var(--deklarativ); }
+
+  .raum__marke {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    fill: var(--ink-45);
+    font-variant-numeric: tabular-nums;
+  }
+  .raum__marke.ist-besucht { fill: var(--ink-70); }
+
+  .spur__segment {
+    stroke: var(--deklarativ);
+    stroke-width: 2;
+    stroke-linecap: round;
+    fill: none;
+  }
+  .spur__segment.ist-blockiert {
+    stroke: var(--verstoss);
+    stroke-dasharray: 0.04 0.03;
+  }
+  .spur__abweisung line {
+    stroke: var(--verstoss);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .spur__kopf { fill: var(--deklarativ); }
+
+  /* Die deklarative Seite bewegt sich weich — das ist die Haelfte des Arguments. */
+  .spur__segment.ist-neu {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: spur-zeichnen var(--takt-pfad) var(--ease-weich) forwards;
+  }
+  .spur__segment.ist-blockiert.ist-neu {
+    stroke-dasharray: 0.04 0.03;
+    stroke-dashoffset: 0;
+    animation: spur-blenden 240ms var(--ease-weich) forwards;
+  }
+  .spur__abweisung.ist-neu { animation: spur-blenden 240ms var(--ease-weich) forwards; }
+
+  @keyframes spur-zeichnen { to { stroke-dashoffset: 0; } }
+  @keyframes spur-blenden { from { opacity: 0; } to { opacity: 1; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spur__segment.ist-neu { stroke-dashoffset: 0; animation: none; }
+    .raum__band { transition: none; }
+  }
 }

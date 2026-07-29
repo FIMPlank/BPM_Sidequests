@@ -138,7 +138,7 @@
       kind = 'precedence';
       praedikat = { type: 'vorheriger_aufruf', tool: 'genehmigung_anfordern', mit_ergebnis: 'erteilt' };
 
-    // 6) "Nach jeder Reise muessen Belege gesammelt werden"
+    // 6) "Nach jeder Reise müssen Belege gesammelt werden"
     } else if (/muss|mussen|immer|stets|jede[rmn]?\b/.test(n)) {
       kind = 'existence';
       praedikat = { type: 'vorheriger_aufruf', tool: ziel };
@@ -182,7 +182,7 @@
       },
       {
         id: 'S-3',
-        text_de: 'Nach jeder Reise muessen Belege gesammelt werden.',
+        text_de: 'Nach jeder Reise müssen Belege gesammelt werden.',
         kind: 'existence', target: 'beleg_pruefen',
         predicate: { type: 'vorheriger_aufruf', tool: 'beleg_pruefen' },
         source: 'system', enforcement: 'runtime'

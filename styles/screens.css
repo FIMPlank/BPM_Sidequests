@@ -1,2 +1,9 @@
 @layer screens {
+  .screen h1 { margin-bottom: var(--r2); }
+  .lead {
+    color: var(--ink-70);
+    font-size: 1.125rem;
+    max-width: 58ch;
+  }
+  .screen p { max-width: var(--mass); }
 }

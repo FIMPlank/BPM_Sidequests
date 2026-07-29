@@ -1,2 +1,46 @@
+/* Linke Seite: technische Zeichnung. Rechte Winkel, Haarlinien, kein Radius. */
 @layer imperativ {
+  .fsm { width: 100%; height: auto; max-width: 340px; display: block; }
+
+  .fsm__achse, .fsm__tick, .fsm__kante {
+    stroke: var(--raster);
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+  }
+  .fsm__kante.ist-erledigt { stroke: var(--imperativ); }
+
+  .fsm__nr {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    fill: var(--ink-45);
+  }
+
+  .fsm__knoten {
+    fill: var(--paper-hoch);
+    stroke: var(--raster);
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+    /* Bewusst ohne Uebergang: die imperative Seite bewegt sich nicht weich. */
+    transition: none;
+  }
+  .fsm__knoten.ist-erledigt { fill: var(--imperativ-weich); stroke: var(--imperativ); }
+  .fsm__knoten.ist-aktuell { stroke: var(--imperativ); stroke-width: 2; }
+  .fsm__knoten.ist-verstoss { fill: var(--verstoss-weich); stroke: var(--verstoss); stroke-width: 2; }
+
+  .fsm__text {
+    font-family: var(--font-body);
+    font-size: 12px;
+    fill: var(--ink);
+  }
+
+  /* Der Stopp ist ein Vermerk auf der Zeichnung, keine Animation. */
+  .fsm__stopp {
+    fill: none;
+    stroke: var(--verstoss);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+    shape-rendering: crispEdges;
+  }
+
+  .panel--imperativ .panel__label { color: var(--imperativ); }
 }
