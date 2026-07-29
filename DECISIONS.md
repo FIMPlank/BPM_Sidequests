@@ -64,3 +64,10 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Die beiden Grautoene wurden umbenannt und nachgezogen, weil `--ink-45` mit 2,9:1 unter der Schwelle lag. Der Name nennt jetzt die Rolle, nicht die Mischung.
 - Ocker bleibt als Flaeche und als Linie unveraendert; nur fuer Text gibt es die abgedunkelte Variante. Sonst haette die rechte Seite ihre Waerme verloren.
 - Bei reduzierter Bewegung wird die Animation nicht nur abgeschaltet, sondern durch eine Textzeile ersetzt. Ohne sie wirkt der harte Stopp links wie ein Fehler.
+
+## v2 — Phase 0 (Werkzeuge am Ort)
+- Auf dieser Maschine ist **kein Node** installiert. `tests/run-node.js` wird trotzdem genau wie in `AGENT.md` §4 gefordert geschrieben — es laeuft auf Maschinen mit Node, etwa dem GitHub-Actions-Runner aus dem Anhang.
+- Verfuegbar sind: Python 3.12, Chrome und Edge. Das Gatter vor jedem Commit laeuft deshalb ueber **kopfloses Chrome** (`--headless=new --dump-dom`) auf `tests.html`. Es liest dieselbe Zusammenfassung „n Tests, 0 Fehler“, die der Doppelklick zeigt.
+- `tests/run-node.js` selbst wurde zweifach geprueft: (1) Syntaxpruefung ueber `new Function(quelle)` im Browser, (2) ein emulierter Lauf, bei dem `require`, `fs`, `path`, `vm` und `process` im Browser nachgebildet sind. Der emulierte Lauf meldet dieselben 234 Tests, 0 Fehler und `exitCode 0` wie `tests.html`.
+- Nicht ausgefuehrt werden konnte allein der Node-eigene Attrappenblock (`browserAufsetzen`), weil ein Browser `window`, `document` und `location` bereits mitbringt. Er wurde stattdessen gegen die vollstaendige Liste der in `src/` und `tests/` benutzten Browser-Globalen gelesen: `fetch`, `URLSearchParams`, `window.location.search`, `window.crypto`, `document.getElementById`, `matchMedia`, `Blob`, `URL.createObjectURL`, `window.setTimeout`. Jede davon ist abgedeckt.
+- `window` wird im Knoten-Lauf auf `globalThis` gelegt, nicht auf ein eigenes Objekt. Nur so wird aus `window.describe = ...` in `tests/harness.js` eine globale Funktion — genau wie im Browser.

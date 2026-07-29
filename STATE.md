@@ -5,7 +5,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 
 | ID | Status | Abhängig von | Was | Zeit | Umfang |
 |---|---|---|---|---|---|
-| V2-00 | wip | — | Headless-Testlauf `tests/run-node.js` | | |
+| V2-00 | done | — | Headless-Testlauf `tests/run-node.js` | 2026-07-29 | 2 Dateien |
 | V2-01 | todo | 00 | Aktleiste und feste Fallzeile | | |
 | V2-02 | todo | 01 | Rahmensatz- und Rückblick-Slots | | |
 | V2-03 | todo | 01 | Akt 0 — Der Auftrag | | |
@@ -24,3 +24,4 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 ## Notizen
 
 - Aufsetzen: Zweig `v2-narrative` aus `main`, `AGENT.md` und `STATE.md` angelegt.
+- V2-00: Kein Node am Ort. Gatter laeuft ueber kopfloses Chrome auf `tests.html` (234 Tests, 0 Fehler); `tests/run-node.js` zusaetzlich emuliert geprueft. Begruendung in `DECISIONS.md`.
