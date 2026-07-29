@@ -1,0 +1,26 @@
+# STATE — Handlungsraum-Sandbox v2
+
+Zweig: `v2-narrative`. Einzige Quelle der Wahrheit zwischen zwei Aufrufen.
+Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb der Tabelle.
+
+| ID | Status | Abhängig von | Was | Zeit | Umfang |
+|---|---|---|---|---|---|
+| V2-00 | todo | — | Headless-Testlauf `tests/run-node.js` | | |
+| V2-01 | todo | 00 | Aktleiste und feste Fallzeile | | |
+| V2-02 | todo | 01 | Rahmensatz- und Rückblick-Slots | | |
+| V2-03 | todo | 01 | Akt 0 — Der Auftrag | | |
+| V2-04 | todo | 03 | Akt 1 — Störung vor dem Lauf | | |
+| V2-05 | todo | 01 | Akt 3 — eine große Zahl | | |
+| V2-06 | todo | 00 | `src/domain/latency.js` | | |
+| V2-07 | todo | 05, 06 | Akt 4, Teil 1 — Platzierung | | |
+| V2-08 | todo | 07 | Akt 4, Teil 2 — Kombination und Muster | | |
+| V2-09 | todo | 07 | Die Verschmelzung zu einer Fläche | | |
+| V2-10 | todo | 08 | Plot nach Akt 4 | | |
+| V2-11 | todo | 08 | Akt 5 — Spalte Platzierung, A/B-Vergleich | | |
+| V2-12 | todo | 11 | Vortragsmodus über fünf Akte | | |
+| V2-13 | todo | 12 | Textdurchgang | | |
+| V2-14 | todo | 13 | `DEMO.md`, `HANDOVER.md`, `README.md` | | |
+
+## Notizen
+
+- Aufsetzen: Zweig `v2-narrative` aus `main`, `AGENT.md` und `STATE.md` angelegt.
