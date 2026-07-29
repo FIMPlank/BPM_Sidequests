@@ -17,3 +17,9 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Zur Laufzeit entscheidbar sind nur `threshold`, `precedence`, `absence`. `response` und `existence` sprechen ueber die Zukunft eines Laufs und werden ausschliesslich nachgelagert geprueft; die Leitplanke laesst sie passieren.
 - Freiheitsgrade zaehlen beide Durchsetzungsarten gleich, weil eine Regel den sanktionierten Raum einschraenkt, unabhaengig davon, wo sie geprueft wird. Ausgewertet wird gegen die leere Vorgeschichte (konservative Lesart, im Kopf von `freedom.js` hergeleitet).
 - Die drei Systemregeln sind bereits `runtime`; der Umschalter auf Screen 3 setzt die Durchsetzungsart fuer alle Regeln eines Laufs.
+
+## Phase 2
+- Der Mock-Agent ist ein kleiner Planer, kein Abspielband: er waehlt die naechste Aktion aus dem Weltzustand und plant nach einer Ablehnung um. Dadurch entstehen Pfadwechsel echt statt vorgemalt — und der Live-Agent kann sich in dieselbe Trajektorienform einfuegen.
+- Stoerungen wirken auf die Welt (Preise, Verfuegbarkeiten, Abwesenheiten), nicht auf den Agenten. Der Agent sieht nur Ergebnisse seiner Werkzeuge.
+- `reise_verlaengert` und `hotel_storniert` fuehren jeweils zu einer zweiten Buchung — das ist der sichtbare Umweg auf der deklarativen Seite, waehrend der Automat links stehen bleibt.
+- Der Runner liefert die vollstaendige Trajektorie zurueck; die Schrittanimation macht die Oberflaeche. So bleibt der Runner testbar und der Live-Pfad identisch.

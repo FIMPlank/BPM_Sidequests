@@ -15,3 +15,7 @@ Gate: `tests.html` rendert `0 Tests, 0 Fehler` (headless in Edge geprueft).
 ## Phase 1 — GRUEN
 `src/domain/` vollstaendig und DOM-frei: `tools.js`, `imperative.js`, `constraints.js`, `compiler.js`, `checker.js`, `guardrail.js`, `freedom.js`, `tokens.js`.
 Gate: **97 Tests, 0 Fehler**. Abgedeckt: alle sechs Praedikatarten, alle fuenf Regelarten im Checker, die Leitplanke, der Compiler inkl. Ablehnungen, die Freiheitsgrad-Formel (40 Zellen, 90 % mit Systemregeln, minus 6 Zellen je Schwellenwert-Regel).
+
+## Phase 2 — GRUEN
+`src/agent/runner.js` (Vertrag, Stoerungsliste, Ergebnisbau) und `src/agent/mockRunner.js` (deterministischer Planer).
+Gate: **134 Tests, 0 Fehler**. Belegt: Grundlauf 0 Verstoesse; Screen-2-Lauf Ziel erreicht, 0 Verstoesse, `selbst_freigeben` in der Trajektorie; mit Schwellenwert-Regel zur Laufzeit >= 1 geblockter Aufruf, Eskalation an die Vertretung, 0 Verstoesse, keine Selbstfreigabe; dieselbe Regel im Nachgang blockt nichts und meldet genau 1 Verstoss.
