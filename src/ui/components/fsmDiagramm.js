@@ -20,7 +20,7 @@
     var teile = [];
 
     teile.push('<svg class="fsm" viewBox="0 0 ' + BREITE + ' ' + HOEHE + '" role="img" ' +
-      'aria-label="Imperatives Prozessmodell mit sechs Schritten" focusable="false">');
+      'aria-label="' + e(HR.copy.a11y.fsmDiagramm) + '" focusable="false">');
 
     // Bezugslinie links — Anmutung einer Zeichnung, kein Schmuck.
     teile.push('<line class="fsm__achse" x1="36" y1="' + (knotenY(0) + H / 2) +

@@ -36,8 +36,11 @@
 
   function tastatur(ev) {
     if (!HR.config.vortrag) return;
-    var ziel = ev.target;
-    if (ziel && (ziel.tagName === 'INPUT' || ziel.tagName === 'TEXTAREA')) return;
+    // Wer in Akt 3 eine Regel tippt, wechselt nicht den Akt: solange ein Feld
+    // den Fokus hat, gehoert jede Taste dem Feld. Auch Modifikatoren bleiben aus
+    // dem Weg — Strg-R und Alt-Pfeil gehoeren dem Browser.
+    if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    if (HR.a11y.istEingabe(ev.target) || HR.a11y.istEingabe(document.activeElement)) return;
     var z = HR.store.holen();
     if (ev.key === 'ArrowRight') HR.store.senden({ typ: 'akt', n: Math.min(HR.store.AKT_MAX, z.akt + 1) });
     else if (ev.key === 'ArrowLeft') HR.store.senden({ typ: 'akt', n: Math.max(HR.store.AKT_MIN, z.akt - 1) });

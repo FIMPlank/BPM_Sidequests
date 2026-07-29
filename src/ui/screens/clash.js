@@ -49,7 +49,7 @@
     var systemRegeln = z.regeln.filter(function (r) { return r.source === 'system'; });
     var h = [];
 
-    h.push('<h1 id="akt-1-titel">' + e(s.titel) + '</h1>');
+    h.push('<h1 id="akt-1-titel" tabindex="-1">' + e(s.titel) + '</h1>');
     h.push('<p class="lead">' + e(s.lead) + '</p>');
     if (z.wahl) {
       h.push('<p class="statuszeile" role="status">' +
@@ -58,25 +58,27 @@
 
     h.push('<div class="clash">');
 
+    // Die Beschriftung steht sichtbar im Panel; sie ist zugleich sein Name.
     h.push('<section class="panel panel--imperativ' + seitenklasse(z, 'imperativ') +
-      '" aria-label="' + e(HR.copy.label.imperativ) + '">');
+      '" aria-labelledby="panel-imperativ-label">');
     h.push(seitenmarke(z, 'imperativ'));
-    h.push('<p class="panel__label">' + e(HR.copy.label.imperativ) + '</p>');
+    h.push('<p class="panel__label" id="panel-imperativ-label">' + e(HR.copy.label.imperativ) + '</p>');
     h.push(HR.komponenten.fsmDiagramm.zeichnen(z.fsm));
     if (z.fsm.gestoppt) {
       h.push('<p class="badge badge--verstoss" role="status">' + e(s.fsmBadge) + '</p>');
     }
     // Die eine Zahl, um die es in Akt 1 geht. Sie ist die groesste der Flaeche.
-    h.push('<div class="grosszahl">');
-    h.push('<span class="grosszahl__wert mono" aria-live="polite">' + z.fsm.varianten + '</span>');
+    // Die Zahl allein sagt nichts: angesagt wird sie zusammen mit ihrer Beschriftung.
+    h.push('<div class="grosszahl" role="status">');
+    h.push('<span class="grosszahl__wert mono">' + z.fsm.varianten + '</span>');
     h.push('<span class="grosszahl__name">' + e(s.variantenLabel) + '</span>');
     h.push('</div>');
     h.push('</section>');
 
     h.push('<section class="panel panel--deklarativ' + seitenklasse(z, 'deklarativ') +
-      '" aria-label="' + e(HR.copy.label.deklarativ) + '">');
+      '" aria-labelledby="panel-deklarativ-label">');
     h.push(seitenmarke(z, 'deklarativ'));
-    h.push('<p class="panel__label">' + e(HR.copy.label.deklarativ) + '</p>');
+    h.push('<p class="panel__label" id="panel-deklarativ-label">' + e(HR.copy.label.deklarativ) + '</p>');
     h.push(regelsaetze(systemRegeln));
     h.push('<div class="raum-panel"><h2 class="raum-panel__titel">' + e(s.raumTitel) + '</h2>');
     h.push(HR.komponenten.handlungsraum.zeichnen({
@@ -92,15 +94,17 @@
     // Erst die Stoerung waehlen, dann laufen lassen. Die Reihenfolge ist der
     // Punkt des Akts: der Besucher setzt die Bedingung, er sieht ihr nicht zu.
     h.push('<div class="steuerung steuerung--wahl">');
-    h.push('<div class="steuerung__gruppe"><span class="steuerung__titel">' + e(s.stoerungWaehlen) + '</span>');
-    HR.imperative.STOERUNGEN.forEach(function (id) {
-      h.push(HR.render.knopf('stoerung-waehlen', s.stoerungen[id], {
+    var knoepfe = HR.imperative.STOERUNGEN.map(function (id) {
+      return HR.render.knopf('stoerung-waehlen', s.stoerungen[id], {
         wert: id,
         gedrueckt: z.stoerungWahl === id,
         deaktiviert: z.laeuft
-      }));
-    });
-    h.push('</div></div>');
+      });
+    }).join('');
+    h.push(HR.a11y.gruppe(e(s.stoerungWaehlen),
+      '<div class="steuerung__gruppe">' + knoepfe + '</div>',
+      { legendeKlasse: 'steuerung__titel' }));
+    h.push('</div>');
 
     h.push('<div class="steuerung">');
     h.push(HR.render.knopf('prozess-starten',

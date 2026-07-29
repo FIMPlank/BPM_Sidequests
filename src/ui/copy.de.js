@@ -313,7 +313,20 @@
       fsmGestoppt: 'Das imperative Modell ist stehen geblieben: für diese Störung ist keine Transition definiert.',
       agentNeu: 'Der Agent hat einen neuen Pfad durch den Handlungsraum gewählt.',
       reduziert: 'Bewegung ist reduziert: die Darstellung wechselt ohne Animation.',
-      verschmolzen: 'Beide Seiten stehen hier in einer Fläche: Handlungsraum mit harten Schranken darin.'
+      verschmolzen: 'Beide Seiten stehen hier in einer Fläche: Handlungsraum mit harten Schranken darin.',
+
+      /*
+       * Beschriftungen, die nur die Vorlesehilfe hoert oder die eine sichtbare
+       * Beschriftung ergaenzen, wo sie fuer sich genommen mehrdeutig waere.
+       * {n}, {regel} und {ort} werden zur Laufzeit gefuellt.
+       */
+      fsmDiagramm: 'Imperatives Prozessmodell mit sechs Schritten',
+      regelHilfe: 'Ein Satz genügt: Vorgang und Bedingung, etwa „Buchungen über 200 € pro Nacht brauchen eine Freigabe".',
+      zuordnungTabelle: 'Zuordnung der drei Regeln zu den drei Orten',
+      knopfImKontext: '{knopf}: {kontext}',
+      auditTabelle: 'Protokoll des Laufs, je Schritt eine Zeile',
+      belegOeffnen: 'Beleg zu Schritt {n} anzeigen',
+      belegSchliessen: 'Beleg zu Schritt {n} ausblenden'
     }
   };
 

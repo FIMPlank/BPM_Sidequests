@@ -598,6 +598,136 @@
     });
   });
 
+  describe('Bedienung ohne Maus und ohne Bildschirm', function () {
+    var sys = HR.compiler.systemRegeln();
+    var schwelle = HR.compiler.uebersetzen('Buchungen über 200 € pro Nacht brauchen eine Freigabe', { id: 'U-9' }).constraint;
+
+    /** Der kopflose Lauf hat nur eine Attrappe des DOM — Fokus gibt es dort nicht. */
+    function echtesDom() {
+      var p = document.createElement('div');
+      p.innerHTML = '<i id="dom-probe"></i>';
+      return !!(p.querySelector && p.querySelector('#dom-probe') && document.body && document.body.appendChild);
+    }
+
+    it('markiert den laufenden Akt als Schritt, die uebrigen nicht', function () {
+      var markup = HR.render.aktleisteMarkup(red(anfang(), { typ: 'akt', n: 2 }));
+      expect(markup.split('aria-current="step"').length - 1).toBe(1);
+      expect(markup.split('aria-current="false"').length - 1).toBe(4);
+    });
+
+    it('gibt jedem Akt eine anspringbare Ueberschrift', function () {
+      for (var i = 0; i <= 5; i++) {
+        var h = HR.screens[i].zeichnen(anfang());
+        expect(/<h1 id="[^"]+" tabindex="-1">/.test(h)).toBeTruthy();
+      }
+    });
+
+    it('holt den Fokus auf die Ueberschrift des Akts', function () {
+      if (!echtesDom()) return;
+      var el = document.createElement('div');
+      el.innerHTML = '<h1 id="probe-titel">Titel</h1>';
+      document.body.appendChild(el);
+      var h = HR.a11y.zurUeberschrift(el);
+      expect(h.id).toBe('probe-titel');
+      expect(h.getAttribute('tabindex')).toBe('-1');
+      expect(document.activeElement).toBe(h);
+      document.body.removeChild(el);
+    });
+
+    it('findet den Fokus nach dem Neuzeichnen wieder', function () {
+      if (!echtesDom()) return;
+      var el = document.createElement('div');
+      el.innerHTML = '<button data-aktion="probe" data-wert="b">B</button>';
+      document.body.appendChild(el);
+      el.querySelector('button').focus();
+      var marke = HR.a11y.fokusMerken(el);
+      expect(marke.auswahl).toBe('[data-aktion="probe"][data-wert="b"]');
+      el.innerHTML = '<button data-aktion="probe" data-wert="b">B</button>';
+      expect(HR.a11y.fokusHerstellen(el, marke)).toBeTruthy();
+      document.body.removeChild(el);
+    });
+
+    it('erkennt, wo gerade getippt wird', function () {
+      var feld = document.createElement('input');
+      var knopf = document.createElement('button');
+      expect(HR.a11y.istEingabe(feld)).toBeTruthy();
+      expect(HR.a11y.istEingabe(document.createElement('textarea'))).toBeTruthy();
+      expect(HR.a11y.istEingabe(knopf)).toBeFalsy();
+      expect(HR.a11y.istEingabe(null)).toBeFalsy();
+    });
+
+    it('fasst zusammengehoerige Knoepfe zu beschrifteten Gruppen', function () {
+      expect(HR.screens[0].zeichnen(anfang())).toContain('<legend class="gruppe__legende auftrag__frage">Wie soll das laufen?</legend>');
+      expect(HR.screens[1].zeichnen(anfang())).toContain('Störung wählen</legend>');
+      var akt4 = HR.screens[4].zeichnen(anfang());
+      expect(akt4.split('<fieldset class="gruppe"').length - 1).toBe(2);
+      expect(akt4).toContain('Wo soll diese Regel greifen?</h2></legend>');
+    });
+
+    it('stellt auch die Frage aus Akt 2 als Beschriftung ihrer Antworten', function () {
+      var e = HR.agent.mock.laufSynchron(HR.agent.anfrage({
+        disturbances: HR.screens[2].STOERUNGEN, constraints: sys, enforcement: 'runtime'
+      }));
+      var h = HR.screens[2].zeichnen(red(anfang(), { typ: 'lauf_fertig', ergebnis: e,
+        kontext: { regeln: sys, screen: 2 } }));
+      expect(h).toContain('<legend class="gruppe__legende frage__text">Sind Sie damit einverstanden?</legend>');
+      expect(h).toContain('<div class="ergebnis" role="status">');
+      expect(h).toContain('<div class="pruefpanel" role="status">');
+    });
+
+    it('haengt Hilfe und Fehler an das Regelfeld', function () {
+      var h = HR.screens[3].zeichnen(anfang());
+      expect(h).toContain('aria-describedby="regel-hilfe"');
+      expect(h).toContain('id="regel-hilfe"');
+      expect(h.indexOf('aria-invalid')).toBe(-1);
+
+      var abgelehnt = HR.screens[3].zeichnen(red(anfang(), { typ: 'entwurf', fehler: { code: 'kein_werkzeug' } }));
+      expect(abgelehnt).toContain('aria-invalid="true"');
+      expect(abgelehnt).toContain('aria-errormessage="regel-fehler"');
+      expect(abgelehnt).toContain('id="regel-fehler" role="alert"');
+    });
+
+    it('nennt jeden Knopf, dessen Aufschrift allein mehrdeutig waere', function () {
+      var h = HR.screens[4].zeichnen(anfang());
+      expect(h).toContain('aria-label="Diesen Ort wählen: Leitplanke zur Laufzeit"');
+      expect(h).toContain('aria-label="Prüfung im Nachgang: Belegpflicht"');
+      expect(h).toContain('<caption class="nur-screenreader">Zuordnung der drei Regeln zu den drei Orten</caption>');
+    });
+
+    it('beschriftet die Audit-Tabelle und ihre aufklappbaren Zeilen', function () {
+      var lauf = HR.agent.mock.laufSynchron(HR.agent.anfrage({
+        disturbances: ['hotel_ausgebucht', 'genehmiger_urlaub'],
+        constraints: sys.concat([schwelle]), enforcement: 'runtime'
+      }));
+      var h = HR.komponenten.logTabelle.voll(lauf.trajectory, sys.concat([schwelle]), {});
+      expect(h).toContain('<caption class="nur-screenreader">Protokoll des Laufs, je Schritt eine Zeile</caption>');
+      expect(h).toContain('aria-label="Beleg zu Schritt 1 anzeigen"');
+      expect(h.split('scope="col"').length - 1).toBe(HR.copy.screen4.spalten.length);
+      expect(h.indexOf('aria-controls')).toBe(-1);
+
+      var offen = HR.komponenten.logTabelle.voll(lauf.trajectory, sys.concat([schwelle]), { 0: true });
+      expect(offen).toContain('aria-label="Beleg zu Schritt 1 ausblenden"');
+      expect(offen).toContain('aria-controls="beleg-0"');
+      expect(offen).toContain('id="beleg-0"');
+    });
+
+    it('kommt ohne ARIA aus, wo das Element schon spricht', function () {
+      for (var i = 0; i <= 5; i++) {
+        var h = HR.screens[i].zeichnen(anfang());
+        expect(h.indexOf('role="button"')).toBe(-1);
+        expect(h.indexOf('role="list"')).toBe(-1);
+        // Eine Live-Region traegt entweder role="status" oder aria-live, nie beides.
+        expect(h.indexOf('role="status" aria-live')).toBe(-1);
+      }
+    });
+
+    it('haelt die Sprungmarke und die Ruecksicht auf reduzierte Bewegung', function () {
+      expect(HR.copy.seite.zumInhalt).toBe('Zum Inhalt springen');
+      expect(typeof HR.render.bewegungErlaubt()).toBe('boolean');
+      expect(HR.copy.a11y.reduziert).toContain('ohne Animation');
+    });
+  });
+
   describe('Vortragsmodus', function () {
     it('nennt die Bedienung fuer beide Akte', function () {
       var t = HR.copy.seite.vortragHinweis;

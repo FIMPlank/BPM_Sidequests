@@ -40,8 +40,9 @@
     var h = [];
 
     h.push('<div class="anzeigen">');
-    h.push('<div class="grosszahl' + (v.warn ? ' ist-warn' : '') + '">');
-    h.push('<span class="grosszahl__wert mono" aria-live="polite">' + e(v.wert) + '</span>');
+    // Angesagt wird die Zahl samt Beschriftung, nicht die nackte Ziffer.
+    h.push('<div class="grosszahl' + (v.warn ? ' ist-warn' : '') + '" role="status">');
+    h.push('<span class="grosszahl__wert mono">' + e(v.wert) + '</span>');
     h.push('<span class="grosszahl__name">' + e(s.verstoesse) + '</span>');
     h.push('</div>');
 
