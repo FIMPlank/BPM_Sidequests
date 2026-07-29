@@ -9,7 +9,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 | V2-01 | done | 00 | Aktleiste und feste Fallzeile | 2026-07-29 | 11 Dateien |
 | V2-02 | done | 01 | Rahmensatz- und Rückblick-Slots | 2026-07-29 | 4 Dateien |
 | V2-03 | done | 01 | Akt 0 — Der Auftrag | 2026-07-29 | 6 Dateien |
-| V2-04 | todo | 03 | Akt 1 — Störung vor dem Lauf | | |
+| V2-04 | wip  | 03 | Akt 1 — Störung vor dem Lauf | | |
 | V2-05 | todo | 01 | Akt 3 — eine große Zahl | | |
 | V2-06 | todo | 00 | `src/domain/latency.js` | | |
 | V2-07 | todo | 05, 06 | Akt 4, Teil 1 — Platzierung | | |
