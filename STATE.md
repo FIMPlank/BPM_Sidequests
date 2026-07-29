@@ -14,7 +14,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 | V2-06 | done | 00 | `src/domain/latency.js` | 2026-07-29 | 4 Dateien |
 | V2-07 | done | 05, 06 | Akt 4, Teil 1 — Platzierung | 2026-07-29 | 8 Dateien |
 | V2-08 | done | 07 | Akt 4, Teil 2 — Kombination und Muster | 2026-07-29 | 8 Dateien |
-| V2-09 | todo | 07 | Die Verschmelzung zu einer Fläche | | |
+| V2-09 | wip  | 07 | Die Verschmelzung zu einer Fläche | | |
 | V2-10 | todo | 08 | Plot nach Akt 4 | | |
 | V2-11 | todo | 08 | Akt 5 — Spalte Platzierung, A/B-Vergleich | | |
 | V2-12 | todo | 11 | Vortragsmodus über fünf Akte | | |
