@@ -83,3 +83,8 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 ## v2 — V2-02 (Rahmensatz und Ruecknahme)
 - Beide Zeilen werden von der **Huelle** gesetzt (`HR.render.zeichnen`), nicht von den Aktmodulen. Nur so bekommt Akt 2 seine beiden Zeilen, ohne dass `src/ui/screens/preis.js` angefasst wird — §6 verbietet das. Der Rahmensatz steht als Vorzeile ueber der Ueberschrift, die Ruecknahme als abgesetzter Block darunter.
 - Die Zeilen sind vorlaeufig, halten aber schon die Laengengrenzen ein; Tests pruefen zwoelf und zwanzig Woerter. V2-13 schreibt sie neu, die Tests bleiben das Gatter.
+
+## v2 — V2-03 (Akt 0)
+- Akt 0 traegt genau zwei Knoepfe und sonst keinen. Ein „Weiter“ daneben haette die Wahl zur Zierde gemacht; die Aufgabe verlangt, dass die erste Handlung eine Entscheidung ist. Wer die Wahl umgehen will, nimmt `?akt=1`.
+- Die nicht gewaehlte Seite wird auf halbe Deckkraft gesetzt, nicht ausgeblendet, und kommt bei Zeigen oder Tastaturfokus zurueck. Der Akt heisst „Der Clash“ — ohne beide Seiten gaebe es keinen.
+- Die Wahl startet denselben Lauf, den auch der Knopf im Akt ausloest; `clash.js` gibt `starten` dafuer nach aussen. Zwei Startwege haetten zwei Verhalten bedeutet.

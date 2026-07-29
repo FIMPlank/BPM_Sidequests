@@ -177,9 +177,20 @@
       consentDanke: 'Danke. Es wird nur der Regeltext gespeichert, keine Kennung Ihrer Person.'
     },
 
-    /** Akt 0 — der Vorspann. Inhalt kommt in V2-03, Text in V2-13. */
+    /** Akt 0 — der Vorspann. Eine Ansage, zwei Wege, keine dritte Option. */
     akt0: {
-      titel: 'Der Auftrag'
+      titel: 'Der Auftrag',
+      rolle: 'Leiterin Finanzen, Montagmorgen',
+      ansage: 'Frau Berger war beim Kunden. Sorgen Sie dafür, dass sie ihr Geld zurückbekommt — regelkonform, und ohne dass ich jeden Beleg selbst ansehe.',
+      frage: 'Wie soll das laufen?',
+      heute: 'So machen wir es heute',
+      agent: 'So würde ein Agent es machen',
+      heuteHinweis: 'Ein modellierter Ablauf. Jeder Schritt steht fest, bevor der erste getan ist.',
+      agentHinweis: 'Ein Ziel und ein paar Regeln. Den Weg sucht der Agent selbst.',
+      gewaehltHeute: 'Sie haben den festen Ablauf gewählt.',
+      gewaehltAgent: 'Sie haben den Agenten gewählt.',
+      seiteAktiv: 'Ihr Weg',
+      seitePassiv: 'Der andere Weg'
     },
 
     /** Akt 4 — die Architektur. Inhalt kommt in V2-07 und V2-08. */

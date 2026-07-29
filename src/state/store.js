@@ -38,7 +38,9 @@
       laufMitRegel: null,
       offeneZeilen: {},
       consent: false,
-      hinweis: null
+      hinweis: null,
+      /** Die Wahl aus Akt 0: 'heute' (imperativ) oder 'agent' (deklarativ). */
+      wahl: null
     };
   }
 
@@ -53,6 +55,15 @@
     switch (a.typ) {
       case 'akt':
         n = kopie(z); n.akt = begrenzen(a.n); n.hinweis = null; return n;
+
+      // Die Wahl aus Akt 0 fuehrt in einem Zug nach Akt 1. Beide Seiten laufen
+      // dort weiter — die gewaehlte steht vorn, die andere bleibt sichtbar.
+      case 'wahl':
+        n = kopie(z);
+        n.wahl = (a.wert === 'heute' || a.wert === 'agent') ? a.wert : null;
+        n.akt = 1;
+        n.hinweis = null;
+        return n;
 
       // Alias: die Bildschirmnummern der ersten Fassung zeigen weiter auf ihren Akt.
       case 'screen':

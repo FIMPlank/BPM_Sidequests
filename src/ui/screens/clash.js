@@ -22,6 +22,27 @@
     return '';
   }
 
+  /**
+   * Die Wahl aus Akt 0 entscheidet, welche Seite vorn steht. Die andere wird
+   * nicht entfernt, nur zurueckgenommen — der Vergleich ist der ganze Akt.
+   */
+  function istGewaehlt(z, seite) {
+    return (z.wahl === 'heute' && seite === 'imperativ') ||
+           (z.wahl === 'agent' && seite === 'deklarativ');
+  }
+
+  function seitenklasse(z, seite) {
+    if (!z.wahl) return '';
+    return istGewaehlt(z, seite) ? ' ist-gewaehlt' : ' ist-zurueckgenommen';
+  }
+
+  function seitenmarke(z, seite) {
+    if (!z.wahl) return '';
+    var a = HR.copy.akt0;
+    return '<p class="panel__wahlmarke">' +
+      HR.render.esc(istGewaehlt(z, seite) ? a.seiteAktiv : a.seitePassiv) + '</p>';
+  }
+
   function zeichnen(z) {
     var e = HR.render.esc;
     var s = txt();
@@ -30,10 +51,16 @@
 
     h.push('<h1 id="akt-1-titel">' + e(s.titel) + '</h1>');
     h.push('<p class="lead">' + e(s.lead) + '</p>');
+    if (z.wahl) {
+      h.push('<p class="statuszeile" role="status">' +
+        e(z.wahl === 'heute' ? HR.copy.akt0.gewaehltHeute : HR.copy.akt0.gewaehltAgent) + '</p>');
+    }
 
     h.push('<div class="clash">');
 
-    h.push('<section class="panel panel--imperativ" aria-label="' + e(HR.copy.label.imperativ) + '">');
+    h.push('<section class="panel panel--imperativ' + seitenklasse(z, 'imperativ') +
+      '" aria-label="' + e(HR.copy.label.imperativ) + '">');
+    h.push(seitenmarke(z, 'imperativ'));
     h.push('<p class="panel__label">' + e(HR.copy.label.imperativ) + '</p>');
     h.push(HR.komponenten.fsmDiagramm.zeichnen(z.fsm));
     if (z.fsm.gestoppt) {
@@ -43,7 +70,9 @@
       '</span><span class="zaehler-zeile__wert mono" aria-live="polite">' + z.fsm.varianten + '</span></p>');
     h.push('</section>');
 
-    h.push('<section class="panel panel--deklarativ" aria-label="' + e(HR.copy.label.deklarativ) + '">');
+    h.push('<section class="panel panel--deklarativ' + seitenklasse(z, 'deklarativ') +
+      '" aria-label="' + e(HR.copy.label.deklarativ) + '">');
+    h.push(seitenmarke(z, 'deklarativ'));
     h.push('<p class="panel__label">' + e(HR.copy.label.deklarativ) + '</p>');
     h.push(regelsaetze(systemRegeln));
     h.push('<div class="raum-panel"><h2 class="raum-panel__titel">' + e(s.raumTitel) + '</h2>');
@@ -153,5 +182,9 @@
   HR.render.auf('prozess-starten', prozessStarten);
   HR.render.auf('stoerung', function (wert) { stoerungEinwerfen(wert); });
 
-  HR.render.bildschirm(1, { zeichnen: zeichnen });
+  HR.render.bildschirm(1, {
+    zeichnen: zeichnen,
+    starten: prozessStarten,        // Akt 0 loest denselben Lauf aus
+    istGewaehlt: istGewaehlt
+  });
 })(window.HR = window.HR || {});

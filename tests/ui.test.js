@@ -141,6 +141,60 @@
     });
   });
 
+  describe('Akt 0 — Der Auftrag', function () {
+    function html(z) { return HR.screens[0].zeichnen(z); }
+
+    it('stellt die Ansage in die Worte einer Vorgesetzten', function () {
+      var h = html(anfang());
+      expect(h).toContain('Frau Berger war beim Kunden');
+      expect(h).toContain('Leiterin Finanzen');
+    });
+    it('bietet genau zwei Wege an', function () {
+      var h = html(anfang());
+      expect(h).toContain('So machen wir es heute');
+      expect(h).toContain('So würde ein Agent es machen');
+      expect(h.split('data-aktion="wahl"').length - 1).toBe(2);
+    });
+    it('macht die Wahl zur ersten Handlung der Seite', function () {
+      var h = html(anfang());
+      // Ausser den beiden Wahlknoepfen gibt es hier keinen Knopf.
+      expect(h.split('<button').length - 1).toBe(2);
+      expect(anfang().akt).toBe(0);
+    });
+    it('legt beide Wege nebeneinander und erklaert sie', function () {
+      var h = html(anfang());
+      expect(h.split('wahl__karte').length - 1).toBe(2);
+      expect(h).toContain('Den Weg sucht der Agent selbst');
+    });
+    it('fuehrt jede Wahl nach Akt 1', function () {
+      expect(red(anfang(), { typ: 'wahl', wert: 'heute' }).akt).toBe(1);
+      expect(red(anfang(), { typ: 'wahl', wert: 'agent' }).akt).toBe(1);
+    });
+    it('merkt sich, welcher Weg gewaehlt wurde', function () {
+      expect(red(anfang(), { typ: 'wahl', wert: 'heute' }).wahl).toBe('heute');
+      expect(red(anfang(), { typ: 'wahl', wert: 'agent' }).wahl).toBe('agent');
+      expect(red(anfang(), { typ: 'wahl', wert: 'unfug' }).wahl).toBe(null);
+    });
+    it('stellt in Akt 1 die gewaehlte Seite vor und laesst die andere stehen', function () {
+      var heute = HR.screens[1].zeichnen(red(anfang(), { typ: 'wahl', wert: 'heute' }));
+      expect(heute).toContain('panel--imperativ ist-gewaehlt');
+      expect(heute).toContain('panel--deklarativ ist-zurueckgenommen');
+      expect(heute).toContain('Sie haben den festen Ablauf gewählt');
+
+      var agent = HR.screens[1].zeichnen(red(anfang(), { typ: 'wahl', wert: 'agent' }));
+      expect(agent).toContain('panel--deklarativ ist-gewaehlt');
+      expect(agent).toContain('panel--imperativ ist-zurueckgenommen');
+    });
+    it('markiert ohne Wahl keine der beiden Seiten', function () {
+      var h = HR.screens[1].zeichnen(anfang());
+      expect(h.indexOf('ist-gewaehlt')).toBe(-1);
+      expect(h.indexOf('ist-zurueckgenommen')).toBe(-1);
+    });
+    it('startet den Lauf der gewaehlten Seite mit', function () {
+      expect(typeof HR.screens[1].starten).toBe('function');
+    });
+  });
+
   describe('Renderhilfe', function () {
     it('maskiert spitze Klammern und Anfuehrungszeichen', function () {
       expect(HR.render.esc('<a href="x">')).toBe('&lt;a href=&quot;x&quot;&gt;');

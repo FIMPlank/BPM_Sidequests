@@ -8,7 +8,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 | V2-00 | done | — | Headless-Testlauf `tests/run-node.js` | 2026-07-29 | 2 Dateien |
 | V2-01 | done | 00 | Aktleiste und feste Fallzeile | 2026-07-29 | 11 Dateien |
 | V2-02 | done | 01 | Rahmensatz- und Rückblick-Slots | 2026-07-29 | 4 Dateien |
-| V2-03 | wip  | 01 | Akt 0 — Der Auftrag | | |
+| V2-03 | done | 01 | Akt 0 — Der Auftrag | 2026-07-29 | 6 Dateien |
 | V2-04 | todo | 03 | Akt 1 — Störung vor dem Lauf | | |
 | V2-05 | todo | 01 | Akt 3 — eine große Zahl | | |
 | V2-06 | todo | 00 | `src/domain/latency.js` | | |
@@ -27,3 +27,4 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 - V2-00: Kein Node am Ort. Gatter laeuft ueber kopfloses Chrome auf `tests.html` (234 Tests, 0 Fehler); `tests/run-node.js` zusaetzlich emuliert geprueft. Begruendung in `DECISIONS.md`.
 - V2-01: Akt 0 ist der Vorspann, die Leiste fuehrt Akt 1 bis 5. Fallzeile weicht bewusst von `AGENT.md` §3 ab (Hamburg statt Verona) — siehe `DECISIONS.md`. 243 Tests, 0 Fehler.
 - V2-02: Beide Zeilen setzt die Huelle, damit Akt 2 unberuehrt bleibt. 249 Tests, 0 Fehler.
+- V2-03: Wahl fuehrt nach Akt 1, gewaehlte Seite vorn, andere zurueckgenommen, Lauf startet mit. Im Browser geklickt geprueft. 258 Tests, 0 Fehler.
