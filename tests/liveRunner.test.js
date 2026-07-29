@@ -112,7 +112,7 @@
     });
   });
 
-  describe('Live-Antwort treibt alle vier Bildschirme', function () {
+  describe('Live-Antwort treibt alle Akte', function () {
     var regeln = HR.compiler.systemRegeln().concat([REGELANTWORT.constraint]);
     var z = HR.store.reduzieren(HR.store.anfang(), {
       typ: 'lauf_fertig', ergebnis: geprueft,
@@ -121,28 +121,28 @@
     });
     z = HR.store.reduzieren(z, { typ: 'spur_schritt', i: geprueft.trajectory.length - 1 });
 
-    it('Screen 1 zeichnet die Spur der Live-Antwort', function () {
+    it('Akt 1 zeichnet die Spur der Live-Antwort', function () {
       var h = HR.screens[1].zeichnen(z);
       expect(h).toContain('spur__segment');
       expect(h).toContain('spur__abweisung');
     });
-    it('Screen 2 zeigt den Ablauf bis zur Erstattung', function () {
+    it('Akt 2 zeigt den Ablauf bis zur Erstattung', function () {
       var z2 = HR.store.reduzieren(z, { typ: 'lauf_fertig', ergebnis: geprueft,
         kontext: { regeln: regeln, screen: 2 } });
       expect(HR.screens[2].zeichnen(z2)).toContain('erstattung_ausloesen');
     });
-    it('Screen 3 zeigt die Anzeigen zum Live-Lauf', function () {
+    it('Akt 3 zeigt die Anzeigen zum Live-Lauf', function () {
       var h = HR.screens[3].zeichnen(z);
       expect(h).toContain('Verstöße im letzten Lauf');
       expect(h).toContain(REGELANTWORT.constraint.text_de);
     });
-    it('Screen 4 baut die Audit-Tabelle mit der Live-Regel', function () {
-      var h = HR.screens[4].zeichnen(z);
+    it('Akt 5 baut die Audit-Tabelle mit der Live-Regel', function () {
+      var h = HR.screens[5].zeichnen(z);
       expect(h).toContain('logzeile ist-geblockt');
       expect(h).toContain('L-ab12x');
     });
-    it('Screen 4 exportiert die Live-Trajektorie vollstaendig', function () {
-      var wieder = JSON.parse(HR.screens[4].alsJson(z));
+    it('Akt 5 exportiert die Live-Trajektorie vollstaendig', function () {
+      var wieder = JSON.parse(HR.screens[5].alsJson(z));
       expect(wieder.trajektorie.length).toBe(8);
       expect(wieder.durchsetzung).toBe('runtime');
     });

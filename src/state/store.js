@@ -2,9 +2,24 @@
 (function (HR) {
   'use strict';
 
+  /**
+   * Akt 0 ist der Vorspann, die Akte 1 bis 5 sind die Leiste. Der Einstieg
+   * liegt auf 0: die erste Handlung des Besuchers ist eine Entscheidung.
+   */
+  var AKT_MIN = 0, AKT_MAX = 5;
+
+  /** `?screen=N` bleibt als Alias gueltig. Der Audit war 4 und ist jetzt Akt 5. */
+  var SCREEN_ZU_AKT = { 1: 1, 2: 2, 3: 3, 4: 5 };
+
+  function begrenzen(n) {
+    n = Number(n);
+    if (!(n >= AKT_MIN && n <= AKT_MAX)) return AKT_MIN;
+    return Math.round(n);
+  }
+
   function anfang() {
     return {
-      screen: 1,
+      akt: 0,
       fsm: HR.imperative.neu(),
       fsmSchritt: -1,
       gestartet: false,
@@ -36,8 +51,12 @@
   function reduzieren(z, a) {
     var n;
     switch (a.typ) {
+      case 'akt':
+        n = kopie(z); n.akt = begrenzen(a.n); n.hinweis = null; return n;
+
+      // Alias: die Bildschirmnummern der ersten Fassung zeigen weiter auf ihren Akt.
       case 'screen':
-        n = kopie(z); n.screen = a.n; n.hinweis = null; return n;
+        n = kopie(z); n.akt = begrenzen(SCREEN_ZU_AKT[Number(a.n)]); n.hinweis = null; return n;
 
       case 'fsm_ereignis': {
         n = kopie(z);
@@ -139,6 +158,9 @@
   var hoerer = [];
 
   HR.store = {
+    AKT_MIN: AKT_MIN,
+    AKT_MAX: AKT_MAX,
+    SCREEN_ZU_AKT: SCREEN_ZU_AKT,
     anfang: anfang,
     reduzieren: reduzieren,
     holen: function () { return zustand; },

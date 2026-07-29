@@ -21,10 +21,20 @@
     /** Vortragsmodus: Tastatursteuerung, groessere Typo, kein Logging. */
     vortrag: modus === 'vortrag',
 
-    /** Direkteinstieg fuer den Vortrag: ?screen=3 startet auf Bildschirm 3. */
-    startScreen: (function () {
-      var n = Number(params.get('screen'));
-      return (n >= 1 && n <= 4) ? n : 1;
+    /**
+     * Direkteinstieg fuer den Vortrag: `?akt=3` startet in Akt 3.
+     * `?screen=N` bleibt als Alias der ersten Fassung gueltig; der Audit war
+     * dort Bildschirm 4 und ist jetzt Akt 5.
+     */
+    startAkt: (function () {
+      var a = params.get('akt');
+      if (a !== null && a !== '') {
+        var na = Number(a);
+        if (na >= 0 && na <= 5) return Math.round(na);
+      }
+      var s = Number(params.get('screen'));
+      var alias = { 1: 1, 2: 2, 3: 3, 4: 5 };
+      return alias[s] || 0;
     })(),
 
     /** Supabase-Projekt des Betreibers. Vor Live-Betrieb hier eintragen. */

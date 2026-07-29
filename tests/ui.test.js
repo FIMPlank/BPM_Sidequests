@@ -6,18 +6,22 @@
   function red(z, a) { return HR.store.reduzieren(z, a); }
 
   describe('Zustandsspeicher', function () {
-    it('startet auf Bildschirm 1 mit den drei Systemregeln', function () {
+    it('startet in Akt 0 mit den drei Systemregeln', function () {
       var z = anfang();
-      expect(z.screen).toBe(1);
+      expect(z.akt).toBe(0);
       expect(z.regeln.length).toBe(3);
     });
-    it('wechselt den Bildschirm', function () {
-      expect(red(anfang(), { typ: 'screen', n: 3 }).screen).toBe(3);
+    it('wechselt den Akt', function () {
+      expect(red(anfang(), { typ: 'akt', n: 3 }).akt).toBe(3);
+    });
+    it('haelt den Akt in seinen Grenzen', function () {
+      expect(red(anfang(), { typ: 'akt', n: 9 }).akt).toBe(0);
+      expect(red(anfang(), { typ: 'akt', n: -2 }).akt).toBe(0);
     });
     it('laesst den Ausgangszustand unveraendert', function () {
       var z = anfang();
-      red(z, { typ: 'screen', n: 3 });
-      expect(z.screen).toBe(1);
+      red(z, { typ: 'akt', n: 3 });
+      expect(z.akt).toBe(0);
     });
     it('zaehlt bei einer Stoerung eine Prozessvariante hoch', function () {
       var z = red(anfang(), { typ: 'fsm_ereignis', ereignis: 'beleg_fehlt' });
@@ -54,8 +58,54 @@
       expect(red(anfang(), { typ: 'enforcement', wert: 'posthoc' }).enforcement).toBe('posthoc');
     });
     it('setzt alles zurueck', function () {
-      var z = red(anfang(), { typ: 'screen', n: 4 });
-      expect(red(z, { typ: 'reset' }).screen).toBe(1);
+      var z = red(anfang(), { typ: 'akt', n: 4 });
+      expect(red(z, { typ: 'reset' }).akt).toBe(0);
+    });
+  });
+
+  describe('Aktleiste und Fallzeile', function () {
+    it('fuehrt fuenf Akte, den Vorspann nicht', function () {
+      expect(HR.copy.akte.length).toBe(5);
+      var markup = HR.render.aktleisteMarkup(anfang());
+      expect(markup.split('aktleiste__punkt').length - 1).toBe(5);
+      expect(markup.indexOf('data-wert="0"')).toBe(-1);
+    });
+    it('macht jeden Akt anklickbar', function () {
+      var markup = HR.render.aktleisteMarkup(anfang());
+      for (var i = 1; i <= 5; i++) {
+        expect(markup).toContain('data-aktion="akt" data-wert="' + i + '"');
+      }
+    });
+    it('markiert genau den laufenden Akt', function () {
+      var markup = HR.render.aktleisteMarkup(red(anfang(), { typ: 'akt', n: 4 }));
+      expect(markup.split('ist-aktiv').length - 1).toBe(1);
+      expect(markup).toContain('data-wert="4" aria-current="step"');
+    });
+    it('markiert im Vorspann keinen Akt', function () {
+      expect(HR.render.aktleisteMarkup(anfang()).indexOf('ist-aktiv')).toBe(-1);
+    });
+    it('nennt jeden Akt beim Namen', function () {
+      var markup = HR.render.aktleisteMarkup(anfang());
+      HR.copy.akte.forEach(function (name) { expect(markup).toContain(name); });
+    });
+    it('haelt die Fallzeile ueber alle Akte konstant', function () {
+      var zeile = HR.copy.fallZeile();
+      for (var i = 0; i <= 5; i++) {
+        expect(HR.copy.fallZeile()).toBe(zeile);
+      }
+      expect(zeile).toContain('Nr. 2847');
+      expect(zeile).toContain('Frau Berger');
+    });
+    it('bildet die alten Bildschirmnummern auf Akte ab', function () {
+      expect(red(anfang(), { typ: 'screen', n: 1 }).akt).toBe(1);
+      expect(red(anfang(), { typ: 'screen', n: 2 }).akt).toBe(2);
+      expect(red(anfang(), { typ: 'screen', n: 3 }).akt).toBe(3);
+      expect(red(anfang(), { typ: 'screen', n: 4 }).akt).toBe(5);
+    });
+    it('haelt fuer jeden Akt ein Modul bereit', function () {
+      for (var i = 0; i <= 5; i++) {
+        expect(typeof HR.screens[i].zeichnen).toBe('function');
+      }
     });
   });
 
@@ -308,7 +358,7 @@
   });
 
 
-  describe('Screen 4 — Der Audit', function () {
+  describe('Akt 5 — Der Audit', function () {
     var sys = HR.compiler.systemRegeln();
     var schwelle = HR.compiler.uebersetzen('Buchungen über 200 € pro Nacht brauchen eine Freigabe', { id: 'U-9' }).constraint;
     var stoer = ['hotel_ausgebucht', 'genehmiger_urlaub'];
@@ -327,7 +377,7 @@
         kontext: { regeln: sys.concat([schwelle]), screen: 3, stoerungen: stoer, enforcement: 'runtime', mitNutzerregel: true } });
       return z;
     }
-    function html(z) { return HR.screens[4].zeichnen(z); }
+    function html(z) { return HR.screens[5].zeichnen(z); }
 
     it('stellt die Auditfrage', function () {
       expect(html(anfang())).toContain('Könnten Sie das im Audit belegen?');
@@ -355,35 +405,35 @@
     });
     it('exportiert JSON, das sich wieder einlesen laesst', function () {
       var z = zustandMitLaeufen();
-      var wieder = JSON.parse(HR.screens[4].alsJson(z));
+      var wieder = JSON.parse(HR.screens[5].alsJson(z));
       expect(wieder.trajektorie.length).toBe(z.lauf.trajectory.length);
       expect(wieder.trajektorie[0].tool).toBe(z.lauf.trajectory[0].tool);
       expect(wieder.regeln.length).toBe(4);
       expect(wieder.ergebnis.goal_reached).toBeTruthy();
     });
     it('nimmt keine Sitzungskennung in den Export', function () {
-      expect(HR.screens[4].alsJson(zustandMitLaeufen()).indexOf(HR.sessionHash)).toBe(-1);
+      expect(HR.screens[5].alsJson(zustandMitLaeufen()).indexOf(HR.sessionHash)).toBe(-1);
     });
     it('exportiert CSV mit Kopfzeile und je Schritt einer Zeile', function () {
       var z = zustandMitLaeufen();
-      var zeilen = HR.screens[4].alsCsv(z).split(/\r\n/);
+      var zeilen = HR.screens[5].alsCsv(z).split(/\r\n/);
       expect(zeilen.length).toBe(z.lauf.trajectory.length + 1);
       expect(zeilen[0]).toContain('Constraint-Check');
     });
     it('maskiert Anfuehrungszeichen im CSV', function () {
-      expect(HR.screens[4].alsCsv(zustandMitLaeufen()).indexOf('"""')).toBe(-1);
+      expect(HR.screens[5].alsCsv(zustandMitLaeufen()).indexOf('"""')).toBe(-1);
     });
     it('verlangt fuer den Vergleich beide Laeufe', function () {
       expect(html(anfang())).toContain('Für den Vergleich braucht es');
     });
     it('richtet die Laeufe nach Schritten aus', function () {
       var z = zustandMitLaeufen();
-      var zeilen = HR.screens[4].diffZeilen(z.laufOhneRegel, z.laufMitRegel);
+      var zeilen = HR.screens[5].diffZeilen(z.laufOhneRegel, z.laufMitRegel);
       expect(zeilen.length).toBe(Math.max(z.laufOhneRegel.trajectory.length, z.laufMitRegel.trajectory.length));
     });
     it('hebt genau die abweichenden Schritte hervor', function () {
       var z = zustandMitLaeufen();
-      var zeilen = HR.screens[4].diffZeilen(z.laufOhneRegel, z.laufMitRegel);
+      var zeilen = HR.screens[5].diffZeilen(z.laufOhneRegel, z.laufMitRegel);
       expect(zeilen[0].anders).toBeFalsy();
       expect(zeilen[1].anders).toBeFalsy();
       expect(zeilen[2].anders).toBeTruthy();

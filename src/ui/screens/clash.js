@@ -28,7 +28,7 @@
     var systemRegeln = z.regeln.filter(function (r) { return r.source === 'system'; });
     var h = [];
 
-    h.push('<h1 id="screen-1-titel">' + e(s.titel) + '</h1>');
+    h.push('<h1 id="akt-1-titel">' + e(s.titel) + '</h1>');
     h.push('<p class="lead">' + e(s.lead) + '</p>');
 
     h.push('<div class="clash">');

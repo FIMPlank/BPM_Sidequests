@@ -21,21 +21,25 @@
 <a class="sprungmarke" href="#hauptinhalt">Zum Inhalt springen</a>
 
 <header class="kopf" role="banner">
-  <div class="kopf__marke">
-    <span class="kopf__titel">Handlungsraum-Sandbox</span>
-    <span class="kopf__unterzeile">Reisekostenabrechnung als Testfall</span>
-  </div>
-  <div class="kopf__rechts">
-    <nav class="schrittnav" id="schrittnav" aria-label="Bildschirme"></nav>
+  <div class="kopf__oben">
+    <div class="kopf__marke">
+      <span class="kopf__titel">Handlungsraum-Sandbox</span>
+    </div>
     <span class="pille" id="modus-pille" aria-live="polite">Modus: Demo (skriptiert)</span>
   </div>
+  <!-- Der Fall. Ein Satz, in jedem Akt derselbe. -->
+  <p class="kopf__fall" id="fallzeile">Reisekostenabrechnung Nr. 2847 · Frau Berger · Kundentermin Hamburg · 2 Nächte</p>
+  <nav class="aktleiste" id="aktleiste" aria-label="Akte"></nav>
 </header>
 
 <main id="hauptinhalt" class="buehne" role="main">
-  <section class="screen" id="screen-1" data-screen="1" aria-labelledby="screen-1-titel"></section>
-  <section class="screen" id="screen-2" data-screen="2" aria-labelledby="screen-2-titel" hidden></section>
-  <section class="screen" id="screen-3" data-screen="3" aria-labelledby="screen-3-titel" hidden></section>
-  <section class="screen" id="screen-4" data-screen="4" aria-labelledby="screen-4-titel" hidden></section>
+  <section class="screen" id="akt-0" data-akt="0" aria-labelledby="akt-0-titel"></section>
+  <section class="screen" id="akt-1" data-akt="1" aria-labelledby="akt-1-titel" hidden></section>
+  <!-- Akt 2 ist unantastbar: seine Ueberschriftskennung bleibt, wie sie war. -->
+  <section class="screen" id="akt-2" data-akt="2" aria-labelledby="screen-2-titel" hidden></section>
+  <section class="screen" id="akt-3" data-akt="3" aria-labelledby="akt-3-titel" hidden></section>
+  <section class="screen" id="akt-4" data-akt="4" aria-labelledby="akt-4-titel" hidden></section>
+  <section class="screen" id="akt-5" data-akt="5" aria-labelledby="akt-5-titel" hidden></section>
 </main>
 
 <footer class="fuss" role="contentinfo">
@@ -73,9 +77,11 @@
 <script src="src/ui/components/zaehler.js"></script>
 <script src="src/ui/components/plot.js"></script>
 <script src="src/ui/components/logTabelle.js"></script>
+<script src="src/ui/screens/auftrag.js"></script>
 <script src="src/ui/screens/clash.js"></script>
 <script src="src/ui/screens/preis.js"></script>
 <script src="src/ui/screens/regeln.js"></script>
+<script src="src/ui/screens/architektur.js"></script>
 <script src="src/ui/screens/audit.js"></script>
 <script src="src/main.js"></script>
 <!-- ENDE LADEREIHENFOLGE -->

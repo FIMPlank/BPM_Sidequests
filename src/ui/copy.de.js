@@ -18,6 +18,21 @@
       vortragHinweis: 'Pfeiltasten wechseln den Bildschirm, 1 bis 3 werfen eine Störung ein, r setzt zurück.'
     },
 
+    /**
+     * Der Fall. Er steht in jedem Akt unveraendert im Kopf der Seite und ist
+     * das einzige, was die fuenf Akte zusammenhaelt.
+     */
+    fall: {
+      nummer: 'Reisekostenabrechnung Nr. 2847',
+      person: 'Frau Berger',
+      anlass: 'Kundentermin Hamburg',
+      dauer: '2 Nächte'
+    },
+
+    /** Die fuenf Akte der Aktleiste. Akt 0 ist der Vorspann und steht nicht darin. */
+    akte: ['Der Clash', 'Der Preis der Autonomie', 'Sie modellieren', 'Die Architektur', 'Der Audit'],
+
+    /** Alte Vierer-Beschriftung, bis der Textdurchgang sie ersetzt. */
     schritte: ['Der Clash', 'Der Preis der Autonomie', 'Sie modellieren', 'Der Audit'],
 
     label: { imperativ: 'IMPERATIV', deklarativ: 'DEKLARATIV' },
@@ -136,6 +151,16 @@
       consentDanke: 'Danke. Es wird nur der Regeltext gespeichert, keine Kennung Ihrer Person.'
     },
 
+    /** Akt 0 — der Vorspann. Inhalt kommt in V2-03, Text in V2-13. */
+    akt0: {
+      titel: 'Der Auftrag'
+    },
+
+    /** Akt 4 — die Architektur. Inhalt kommt in V2-07 und V2-08. */
+    akt4: {
+      titel: 'Die Architektur'
+    },
+
     screen4: {
       titel: 'Der Audit',
       frage: 'Könnten Sie das im Audit belegen?',
@@ -177,6 +202,12 @@
       agentNeu: 'Der Agent hat einen neuen Pfad durch den Handlungsraum gewählt.',
       reduziert: 'Bewegung ist reduziert: die Darstellung wechselt ohne Animation.'
     }
+  };
+
+  /** Die Fallzeile im Kopf, in jedem Akt identisch. */
+  t.fallZeile = function () {
+    var f = t.fall;
+    return [f.nummer, f.person, f.anlass, f.dauer].join(' · ');
   };
 
   /** Betrag in deutscher Schreibweise. */

@@ -61,7 +61,7 @@
   }
 
   var bildschirme = {};
-  /** @param {number} n @param {{zeichnen:Function, nach?:Function}} modul */
+  /** @param {number} n Aktnummer 0 bis 5 @param {{zeichnen:Function, nach?:Function}} modul */
   function bildschirm(n, modul) {
     bildschirme[n] = modul;
     HR.screens = HR.screens || {};
@@ -69,10 +69,10 @@
   }
 
   function zeichnen(zustand) {
-    for (var n = 1; n <= 4; n++) {
-      var el = document.getElementById('screen-' + n);
+    for (var n = HR.store.AKT_MIN; n <= HR.store.AKT_MAX; n++) {
+      var el = document.getElementById('akt-' + n);
       if (!el) continue;
-      var aktiv = zustand.screen === n;
+      var aktiv = zustand.akt === n;
       el.hidden = !aktiv;
       if (!aktiv) continue;
       var modul = bildschirme[n];
@@ -80,21 +80,40 @@
       el.innerHTML = modul.zeichnen(zustand);
       if (modul.nach) modul.nach(el, zustand);
     }
-    navZeichnen(zustand);
+    aktleisteZeichnen(zustand);
+    fallZeileZeichnen();
   }
 
-  function navZeichnen(zustand) {
-    var nav = document.getElementById('schrittnav');
-    if (!nav) return;
+  /**
+   * Die Aktleiste zeigt die fuenf Akte. Akt 0 ist der Vorspann und steht nicht
+   * darin; solange er laeuft, ist kein Punkt als aktuell markiert.
+   * @returns {string} HTML, auch fuer die Tests
+   */
+  function aktleisteMarkup(zustand) {
     var html = '';
-    for (var i = 1; i <= 4; i++) {
-      html += '<button type="button" class="schrittnav__punkt' +
-        (zustand.screen === i ? ' ist-aktiv' : '') + '" data-aktion="screen" data-wert="' + i + '"' +
-        ' aria-current="' + (zustand.screen === i ? 'step' : 'false') + '">' +
-        '<span class="schrittnav__nr">' + i + '</span>' +
-        '<span class="schrittnav__text">' + esc(HR.copy.schritte[i - 1]) + '</span></button>';
+    for (var i = 1; i <= HR.store.AKT_MAX; i++) {
+      var aktuell = zustand.akt === i;
+      html += '<button type="button" class="aktleiste__punkt' +
+        (aktuell ? ' ist-aktiv' : '') + '" data-aktion="akt" data-wert="' + i + '"' +
+        ' aria-current="' + (aktuell ? 'step' : 'false') + '">' +
+        '<span class="aktleiste__nr">' + i + '</span>' +
+        '<span class="aktleiste__text">' + esc(HR.copy.akte[i - 1]) + '</span></button>';
     }
-    nav.innerHTML = html;
+    return html;
+  }
+
+  function aktleisteZeichnen(zustand) {
+    var nav = document.getElementById('aktleiste');
+    if (!nav) return;
+    nav.innerHTML = aktleisteMarkup(zustand);
+  }
+
+  /** Der Fall steht in jedem Akt gleich im Kopf — er wird nie neu geschrieben. */
+  function fallZeileZeichnen() {
+    var el = document.getElementById('fallzeile');
+    if (!el) return;
+    var text = HR.copy.fallZeile();
+    if (el.textContent !== text) el.textContent = text;
   }
 
   /** Bewegung nur, wenn der Nutzer sie nicht abbestellt hat. */
@@ -110,6 +129,7 @@
     delegieren: delegieren,
     bildschirm: bildschirm,
     zeichnen: zeichnen,
+    aktleisteMarkup: aktleisteMarkup,
     bewegungErlaubt: bewegungErlaubt
   };
 })(window.HR = window.HR || {});

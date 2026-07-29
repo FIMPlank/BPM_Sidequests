@@ -1,12 +1,11 @@
 @layer layout {
   .kopf {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--r2);
-    padding: var(--r2) var(--r3);
+    padding: var(--r2) var(--r3) 0;
     border-bottom: var(--haarlinie) solid var(--raster);
+  }
+  .kopf__oben {
+    display: flex; flex-wrap: wrap; align-items: baseline;
+    justify-content: space-between; gap: var(--r2);
   }
   .kopf__marke { display: flex; align-items: baseline; gap: var(--r2); flex-wrap: wrap; }
   .kopf__titel {
@@ -18,8 +17,16 @@
   .kopf__unterzeile { color: var(--ink-leise); font-size: 0.875rem; }
   .kopf__rechts { display: flex; align-items: center; gap: var(--r2); flex-wrap: wrap; }
 
-  .schrittnav { display: flex; gap: 2px; }
-  .schrittnav__punkt {
+  /* Der Fall. Er wechselt nie — deshalb steht er ruhig und ohne Auszeichnung da. */
+  .kopf__fall {
+    margin: var(--r1) 0 0;
+    max-width: none;
+    color: var(--ink-mittel);
+    font-size: 0.875rem;
+  }
+
+  .aktleiste { display: flex; gap: 2px; margin-top: var(--r1); flex-wrap: wrap; }
+  .aktleiste__punkt {
     display: flex; align-items: center; gap: 6px;
     background: none; border: 0;
     padding: 6px var(--r1);
@@ -27,14 +34,14 @@
     font-size: 0.8125rem;
     border-bottom: 2px solid transparent;
   }
-  .schrittnav__punkt:hover { color: var(--ink); }
-  .schrittnav__punkt.ist-aktiv { color: var(--ink); border-bottom-color: var(--ink); }
-  .schrittnav__nr {
+  .aktleiste__punkt:hover { color: var(--ink); }
+  .aktleiste__punkt.ist-aktiv { color: var(--ink); border-bottom-color: var(--ink); }
+  .aktleiste__nr {
     font-family: var(--font-mono); font-size: 0.75rem;
     border: var(--haarlinie) solid var(--raster);
     width: 18px; height: 18px; line-height: 16px; text-align: center;
   }
-  .schrittnav__punkt.ist-aktiv .schrittnav__nr { border-color: var(--ink); }
+  .aktleiste__punkt.ist-aktiv .aktleiste__nr { border-color: var(--ink); }
 
   .pille {
     font-family: var(--font-mono);
@@ -88,7 +95,7 @@
     .panel--deklarativ { border-left: 0; border-top: var(--haarlinie) solid var(--raster); }
     .buehne { padding: var(--r3) var(--r2) var(--r6); }
     .panel { padding: var(--r3) 0 var(--r4); }
-    .kopf { padding: var(--r2); }
-    .schrittnav__text { display: none; }
+    .kopf { padding: var(--r2) var(--r2) 0; }
+    .aktleiste__text { display: none; }
   }
 }

@@ -122,7 +122,7 @@
     var s = HR.copy.screen4;
     var h = [];
 
-    h.push('<h1 id="screen-4-titel">' + e(s.titel) + '</h1>');
+    h.push('<h1 id="akt-5-titel">' + e(s.titel) + '</h1>');
     h.push('<p class="frage__text">' + e(s.frage) + '</p>');
 
     if (!z.lauf) {
@@ -160,7 +160,7 @@
     herunterladen(alsCsv(HR.store.holen()), 'handlungsraum-lauf.csv', 'text/csv');
   });
 
-  HR.render.bildschirm(4, {
+  HR.render.bildschirm(5, {
     zeichnen: zeichnen,
     alsJson: alsJson,
     alsCsv: alsCsv,

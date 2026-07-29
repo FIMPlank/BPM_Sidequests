@@ -65,7 +65,7 @@
     var s = HR.copy.screen3;
     var h = [];
 
-    h.push('<h1 id="screen-3-titel">' + e(s.titel) + '</h1>');
+    h.push('<h1 id="akt-3-titel">' + e(s.titel) + '</h1>');
     h.push('<p class="lead">' + e(s.lead) + '</p>');
 
     h.push(HR.komponenten.zaehler.zeichnen(z));
