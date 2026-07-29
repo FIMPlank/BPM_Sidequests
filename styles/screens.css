@@ -260,3 +260,28 @@
     .wahl { grid-template-columns: 1fr; }
   }
 }
+
+@layer screens {
+  /* Die Leitzahl eines Akts. Genau eine je Flaeche, sonst waere sie keine. */
+  .grosszahl {
+    display: flex; flex-direction: column; gap: 2px;
+    margin-top: var(--r3);
+    padding-top: var(--r2);
+    border-top: var(--haarlinie) solid var(--raster);
+  }
+  .grosszahl__wert {
+    font-size: 3.25rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+  }
+  .grosszahl__name {
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--ink-leise);
+  }
+
+  .steuerung--wahl { border-top: 0; margin-top: var(--r3); padding-bottom: 0; }
+  .steuerung__erklaerung { color: var(--ink-leise); font-size: 0.875rem; }
+}

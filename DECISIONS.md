@@ -88,3 +88,8 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Akt 0 traegt genau zwei Knoepfe und sonst keinen. Ein „Weiter“ daneben haette die Wahl zur Zierde gemacht; die Aufgabe verlangt, dass die erste Handlung eine Entscheidung ist. Wer die Wahl umgehen will, nimmt `?akt=1`.
 - Die nicht gewaehlte Seite wird auf halbe Deckkraft gesetzt, nicht ausgeblendet, und kommt bei Zeigen oder Tastaturfokus zurueck. Der Akt heisst „Der Clash“ — ohne beide Seiten gaebe es keinen.
 - Die Wahl startet denselben Lauf, den auch der Knopf im Akt ausloest; `clash.js` gibt `starten` dafuer nach aussen. Zwei Startwege haetten zwei Verhalten bedeutet.
+
+## v2 — V2-04 (Akt 1)
+- Die Stoerungsknoepfe sind jetzt eine **Auswahl**, kein Ausloeser: sie sind von Anfang an bedienbar, tragen `aria-pressed` und aendern fuer sich genommen nichts. Erst der eine Startknopf laesst laufen, und er sagt an, was er mitbringt. Ein zweites Anklicken derselben Stoerung nimmt die Wahl zurueck.
+- Der Grundlauf ohne Stoerung bleibt erhalten und wird weiterhin von der Wahl in Akt 0 ausgeloest. Er ist der Beleg fuer „bisher kein Unterschied“ — ohne ihn haette die erste Stoerung nichts, wogegen sie sich abheben koennte.
+- `Modellierte Varianten` steht als Leitzahl (52 px) unter dem imperativen Modell. Je Akt gibt es genau eine solche Zahl; der Test zaehlt sie.

@@ -17,7 +17,7 @@
     else if (ev.key === 'r') HR.store.senden({ typ: 'reset' });
     else if (ev.key >= '1' && ev.key <= '3') {
       var id = HR.imperative.STOERUNGEN[Number(ev.key) - 1];
-      var knopf = document.querySelector('[data-aktion="stoerung"][data-wert="' + id + '"]');
+      var knopf = document.querySelector('[data-aktion="stoerung-waehlen"][data-wert="' + id + '"]');
       if (knopf && !knopf.disabled) knopf.click();
     } else return;
     ev.preventDefault();

@@ -66,8 +66,11 @@
     if (z.fsm.gestoppt) {
       h.push('<p class="badge badge--verstoss" role="status">' + e(s.fsmBadge) + '</p>');
     }
-    h.push('<p class="zaehler-zeile"><span class="zaehler-zeile__name">' + e(s.variantenLabel) +
-      '</span><span class="zaehler-zeile__wert mono" aria-live="polite">' + z.fsm.varianten + '</span></p>');
+    // Die eine Zahl, um die es in Akt 1 geht. Sie ist die groesste der Flaeche.
+    h.push('<div class="grosszahl">');
+    h.push('<span class="grosszahl__wert mono" aria-live="polite">' + z.fsm.varianten + '</span>');
+    h.push('<span class="grosszahl__name">' + e(s.variantenLabel) + '</span>');
+    h.push('</div>');
     h.push('</section>');
 
     h.push('<section class="panel panel--deklarativ' + seitenklasse(z, 'deklarativ') +
@@ -86,14 +89,25 @@
 
     h.push('</div>');
 
-    h.push('<div class="steuerung">');
-    h.push(HR.render.knopf('prozess-starten', z.gestartet ? s.erneut : s.starten,
-      { klasse: 'knopf--haupt', deaktiviert: z.laeuft }));
-    h.push('<div class="steuerung__gruppe"><span class="steuerung__titel">' + e(s.stoerungTitel) + '</span>');
+    // Erst die Stoerung waehlen, dann laufen lassen. Die Reihenfolge ist der
+    // Punkt des Akts: der Besucher setzt die Bedingung, er sieht ihr nicht zu.
+    h.push('<div class="steuerung steuerung--wahl">');
+    h.push('<div class="steuerung__gruppe"><span class="steuerung__titel">' + e(s.stoerungWaehlen) + '</span>');
     HR.imperative.STOERUNGEN.forEach(function (id) {
-      h.push(HR.render.knopf('stoerung', s.stoerungen[id], { wert: id, deaktiviert: z.laeuft || !z.gestartet }));
+      h.push(HR.render.knopf('stoerung-waehlen', s.stoerungen[id], {
+        wert: id,
+        gedrueckt: z.stoerungWahl === id,
+        deaktiviert: z.laeuft
+      }));
     });
-    h.push('</div>');
+    h.push('</div></div>');
+
+    h.push('<div class="steuerung">');
+    h.push(HR.render.knopf('prozess-starten',
+      z.stoerungWahl ? s.startenMitStoerung : (z.gestartet ? s.erneut : s.starten),
+      { klasse: 'knopf--haupt', deaktiviert: z.laeuft }));
+    h.push('<span class="steuerung__erklaerung">' +
+      e(z.stoerungWahl ? s.laufMitWahl : s.laufOhneWahl) + '</span>');
     h.push('</div>');
 
     h.push('<p class="statuszeile" role="status">' + e(statuszeile(z)) + '</p>');
@@ -179,12 +193,22 @@
     });
   }
 
-  HR.render.auf('prozess-starten', prozessStarten);
-  HR.render.auf('stoerung', function (wert) { stoerungEinwerfen(wert); });
+  /** Der eine Startknopf. Was er tut, hat der Besucher vorher festgelegt. */
+  function laufAusloesen() {
+    var wahl = HR.store.holen().stoerungWahl;
+    if (wahl) stoerungEinwerfen(wahl);
+    else prozessStarten();
+  }
+
+  HR.render.auf('prozess-starten', laufAusloesen);
+  HR.render.auf('stoerung-waehlen', function (wert) {
+    HR.store.senden({ typ: 'stoerung_waehlen', id: wert });
+  });
 
   HR.render.bildschirm(1, {
     zeichnen: zeichnen,
-    starten: prozessStarten,        // Akt 0 loest denselben Lauf aus
+    starten: prozessStarten,        // Akt 0 loest den Grundlauf aus
+    ausloesen: laufAusloesen,
     istGewaehlt: istGewaehlt
   });
 })(window.HR = window.HR || {});

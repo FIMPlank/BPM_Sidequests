@@ -40,7 +40,9 @@
       consent: false,
       hinweis: null,
       /** Die Wahl aus Akt 0: 'heute' (imperativ) oder 'agent' (deklarativ). */
-      wahl: null
+      wahl: null,
+      /** In Akt 1 gewaehlte, noch nicht eingeworfene Stoerung. */
+      stoerungWahl: null
     };
   }
 
@@ -116,6 +118,14 @@
 
       case 'spur_schritt':
         n = kopie(z); n.spurSchritt = a.i; return n;
+
+      // Erst waehlen, dann laufen lassen. Die Wahl allein aendert noch nichts
+      // am Modell — sie sagt nur, womit der naechste Lauf zu rechnen hat.
+      case 'stoerung_waehlen': {
+        n = kopie(z);
+        n.stoerungWahl = (z.stoerungWahl === a.id) ? null : a.id;
+        return n;
+      }
 
       case 'stoerung':
         n = kopie(z); n.stoerungGeworfen = a.id; n.gestartet = true; return n;

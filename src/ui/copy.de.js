@@ -68,7 +68,11 @@
       lead: 'Ein Prozess, zwei Denkweisen. Links das Modell, das jeden Schritt vorschreibt. Rechts drei Regeln, die einen Raum aufspannen. Starten Sie beide.',
       starten: 'Prozess starten',
       erneut: 'Erneut starten',
+      startenMitStoerung: 'Mit dieser Störung starten',
       stoerungTitel: 'Störung einwerfen',
+      stoerungWaehlen: 'Störung wählen',
+      laufOhneWahl: 'Ohne Störung läuft der Fall wie im Lehrbuch.',
+      laufMitWahl: 'Beide Seiten bekommen dieselbe Störung.',
       stoerungen: {
         reise_verlaengert: 'Reise wird kurzfristig verlängert',
         beleg_fehlt: 'Beleg fehlt',

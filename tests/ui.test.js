@@ -280,13 +280,33 @@
     it('zeigt die drei Systemregeln als Saetze', function () {
       expect(html(anfang()).split('class="regelsatz"').length - 1).toBe(3);
     });
-    it('sperrt die Stoerungen, solange nicht gestartet wurde', function () {
-      expect(html(anfang())).toContain('data-aktion="stoerung" data-wert="reise_verlaengert" disabled');
+    it('laesst die Stoerung vor dem ersten Lauf waehlen', function () {
+      var h = html(anfang());
+      expect(h).toContain('data-aktion="stoerung-waehlen" data-wert="reise_verlaengert"');
+      expect(h.indexOf('data-wert="reise_verlaengert" disabled')).toBe(-1);
     });
-    it('gibt die Stoerungen nach dem Start frei', function () {
-      var z = red(anfang(), { typ: 'gestartet' });
-      expect(html(z)).toContain('data-aktion="stoerung" data-wert="reise_verlaengert"');
-      expect(html(z).indexOf('data-wert="reise_verlaengert" disabled')).toBe(-1);
+    it('stellt die Wahl vor den Startknopf', function () {
+      var h = html(anfang());
+      expect(h.indexOf('data-aktion="stoerung-waehlen"'))
+        .toBeLessThan(h.indexOf('data-aktion="prozess-starten"'));
+    });
+    it('merkt sich die gewaehlte Stoerung und schaltet sie wieder ab', function () {
+      var z = red(anfang(), { typ: 'stoerung_waehlen', id: 'beleg_fehlt' });
+      expect(z.stoerungWahl).toBe('beleg_fehlt');
+      expect(html(z)).toContain('data-wert="beleg_fehlt" aria-pressed="true"');
+      expect(red(z, { typ: 'stoerung_waehlen', id: 'beleg_fehlt' }).stoerungWahl).toBe(null);
+    });
+    it('sagt am Startknopf an, was der naechste Lauf mitbringt', function () {
+      expect(html(anfang())).toContain('Prozess starten');
+      var z = red(anfang(), { typ: 'stoerung_waehlen', id: 'hotel_storniert' });
+      expect(html(z)).toContain('Mit dieser Störung starten');
+    });
+    it('fuehrt die Leitzahl des Akts als groesste Zahl der Flaeche', function () {
+      var h = html(anfang());
+      expect(h.split('grosszahl__wert').length - 1).toBe(1);
+      expect(h).toContain('Modellierte Varianten');
+      // Die Leitzahl steht im Markup direkt neben ihrer Beschriftung.
+      expect(/grosszahl__wert[^>]*>\d+</.test(h)).toBeTruthy();
     });
     it('zeigt die Badge erst, wenn der Automat stehen bleibt', function () {
       expect(html(anfang()).indexOf('badge--verstoss')).toBe(-1);
