@@ -98,3 +98,108 @@ rechne:
    sauber getrennt; ein Freigabe- oder Beschaffungsfall wäre im Wesentlichen ein
    neuer Werkzeugkatalog plus Störungen. Für Publikum, das Reisekosten für zu
    klein hält, ist das das stärkste Gegenargument.
+
+---
+
+# Übergabe — Nachtrag zu v2 („Ein Fall, fünf Akte")
+
+Alles oberhalb dieser Linie gilt unverändert weiter, **einschließlich des
+gesamten Abschnitts 2 zur Inbetriebnahme.** An Supabase, Edge Function, Secrets
+und GitHub Pages hat sich nichts geändert. Der Nachtrag ergänzt, er ersetzt nicht.
+
+## 5. Was v2 ändert
+
+Die erste Fassung hatte zwei Schwächen. Die erste: der Besucher war bis
+Bildschirm 3 Zuschauer. Die zweite, wichtigere: die eigentliche These des
+Whitepapers — imperative Kontrollpunkte *innerhalb* eines deklarativen
+Handlungsraums — war nirgends zu sehen. Die Demo argumentierte „starr verliert,
+autonom gewinnt, dann zähmen wir es". Das ist nicht dasselbe.
+
+Aus vier Bildschirmen sind fünf Akte plus ein Vorspann geworden:
+
+| | | war |
+|---|---|---|
+| **Akt 0** | Der Auftrag | neu — Vorspann, steht nicht in der Aktleiste |
+| **Akt 1** | Der Clash | Bildschirm 1 |
+| **Akt 2** | Der Preis der Autonomie | Bildschirm 2, **unverändert** |
+| **Akt 3** | Sie modellieren | Bildschirm 3 |
+| **Akt 4** | Die Architektur | neu — der Grund für diese Überarbeitung |
+| **Akt 5** | Der Audit | Bildschirm 4 |
+
+`?screen=N` funktioniert weiter; `screen=4` führt nach Akt 5. Neu ist `?akt=N`.
+
+**Akt 2 wurde nicht angefasst.** Weder Text noch Timing noch Markup. Die beiden
+Zeilen, die jetzt jeden Akt rahmen (der Rahmensatz oben und
+„Was ist gerade passiert?" unten), setzt die Hülle in `HR.render.zeichnen` —
+genau deshalb, damit `src/ui/screens/preis.js` unberührt bleibt. Die Ruecknahme
+zu Akt 2 sagt nur nach, was ohnehin auf der Fläche steht.
+
+## 6. Was in Akt 4 passiert
+
+Drei Orte für dieselbe Regel, jeder mit demselben Fall und denselben zwei
+Störungen, jeder mit einer messbar anderen Trajektorie:
+
+| Ort | Schritte | Durchlaufzeit | Kosten je Lauf | Restrisiko |
+|---|---|---|---|---|
+| Imperativer Kontrollpunkt | 9 | 12 h 18 min | 10,50 € | 0,00 € |
+| Leitplanke zur Laufzeit | 8 | 8 h 16 min | 7,00 € | 0,00 € |
+| Prüfung im Nachgang | 7 | 4 h 14 min | 3,50 € | 520,00 € |
+
+Darunter werden drei Regeln auf drei Orte verteilt. Alle 27 Belegungen bilden
+auf eines von vier Mustern ab; die Zuordnung hängt nur an den Anzahlen, nicht
+daran, welche Regel wo steht. Die beiden Randfälle bekommen ihren eigenen Satz.
+
+Ganz unten verschmelzen die Panels zu einer Fläche: der Handlungsraum, und darin
+die harten Schranken als Türen, durch die die Spur des Agenten hindurch muss.
+Die Verschmelzung läuft **einmal je Sitzung**, rund 900 ms; bei
+`prefers-reduced-motion` steht sie sofort fertig da, mit Bildunterschrift.
+
+## 7. Neue Dateien
+
+```
+src/domain/latency.js        Durchlaufzeit: Schritte plus Wartezeit je Freigabe
+src/v2/platzierung.js        drei Orte, drei Läufe, drei Maße
+src/v2/muster.js             27 Belegungen auf vier Muster
+src/ui/screens/auftrag.js    Akt 0
+src/ui/screens/architektur.js Akt 4
+src/ui/components/fusion.js  die verschmolzene Fläche
+tests/run-node.js            derselbe Testlauf kopflos unter Node
+```
+
+`src/v2/` gibt es, weil `src/domain/` und `src/agent/` für diese Überarbeitung
+gesperrt waren. Wenn Du die Sperre aufhebst, gehören `platzierung.js` und
+`muster.js` fachlich nach `src/domain/`.
+
+## 8. Was Du überstimmen könntest
+
+Ausführlich in `DECISIONS.md` unter den Überschriften `## v2 — …`. Die drei,
+die am ehesten Widerspruch verdienen:
+
+1. **Die Fallzeile nennt Hamburg und zwei Nächte, nicht Verona und drei.** Die
+   Vorgabe sagte Verona; der skriptierte Agent bucht aber Hamburg, und
+   `src/agent/` war gesperrt. Eine Kopfzeile, die etwas anderes behauptet als
+   das Protokoll darunter, wäre in einer Demo über Nachvollziehbarkeit der
+   schlechteste denkbare Fehler. Willst Du Verona, muss `src/agent/mockRunner.js`
+   mit.
+2. **3,50 € Sachbearbeitung je menschlicher Freigabe** und vier Stunden
+   Wartezeit sind gesetzte Zahlen (`src/v2/platzierung.js`, `src/domain/latency.js`).
+   Ohne den menschlichen Anteil wären alle drei Orte praktisch gleich teuer und
+   Akt 4 hätte keine Aussage. Die Größenordnung darf man diskutieren.
+3. **Die Schranken sind waagerechte Wände mit senkrechten Pfosten**, nicht
+   senkrechte Balken. Der Fall läuft in dieser Zeichnung von oben nach unten;
+   eine Schranke quer dazu ist waagerecht. Die Alternative wäre gewesen, die
+   Geometrie des Handlungsraums zu drehen — das hätte Akt 1 und Akt 3 mitgerissen.
+
+## 9. Tests
+
+348 Tests, 0 Fehler. Der Doppelklick auf `tests.html` bleibt der maßgebliche
+Weg. `tests/run-node.js` führt dieselben Dateien kopflos unter Node aus — es
+liest die Skriptliste aus `tests.html`, damit beide nicht auseinanderlaufen
+können. **Die ausgelieferte Seite hängt nicht davon ab**; keine der beiden
+HTML-Dateien verweist darauf.
+
+Ein Hinweis aus der Praxis: eine Testdatei mit Syntaxfehler lässt die
+Gesamtzahl *sinken*, statt rot zu werden — der Lauf bleibt grün. Wer am
+Testbestand arbeitet, sollte die Zahl der geladenen Suiten gegen die Zahl der
+`describe`-Aufrufe prüfen. Genau das ist während dieser Überarbeitung einmal
+passiert und wurde nur durch die plötzlich gesunkene Gesamtzahl bemerkt.

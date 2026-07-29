@@ -1,50 +1,66 @@
-# Vorführung in drei Minuten
+# Vorführung in vier Minuten
+
+Ein Fall, fünf Akte. Der Fall steht die ganze Zeit im Kopf der Seite:
+**Reisekostenabrechnung Nr. 2847 · Frau Berger · Kundentermin Hamburg · 2 Nächte.**
 
 Vorbereitung: `index.html?modus=vortrag` öffnen. Größere Schrift, Tastatur­steuerung,
-kein Protokoll. `←`/`→` wechseln den Bildschirm, `1`–`3` werfen eine Störung ein,
-`r` setzt alles zurück. Kein Netz nötig.
+kein Protokoll. `←`/`→` wechseln den Akt, `1`–`3` werfen in Akt 1 eine Störung ein
+und wählen in Akt 4 einen Ort, `r` setzt alles zurück. Kein Netz nötig.
+
+Der Einstieg ist **Akt 0**. Er steht nicht in der Aktleiste, sondern davor.
 
 ---
 
-## 0:00 — Der Aufbau (20 Sekunden)
+## 0:00 — Akt 0, Der Auftrag (20 Sekunden)
 
-> „Links sehen Sie eine Reisekostenabrechnung als Prozessmodell. Sechs Schritte,
-> jeder vorgeschrieben. Rechts steht derselbe Vorgang als drei Regeln — und
-> darunter der Raum, den diese Regeln aufspannen."
+Auf dem Schirm steht eine Ansage, keine Oberfläche:
 
-**`Prozess starten` klicken.** Beide Seiten laufen durch.
+> „Frau Berger war beim Kunden. Sorgen Sie dafür, dass sie ihr Geld zurückbekommt —
+> regelkonform, und ohne dass ich jeden Beleg selbst ansehe."
+
+Darunter zwei Knöpfe und sonst nichts.
+
+> „Bevor irgendetwas läuft, entscheiden Sie. Machen wir es wie heute — ein
+> Ablauf, jeder Schritt vorgeschrieben? Oder geben wir einem Agenten das Ziel
+> und ein paar Regeln?"
+
+**`So würde ein Agent es machen` klicken.** Die Seite springt in Akt 1, die
+rechte Seite steht vorn, die linke bleibt sichtbar, und der Lauf startet.
 
 > „Gleiches Ergebnis, gleicher Betrag. Bis hierhin kein Unterschied."
 
 ---
 
-## 0:30 — Die Störung (30 Sekunden)
+## 0:30 — Akt 1, Der Clash (40 Sekunden)
 
-**Taste `1`** — *Reise wird kurzfristig verlängert*.
+Erst wählen, dann laufen lassen. **Taste `2`** — *Beleg fehlt*.
 
 Links bleibt die Kette stehen, hart, ohne Übergang. Rechts zeichnet der Agent
 einen neuen Weg.
 
 > „Für diesen Fall gibt es keine Transition. Das Modell ist nicht falsch — es ist
-> unvollständig, und das wird es immer sein. Der Zähler links sagt, was das
-> kostet: **eine weitere Prozessvariante**."
+> unvollständig, und das wird es immer sein."
 
-**Taste `2`**, **Taste `3`**. Der Zähler steigt weiter.
+Auf die große Zahl links zeigen: **Modellierte Varianten.**
+
+> „Das ist der Preis. Eine Störung, eine weitere Variante."
+
+**Taste `1`**, **Taste `3`**. Die Zahl steigt.
 
 > „Drei Störungen, drei Varianten. In Ihrer Realität sind es dreißig."
 
 ---
 
-## 1:00 — Der Preis (45 Sekunden)
+## 1:10 — Akt 2, Der Preis der Autonomie (45 Sekunden)
 
-**`→` auf Bildschirm 2.** Zwei Störungen zugleich: das Hotel kostet 260 € statt
-der 150 € aus der Richtlinie, und der Genehmiger ist im Urlaub.
+**`→`.** Zwei Störungen zugleich: das Hotel kostet 260 € statt der 150 € aus der
+Richtlinie, und der Genehmiger ist im Urlaub.
 
 **`Agent laufen lassen`.**
 
 > „Ziel erreicht. 520 € erstattet. Und jetzt schauen Sie in den Ablauf."
 
-Auf `selbst_freigeben` zeigen. Nicht kommentieren. Dann auf den Prüfblock zeigen:
+Auf `selbst_freigeben` zeigen. **Nicht kommentieren.** Dann auf den Prüfblock:
 
 > „**Null Regelverstöße.** Der Prüfer lügt nicht. Die Regel, dass 260 € pro Nacht
 > zu viel sind, steht nirgends im System. Sie steht in einer Richtlinie als PDF."
@@ -53,11 +69,13 @@ Die Frage stehen lassen: **Sind Sie damit einverstanden?**
 
 Zwei Sekunden warten. Dann `Nein` klicken.
 
+Dieser Akt ist der Kern der Vorführung. Nichts hinzufügen, nichts vorwegnehmen.
+
 ---
 
-## 1:45 — Die Regel (45 Sekunden)
+## 1:55 — Akt 3, Sie modellieren (40 Sekunden)
 
-Auf Bildschirm 3 in das Feld tippen:
+In das Feld tippen:
 
 ```
 Buchungen über 200 € pro Nacht brauchen eine Freigabe
@@ -68,56 +86,99 @@ Buchungen über 200 € pro Nacht brauchen eine Freigabe
 > „Kein Formular, keine Modellierungssprache, ein deutscher Satz. Daraus wird
 > eine Schwellenwert-Regel: Zielwerkzeug, Bedingung, Forderung."
 
-**`Regel übernehmen`.** Auf die Anzeigen zeigen — die Freiheitsgrade fallen.
+**`Regel übernehmen`**, dann **`Erneut ausführen`**.
 
-> „Sie haben gerade deklarativ modelliert. Und Sie sehen sofort, was es kostet:
-> mehr Kontext-Token, mehr Geld je Lauf, weniger Handlungsspielraum."
+Auf die große Zahl zeigen: **Verstöße im letzten Lauf.**
 
-**`Erneut ausführen`.** Dieselben Störungen.
-
-> „Der Agent versucht dieselbe Buchung. Die Leitplanke lehnt ab — an der
-> Werkzeuggrenze, bevor gebucht wird. Er plant um, eskaliert an die Vertretung,
-> bekommt die Freigabe und erreicht das Ziel. Anderer Weg, gleiches Ergebnis,
-> regelkonform."
-
-Falls Zeit ist: den Umschalter auf **`Prüfung im Nachgang`** stellen und noch
-einmal laufen lassen.
-
-> „Dieselbe Regel, nur später geprüft. Jetzt bucht er, und wir erfahren es
-> hinterher. Die Frage ist nicht *ob* Sie Regeln haben, sondern **wo sie greifen**."
+> „Eine Regel, und die Zahl bewegt sich. Was sie kostet, steht daneben:
+> Kontext-Token, Geld je Lauf, Freiheitsgrade."
 
 ---
 
-## 2:30 — Der Audit (30 Sekunden)
+## 2:35 — Akt 4, Die Architektur (70 Sekunden)
 
-**`→` auf Bildschirm 4.**
+**`→`.** Das ist der Akt, um den es geht.
 
-> „Jeder Schritt mit Zeit, Akteur, Werkzeug, Eingabe und der Regel, die dabei
-> geprüft wurde. Die abgelehnte Zeile lässt sich aufklappen: welche Bedingung auf
-> welchem Wert gescheitert ist."
+> „Dieselbe Regel. Dieselben zwei Störungen. Die Frage ist nur: **wo greift sie?**"
 
-Eine abgelehnte Zeile aufklappen. Dann auf den Vergleich scrollen.
+Drei Karten nebeneinander, jede mit denselben drei Maßen:
 
-> „Links der Lauf ohne Ihre Regel, rechts mit. Ab Schritt drei laufen sie
-> auseinander. Das ist der Unterschied, den eine einzige Regel macht — und
-> exportierbar ist er auch."
+| Ort | Durchlaufzeit | Kosten je Lauf | Restrisiko |
+|---|---|---|---|
+| Imperativer Kontrollpunkt | 12 h 18 min | 10,50 € | 0,00 € |
+| Leitplanke zur Laufzeit | 8 h 16 min | 7,00 € | 0,00 € |
+| Prüfung im Nachgang | 4 h 14 min | 3,50 € | **520,00 €** |
+
+**Taste `1`.** Der Kontrollpunkt: ein Mensch gibt frei, bevor gebucht wird.
+
+> „Sicher. Und teuer, weil jemand warten muss."
+
+**Taste `3`.** Die Prüfung im Nachgang.
+
+> „Am schnellsten, am billigsten — und 520 € sind schon ausgezahlt, bevor
+> jemand hingesehen hat."
+
+**Taste `2`.** Die Leitplanke.
+
+Die Tabelle nicht erklären. Sie sagt es selbst.
+
+Darunter die Kombination: **drei Regeln, drei Orte.** Je Regel einen Ort
+zuweisen — zum Beispiel die eigene Regel auf `Imperativer Kontrollpunkt`, die
+Zahlungsgrenze und die Belegpflicht auf `Leitplanke zur Laufzeit`.
+
+> „Sie haben gerade **Muster 2 — Deklarative Ziele, imperative Kontrollpunkte**
+> gebaut. Das ist die Architektur, um die es im Whitepaper geht."
+
+Auf die Fläche darunter zeigen: eine einzige Zeichnung, keine zwei Panels mehr.
+
+> „Bis eben waren das zwei Welten mit einer Naht dazwischen. Hier ist es eine:
+> der Handlungsraum, und darin die harten Schranken. Der Agent läuft frei —
+> aber er muss hindurch."
+
+Wenn jemand fragt, was passiert, wenn man alles hart absichert: alle drei auf
+`Imperativer Kontrollpunkt` stellen.
+
+> „**Sie haben den alten Prozess nachgebaut — mit Zusatzkosten für die KI.**"
+
+---
+
+## 3:45 — Akt 5, Der Audit (30 Sekunden)
+
+**`→`.**
+
+> „Jeder Schritt mit Zeit, Akteur, Werkzeug, Eingabe — und mit der Spalte
+> `Platzierung`: welcher Architekturentscheidung diese Prüfung zu verdanken ist."
+
+Eine abgelehnte Zeile aufklappen. Dann zum Vergleich scrollen.
+
+> „Links der freie Lauf aus Akt 2, rechts Ihre Architektur. Ab Schritt drei
+> laufen sie auseinander. Exportierbar als JSON und CSV, mit der neuen Spalte."
 
 Schlusssatz:
 
 > „Weder ein Modell, das jede Abweichung als Fehler behandelt, noch ein Agent,
-> der jedes Ziel irgendwie erreicht. Explizite Regeln, ein bewusster
-> Kontrollpunkt, ein belegbarer Lauf."
+> der jedes Ziel irgendwie erreicht. Die Frage ist nicht, *ob* Sie Regeln haben.
+> Die Frage ist, **wo sie greifen.**"
 
 ---
 
 ## Wenn etwas dazwischenkommt
 
 - **Kein Netz:** irrelevant. Der Demo-Modus braucht keins.
-- **Verklickt:** `r` setzt zurück, `←`/`→` navigieren.
-- **Zu wenig Zeit:** Bildschirm 1 und 2 reichen. Die Frage „Sind Sie damit
-  einverstanden?" ist der Kern; alles danach ist die Auflösung.
-- **Zu viel Zeit:** eine zweite Regel formulieren lassen — etwa
-  „Niemals selbst freigeben" — und den Plot beobachten, wie die Verstöße fallen
-  und die Kosten steigen.
+- **Verklickt:** `r` setzt zurück, `←`/`→` navigieren, `?akt=N` steigt direkt ein.
+- **Zu wenig Zeit:** Akt 2 und Akt 4 reichen. „Sind Sie damit einverstanden?" ist
+  die Frage, Akt 4 ist die Antwort. Alles andere ist Anlauf.
+- **Zu viel Zeit:** eine zweite Regel formulieren lassen — etwa „Niemals selbst
+  freigeben" — und in Akt 4 den Plot beobachten: er sammelt über die ganze
+  Sitzung, nicht je Akt.
 - **Nachfrage nach dem Live-Agenten:** möglich, aber nur auf der gehosteten
   Fassung. Die Demo zeigt bewusst denselben Ablauf reproduzierbar.
+
+## Direkteinstieg
+
+| Aufruf | Landet in |
+|---|---|
+| `index.html` | Akt 0, Der Auftrag |
+| `index.html?akt=2` | Akt 2, Der Preis der Autonomie |
+| `index.html?akt=4` | Akt 4, Die Architektur |
+| `index.html?screen=4` | Akt 5 — die alte Nummerierung gilt weiter |

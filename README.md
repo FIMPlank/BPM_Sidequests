@@ -20,22 +20,41 @@ Die Demo läuft standardmäßig im **Demo-Modus**: der Agent ist skriptiert und
 läuft vollständig im Browser. Dieser Modus ist für Konferenzräume mit schlechtem
 WLAN gedacht und funktioniert ohne Netz.
 
-## Die vier Bildschirme
+## Ein Fall, fünf Akte
 
-1. **Der Clash** — derselbe Prozess als Kette und als Handlungsraum. Beide
-   erreichen dasselbe Ergebnis. Dann kommt eine Störung: links bleibt das Modell
-   stehen und braucht eine weitere Prozessvariante, rechts plant der Agent um.
+Alles spielt an **einem** Vorgang: Reisekostenabrechnung Nr. 2847, Frau Berger,
+Kundentermin Hamburg, zwei Nächte. Der Fall steht in jedem Akt im Kopf der Seite.
+
+**Akt 0 — Der Auftrag** ist der Vorspann und steht nicht in der Aktleiste. Eine
+Ansage in den Worten einer Vorgesetzten und zwei Knöpfe: `So machen wir es heute`
+oder `So würde ein Agent es machen`. Die erste Handlung auf der Seite ist eine
+Entscheidung, kein Zusehen.
+
+1. **Der Clash** — derselbe Prozess als Kette und als Handlungsraum. Der Besucher
+   wählt die Störung, *bevor* er laufen lässt. Links bleibt das Modell stehen und
+   braucht eine weitere Prozessvariante — die Leitzahl des Akts —, rechts plant
+   der Agent um.
 2. **Der Preis der Autonomie** — zwei Störungen gleichzeitig. Der Agent erreicht
    das Ziel, bucht ein Hotel über der Richtlinie und gibt die Abrechnung selbst
    frei. Der Regelprüfer meldet ehrlich **null Verstöße**: die Regel dazu gibt es
    noch nicht. Danach steht genau eine Frage im Raum.
 3. **Sie modellieren jetzt deklarativ** — der Besucher schreibt eine Regel in
    eigenen Worten. Sie wird in eine strukturierte Form übersetzt, lesbar
-   zurückgegeben und beim nächsten Lauf durchgesetzt. Live sichtbar: Zahl der
-   Regeln, Kontext-Token, Kosten je Lauf, Freiheitsgrade, Verstöße. Dazu die
-   Frage, wo die Kontrolle greift — im Nachgang oder an der Werkzeuggrenze.
-4. **Der Audit** — die vollständige Trajektorie mit Belegen, Export als JSON und
-   CSV, und der Vergleich des Laufs ohne mit dem Lauf mit der eigenen Regel.
+   zurückgegeben und beim nächsten Lauf durchgesetzt. Eine Zahl führt: **Verstöße
+   im letzten Lauf**; Regeln, Token, Kosten und Freiheitsgrade stehen daneben.
+4. **Die Architektur** — der Kern. Dieselbe Regel, derselbe Fall, dieselben
+   Störungen, drei Orte: `Imperativer Kontrollpunkt`, `Leitplanke zur Laufzeit`,
+   `Prüfung im Nachgang`. Jeder Ort zeigt Durchlaufzeit, Kosten je Lauf und
+   Restrisiko, und jeder erzeugt eine andere Trajektorie. Danach werden drei
+   Regeln auf drei Orte verteilt; jede der 27 Belegungen bekommt einen Namen aus
+   der Sprache des Whitepapers — bis hin zu „Sie haben den alten Prozess
+   nachgebaut — mit Zusatzkosten für die KI." Darunter verschmelzen die beiden
+   Paradigmen zu **einer** Fläche: der Handlungsraum mit harten Schranken darin,
+   durch die die Spur des Agenten hindurch muss.
+5. **Der Audit** — die vollständige Trajektorie mit Belegen und einer Spalte
+   `Platzierung`, die jede Prüfung einer Architekturentscheidung zurechnet.
+   Export als JSON und CSV, dazu der Vergleich des freien Laufs aus Akt 2 gegen
+   die Architektur des Besuchers.
 
 ## Aufrufparameter
 
@@ -44,10 +63,11 @@ WLAN gedacht und funktioniert ohne Netz.
 | `index.html` | Demo-Modus, skriptierter Agent, ohne Netz |
 | `index.html?modus=vortrag` | größere Schrift, Tastatursteuerung, kein Protokoll |
 | `index.html?modus=live` | echter Agent über die eigene Edge Function (nur gehostet) |
-| `index.html?screen=3` | steigt direkt auf dem dritten Bildschirm ein |
+| `index.html?akt=4` | steigt direkt in Akt 4 ein |
+| `index.html?screen=3` | alte Nummerierung, gilt weiter (`screen=4` führt nach Akt 5) |
 
-Im Vortragsmodus: `←`/`→` wechseln den Bildschirm, `1`–`3` werfen eine Störung
-ein, `r` setzt zurück.
+Im Vortragsmodus: `←`/`→` wechseln den Akt, `1`–`3` werfen in Akt 1 eine Störung
+ein und wählen in Akt 4 einen Ort, `r` setzt zurück.
 
 ## Tests
 
@@ -95,12 +115,14 @@ tests.html                 Doppelklick — führt die Tests in der Seite aus
 src/config.js              Modus, Preise, Projektdaten
 src/domain/                reine Logik, ohne DOM, vollständig getestet
 src/agent/                 Vertrag, skriptierter Agent, Live-Agent
-src/ui/                    Renderhilfe, Komponenten, Bildschirme, alle Texte
+src/ui/                    Renderhilfe, Komponenten, Akte, alle Texte
+src/v2/                    Platzierung einer Regel und die vier Architekturmuster
 src/state/store.js         Reducer und Abonnement
 styles/                    eine Datei je Zuständigkeit, über @layer geordnet
 functions/agent-run/       Deno-Quelltext für die Edge Function
 supabase/schema.sql        Datenmodell der freiwilligen Auswertung
 tests/                     abhängigkeitsfreier Testrunner und die Tests
+tests/run-node.js          derselbe Testlauf kopflos unter Node (nur für Werkzeuge)
 ```
 
 Jede Quelldatei ist eine gekapselte Funktion, die sich an einen einzigen
@@ -112,7 +134,7 @@ läuft trotzdem per Doppelklick.
 
 Keine Cookies, keine Speicher-APIs, keine fremden Server, kein Tracking. Im
 Demo-Modus verlässt nichts den Browser. Die freiwillige Auswertung auf dem
-dritten Bildschirm ist ausdrücklich einzuwilligen und schreibt nur den Regeltext
+dritten Akt ist ausdrücklich einzuwilligen und schreibt nur den Regeltext
 und Kennzahlen. Einzelheiten in [`DATENSCHUTZ.md`](DATENSCHUTZ.md).
 
 ## Weitere Dokumente
