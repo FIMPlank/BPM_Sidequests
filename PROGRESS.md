@@ -42,3 +42,7 @@ Gate: **203 Tests, 0 Fehler**. Der JSON-Export laesst sich wieder einlesen (glei
 `functions/agent-run/index.js` (Deno, **nie lokal ausgefuehrt**, zum Einfuegen in den Supabase-Funktionseditor), `src/agent/liveRunner.js`, Live-Compiler ueber dieselbe Funktion, Anbindung in Screen 3 mit Rueckfall auf die Heuristik.
 Gate: **220 Tests, 0 Fehler**. Eine oertliche Attrappe der Edge-Function-Antwort treibt alle vier Bildschirme durch `liveRunner`: Spur inklusive Abweisung auf Screen 1, Ablauf auf Screen 2, Anzeigen auf Screen 3, Audit-Tabelle und Export auf Screen 4. Kein Netzwerkaufruf, kein Modellaufruf im Test.
 Nebenbefund und behoben: Screen 3 zeigt die Spur vollstaendig (dort wird nicht animiert).
+
+## Phase 8 — GRUEN
+`supabase/schema.sql` (zum Einfuegen in den SQL-Editor: zwei Tabellen, RLS nur `insert` fuer `anon`, Aufraeumfunktion fuer 24 Monate), Zustimmungsschranke in `src/logging.js`, `DATENSCHUTZ.md`.
+Gate: **234 Tests, 0 Fehler**. Belegt: ohne Zustimmung wird nichts geschrieben, auch nicht im Live-Modus; mit Zustimmung, aber im Demo-Modus ebenfalls nicht; im Vortragsmodus nie; ohne konfiguriertes Projekt nie. Geschrieben werden genau die dokumentierten Felder, der Regeltext auf 400 Zeichen gekuerzt. Kein Zugriff auf Speicher-APIs.

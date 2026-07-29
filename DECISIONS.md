@@ -53,3 +53,9 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Das Modell steht als Secret `ANTHROPIC_MODELL` mit Vorgabewert in der Funktion. So laesst es sich im Dashboard wechseln, ohne die Datei erneut einzufuegen.
 - Faellt der Live-Compiler aus (Netz, Kontingent, ungueltige Struktur), uebersetzt die oertliche Heuristik. Der Besucher merkt nur, dass es funktioniert.
 - Die Antwort der Edge Function wird im Browser normalisiert und geprueft, bevor sie den Zustand erreicht. Fremde Felder werden verworfen, fehlende ergaenzt.
+
+## Phase 8
+- Geschrieben wird nur, wenn Zustimmung **und** Live-Modus **und** konfiguriertes Projekt zusammenkommen. Im Demo-Modus verlaesst nichts den Browser — das ist die Voreinstellung und der Zustand beim Doppelklick.
+- Die RLS-Policies begrenzen zusaetzlich die Feldlaengen. Der anon-Schluessel ist oeffentlich; die Datenbank muss auch dann sinnvoll bleiben, wenn jemand ihn direkt benutzt.
+- `select`, `update` und `delete` sind fuer `anon` ausdruecklich entzogen. Die Auswertung laeuft ueber das Dashboard.
+- Die Aufbewahrungsgrenze steht als aufrufbare SQL-Funktion in der Datei, nicht als Scheduler-Job — ein Job waere ein weiterer Einrichtungsschritt.
