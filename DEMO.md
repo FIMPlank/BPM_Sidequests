@@ -86,7 +86,7 @@ Buchungen über 200 € pro Nacht brauchen eine Freigabe
 > „Kein Formular, keine Modellierungssprache, ein deutscher Satz. Daraus wird
 > eine Schwellenwert-Regel: Zielwerkzeug, Bedingung, Forderung."
 
-**`Regel übernehmen`**, dann **`Erneut ausführen`**.
+**`Regel übernehmen`**, dann **`Denselben Fall mit Ihren Regeln laufen lassen`**.
 
 Auf die große Zahl zeigen: **Verstöße im letzten Lauf.**
 
