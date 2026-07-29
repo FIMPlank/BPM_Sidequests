@@ -5,7 +5,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 
 | ID | Status | Abhängig von | Was | Zeit | Umfang |
 |---|---|---|---|---|---|
-| V2-00 | todo | — | Headless-Testlauf `tests/run-node.js` | | |
+| V2-00 | wip | — | Headless-Testlauf `tests/run-node.js` | | |
 | V2-01 | todo | 00 | Aktleiste und feste Fallzeile | | |
 | V2-02 | todo | 01 | Rahmensatz- und Rückblick-Slots | | |
 | V2-03 | todo | 01 | Akt 0 — Der Auftrag | | |
