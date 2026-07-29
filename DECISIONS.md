@@ -131,3 +131,9 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 
 ## v2 — V2-10 (Plot in Akt 4)
 - Der Plot musste nicht umgebaut werden: `z.historie` sammelte schon immer jeden Lauf aus jedem Akt. In Akt 3 sah man davon nur ein Bruchstueck. In Akt 4 steht er an der richtigen Stelle — dort, wo es um die Form der Kurve geht, nicht um einen einzelnen Lauf. Eine Zeile sagt an, dass die Punkte aus allen Akten kommen.
+
+## v2 — V2-11 (Akt 5)
+- Die Spalte `Platzierung` wird **aus dem Schritt selbst abgeleitet**, nicht aus dem Laufkontext: ein eigener Schritt `kontrollpunkt` heisst imperativ, ein Vermerk der Leitplanke am Aufruf heisst Laufzeit, und was beides nicht hat, aber vom Checker berührt wird, ist erst hinterher aufgefallen. Damit bleibt die Zurechnung auch dann richtig, wenn ein Lauf mehrere Orte mischt — was in Akt 4, Teil 2 der Normalfall ist.
+- Der Export legt die Spalte auf **jeden Schritt** und laesst die Trajektorie im Zustand unberuehrt (Kopie je Schritt). Ein Test prueft beides: der Wiedereinlesevorgang findet die Spalte, der Ursprungslauf hat sie nicht.
+- Der Vergleich heisst jetzt, was er ist: `Akt 2 — ohne Ihre Regel` gegen `Ihre Architektur`. Die Verdrahtung war schon richtig (Akt 2 setzt `vergleichsbasis`, Akt 4 setzt `mitNutzerregel`), nur die Beschriftung sprach noch von „Lauf A“ und „Lauf B“.
+- **Luecke im Gatter geschlossen:** eine Testdatei mit Syntaxfehler laesst die Gesamtzahl *sinken*, statt rot zu werden — der Lauf bleibt gruen. Genau das ist hier einmal passiert. Das Gatter zaehlt jetzt zusaetzlich die geladenen Suiten gegen die `describe`-Aufrufe in den Dateien.

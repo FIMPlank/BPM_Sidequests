@@ -312,4 +312,110 @@
     });
   });
 
+  describe('Akt 5 — Platzierung im Protokoll', function () {
+    var sys = HR.compiler.systemRegeln();
+    var schwelle = HR.compiler.uebersetzen(SATZ, { id: 'U-9' }).constraint;
+    var regeln = sys.concat([schwelle]);
+
+    function anfang() { return HR.store.anfang(); }
+    function red(s, a) { return HR.store.reduzieren(s, a); }
+
+    function frei() {
+      return HR.agent.mock.laufSynchron(HR.agent.anfrage({
+        disturbances: HR.platzierung.STOERUNGEN, constraints: sys, enforcement: 'runtime' }));
+    }
+    function hybrid(ort) {
+      return HR.platzierung.lauf(ort, { regel: schwelle, regeln: regeln,
+        stoerungen: HR.platzierung.STOERUNGEN });
+    }
+    function zustand(ort) {
+      var s = red(anfang(), { typ: 'lauf_fertig', ergebnis: frei(),
+        kontext: { regeln: sys, screen: 2, stoerungen: HR.platzierung.STOERUNGEN, vergleichsbasis: true } });
+      var e = hybrid(ort || 'imperativ');
+      return red(s, { typ: 'lauf_fertig', ergebnis: e.ergebnis,
+        kontext: { regeln: regeln, screen: 4, akt: 4, platzierung: ort || 'imperativ',
+          enforcement: HR.platzierung.durchsetzung(ort || 'imperativ'),
+          stoerungen: HR.platzierung.STOERUNGEN, mitNutzerregel: true } });
+    }
+
+    it('fuehrt die Spalte Platzierung im Kopf der Tabelle', function () {
+      expect(HR.copy.screen4.spalten.length).toBe(9);
+      expect(HR.copy.screen4.spalten).toContain('Platzierung');
+      expect(HR.screens[5].zeichnen(zustand())).toContain('Platzierung');
+    });
+
+    it('rechnet den Kontrollpunkt der imperativen Entscheidung zu', function () {
+      var t = HR.komponenten.logTabelle;
+      expect(t.platzierungFuerSchritt({ tool: 'kontrollpunkt' }, [])).toBe('imperativ');
+    });
+
+    it('rechnet einen Vermerk der Leitplanke der Laufzeit zu', function () {
+      var t = HR.komponenten.logTabelle;
+      expect(t.platzierungFuerSchritt(
+        { tool: 'hotel_buchen', guardrail: { rule_id: 'U-9', blocked: true, reason: 'regel' } }, []))
+        .toBe('leitplanke');
+    });
+
+    it('rechnet einen erst hinterher geprueften Schritt dem Nachgang zu', function () {
+      var t = HR.komponenten.logTabelle;
+      expect(t.platzierungFuerSchritt({ tool: 'hotel_buchen', guardrail: null },
+        [{ id: 'U-9', status: 'verletzt' }])).toBe('nachgang');
+    });
+
+    it('laesst ungeregelte Schritte ohne Zurechnung', function () {
+      var t = HR.komponenten.logTabelle;
+      expect(t.platzierungFuerSchritt({ tool: 'beleg_pruefen', guardrail: null }, [])).toBe(null);
+      expect(t.platzierungText(null)).toBe('—');
+    });
+
+    it('zeigt die Zurechnung in der Tabelle an', function () {
+      var h = HR.screens[5].zeichnen(zustand('imperativ'));
+      expect(h).toContain('logtabelle__ort ist-imperativ');
+      expect(h).toContain('Imperativer Kontrollpunkt');
+    });
+
+    it('nimmt die Spalte in den CSV-Export auf', function () {
+      var zeilen = HR.screens[5].alsCsv(zustand()).split(String.fromCharCode(13) + String.fromCharCode(10));
+      expect(zeilen[0]).toContain('Platzierung');
+      expect(zeilen[0].split(';').length).toBe(9);
+      zeilen.slice(1).forEach(function (r) { expect(r.split(';').length).toBe(9); });
+    });
+
+    it('laesst den JSON-Export mit der neuen Spalte hin und zurueck laufen', function () {
+      var z = zustand('imperativ');
+      var wieder = JSON.parse(HR.screens[5].alsJson(z));
+      expect(wieder.trajektorie.length).toBe(z.lauf.trajectory.length);
+      expect(wieder.platzierung).toBe('imperativ');
+      var mitOrt = wieder.trajektorie.filter(function (s) { return s.platzierung; });
+      expect(mitOrt.length).toBeGreaterThan(0);
+      var kontrollpunkt = wieder.trajektorie.filter(function (s) { return s.tool === 'kontrollpunkt'; });
+      expect(kontrollpunkt.length).toBe(1);
+      expect(kontrollpunkt[0].platzierung).toBe('imperativ');
+      // Der Ursprungslauf bleibt unangetastet.
+      expect(z.lauf.trajectory[0].platzierung).toBe(undefined);
+    });
+
+    it('vergleicht den freien Lauf aus Akt 2 gegen die Architektur des Besuchers', function () {
+      var z = zustand('imperativ');
+      expect(z.laufOhneRegel).toBeTruthy();
+      expect(z.laufMitRegel).toBeTruthy();
+      var h = HR.screens[5].zeichnen(z);
+      expect(h).toContain('Akt 2 — ohne Ihre Regel');
+      expect(h).toContain('Ihre Architektur');
+    });
+
+    it('hebt genau die abweichenden Schritte hervor', function () {
+      var z = zustand('imperativ');
+      var zeilen = HR.screens[5].diffZeilen(z.laufOhneRegel, z.laufMitRegel);
+      expect(zeilen.length).toBe(Math.max(
+        z.laufOhneRegel.trajectory.length, z.laufMitRegel.trajectory.length));
+      var anders = zeilen.filter(function (r) { return r.anders; });
+      expect(anders.length).toBeGreaterThan(0);
+      expect(anders.length).toBeLessThan(zeilen.length + 1);
+      // Die ersten beiden Schritte sind in beiden Laeufen dieselben.
+      expect(zeilen[0].anders).toBeFalsy();
+      expect(zeilen[1].anders).toBeFalsy();
+    });
+  });
+
 })(window.HR = window.HR || {});

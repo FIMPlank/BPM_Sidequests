@@ -504,7 +504,7 @@
     it('stellt die Auditfrage', function () {
       expect(html(anfang())).toContain('Könnten Sie das im Audit belegen?');
     });
-    it('zeigt alle acht Spalten', function () {
+    it('zeigt alle neun Spalten', function () {
       var h = html(zustandMitLaeufen());
       HR.copy.screen4.spalten.forEach(function (n) { expect(h).toContain(n); });
     });

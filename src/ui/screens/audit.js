@@ -10,16 +10,33 @@
     return (z.laufKontext && z.laufKontext.regeln) || z.regeln;
   }
 
+  /**
+   * Jeder Schritt bekommt seine Platzierung mit — dieselbe Zuordnung, die in
+   * der Tabelle steht. Ohne sie waere im Export nicht mehr erkennbar, welcher
+   * Architekturentscheidung eine Pruefung zu verdanken ist.
+   */
+  function mitPlatzierung(lauf, regeln) {
+    return lauf.trajectory.map(function (schritt) {
+      var checks = HR.komponenten.logTabelle.checksFuerSchritt(schritt, lauf.trajectory, regeln);
+      var kopie = {};
+      for (var k in schritt) if (Object.prototype.hasOwnProperty.call(schritt, k)) kopie[k] = schritt[k];
+      kopie.platzierung = HR.komponenten.logTabelle.platzierungFuerSchritt(schritt, checks);
+      return kopie;
+    });
+  }
+
   /** Exportformat. Bewusst ohne Sitzungskennung — es gehoert dem Besucher. */
   function alsJson(z) {
     var lauf = z.lauf;
     if (!lauf) return '{}';
+    var regeln = regelnDesLaufs(z);
     return JSON.stringify({
       szenario: HR.agent.SZENARIO_ID,
       stoerungen: (z.laufKontext && z.laufKontext.stoerungen) || [],
       durchsetzung: (z.laufKontext && z.laufKontext.enforcement) || z.enforcement,
-      regeln: regelnDesLaufs(z),
-      trajektorie: lauf.trajectory,
+      platzierung: (z.laufKontext && z.laufKontext.platzierung) || null,
+      regeln: regeln,
+      trajektorie: mitPlatzierung(lauf, regeln),
       ergebnis: lauf.result,
       nutzung: lauf.usage,
       pruefung: lauf.violations
@@ -37,8 +54,8 @@
     var regeln = regelnDesLaufs(z);
     var zeilen = [HR.copy.screen4.spalten.map(csvFeld).join(';')];
     lauf.trajectory.forEach(function (s) {
-      var checks = HR.komponenten.logTabelle.checksFuerSchritt(s, lauf.trajectory, regeln)
-        .map(function (c) { return c.id + '=' + c.status; }).join(' ');
+      var rohChecks = HR.komponenten.logTabelle.checksFuerSchritt(s, lauf.trajectory, regeln);
+      var checks = rohChecks.map(function (c) { return c.id + '=' + c.status; }).join(' ');
       zeilen.push([
         s.i + 1,
         HR.copy.zeit(s.t),
@@ -46,6 +63,8 @@
         (s.guardrail && s.guardrail.blocked) ? 'abgelehnt' : s.action,
         s.tool,
         HR.komponenten.logTabelle.kurzInput(s.input),
+        HR.komponenten.logTabelle.platzierungText(
+          HR.komponenten.logTabelle.platzierungFuerSchritt(s, rohChecks)),
         checks,
         s.output && s.output.status
       ].map(csvFeld).join(';'));
@@ -164,6 +183,7 @@
     zeichnen: zeichnen,
     alsJson: alsJson,
     alsCsv: alsCsv,
-    diffZeilen: diffZeilen
+    diffZeilen: diffZeilen,
+    mitPlatzierung: mitPlatzierung
   });
 })(window.HR = window.HR || {});

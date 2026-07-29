@@ -66,6 +66,30 @@
     return out;
   }
 
+  /**
+   * Welcher Architekturentscheidung ist dieser Schritt zuzurechnen?
+   *
+   * Das ist die Frage, die eine Innenrevision stellt: nicht nur „wurde
+   * geprueft“, sondern „wo wurde geprueft“. Sie laesst sich am Schritt
+   * selbst beantworten — der Kontrollpunkt steht als eigener Schritt im
+   * Protokoll, die Leitplanke hinterlaesst einen Vermerk am Aufruf, und was
+   * beides nicht hat, ist erst hinterher aufgefallen oder gar nicht geregelt.
+   *
+   * @returns {string|null} Schluessel aus HR.platzierung.PLATZIERUNGEN
+   */
+  function platzierungFuerSchritt(schritt, checks) {
+    if (!schritt) return null;
+    if (schritt.tool === 'kontrollpunkt') return 'imperativ';
+    if (schritt.guardrail) return 'leitplanke';
+    var betroffen = (checks || []).filter(function (c) { return c.status !== 'nicht_anwendbar'; });
+    return betroffen.length ? 'nachgang' : null;
+  }
+
+  function platzierungText(schluessel) {
+    if (!schluessel) return HR.copy.screen4.fehlt;
+    return HR.copy.akt4.orte[schluessel];
+  }
+
   /** Vollstaendige Audit-Tabelle mit aufklappbarem Beleg. */
   function voll(traj, constraints, offen) {
     var e = HR.render.esc;
@@ -89,6 +113,9 @@
       h.push('<td>' + e(geblockt ? s.geblockt : (s.aktion[schritt.action] || schritt.action)) + '</td>');
       h.push('<td class="mono">' + e(schritt.tool) + '</td>');
       h.push('<td class="mono logtabelle__input">' + e(kurzInput(schritt.input)) + '</td>');
+      var ort = platzierungFuerSchritt(schritt, checks);
+      h.push('<td class="logtabelle__ort' + (ort ? ' ist-' + ort : '') + '">' +
+        e(platzierungText(ort)) + '</td>');
       h.push('<td class="mono">' + (checks.length
         ? checks.map(function (c) {
             return '<span class="check check--' + c.status + '">' + e(c.id) + ' ' +
@@ -121,6 +148,8 @@
     kurz: kurz,
     voll: voll,
     kurzInput: kurzInput,
-    checksFuerSchritt: checksFuerSchritt
+    checksFuerSchritt: checksFuerSchritt,
+    platzierungFuerSchritt: platzierungFuerSchritt,
+    platzierungText: platzierungText
   };
 })(window.HR = window.HR || {});

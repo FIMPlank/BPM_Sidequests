@@ -466,3 +466,10 @@
     .fusion.ist-verschmilzt .schranke { animation: none; opacity: 1; transform: none; }
   }
 }
+
+@layer screens {
+  /* Die Spalte, die eine Pruefung einer Architekturentscheidung zurechnet. */
+  .logtabelle__ort { font-size: 0.75rem; color: var(--ink-leise); white-space: nowrap; }
+  .logtabelle__ort.ist-imperativ { color: var(--ink); font-weight: 500; }
+  .logtabelle__ort.ist-leitplanke { color: var(--ink-mittel); }
+}
