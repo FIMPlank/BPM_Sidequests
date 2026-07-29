@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tests — Handlungsraum-Sandbox</title>
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/tests.css">
+</head>
+<body class="testseite">
+
+<h1>Testlauf</h1>
+<p class="testseite__hinweis">Diese Seite laeuft per Doppelklick, ohne Server und ohne Installation.</p>
+<div id="ergebnis" aria-live="polite">Laeuft …</div>
+
+<!-- LADEREIHENFOLGE — identisch zu index.html -->
+<script src="src/config.js"></script>
+<script src="src/domain/tools.js"></script>
+<script src="src/domain/imperative.js"></script>
+<script src="src/domain/constraints.js"></script>
+<script src="src/domain/compiler.js"></script>
+<script src="src/domain/checker.js"></script>
+<script src="src/domain/guardrail.js"></script>
+<script src="src/domain/freedom.js"></script>
+<script src="src/domain/tokens.js"></script>
+<script src="src/agent/runner.js"></script>
+<script src="src/agent/mockRunner.js"></script>
+<script src="src/agent/liveRunner.js"></script>
+<script src="src/state/store.js"></script>
+<script src="src/logging.js"></script>
+<script src="src/ui/copy.de.js"></script>
+<script src="src/ui/render.js"></script>
+<script src="src/ui/components/handlungsraum.js"></script>
+<script src="src/ui/components/fsmDiagramm.js"></script>
+<script src="src/ui/components/zaehler.js"></script>
+<script src="src/ui/components/plot.js"></script>
+<script src="src/ui/components/logTabelle.js"></script>
+<script src="src/ui/screens/clash.js"></script>
+<script src="src/ui/screens/preis.js"></script>
+<script src="src/ui/screens/regeln.js"></script>
+<script src="src/ui/screens/audit.js"></script>
+<!-- main.js bewusst nicht: die Testseite startet die App nicht -->
+<!-- ENDE LADEREIHENFOLGE -->
+
+<script src="tests/harness.js"></script>
+<script src="tests/domain.test.js"></script>
+<script src="tests/compiler.test.js"></script>
+<script src="tests/checker.test.js"></script>
+<script src="tests/freedom.test.js"></script>
+<script src="tests/mockRunner.test.js"></script>
+<script src="tests/liveRunner.test.js"></script>
+<script src="tests/logging.test.js"></script>
+<script>
+  HR.test.run(document.getElementById('ergebnis'));
+</script>
+
+</body>
+</html>

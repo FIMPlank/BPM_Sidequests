@@ -1,0 +1,59 @@
+/* Reihenfolge aller Layer, einmal deklariert. Danach ist die Dateireihenfolge egal. */
+@layer tokens, base, layout, imperativ, deklarativ, components, screens;
+
+@layer tokens {
+  :root {
+    /* Palette — es wird nichts ausserhalb dieser Werte verwendet. */
+    --ink:        #14171C;
+    --paper:      #EFF1EE;
+    --imperativ:  #2B4C7E;
+    --deklarativ: #A8762C;
+    --verstoss:   #A6321E;
+    --raster:     #D6D9D4;
+
+    /* Abgeleitete Toene, ausschliesslich aus der Palette gemischt. */
+    --ink-70: color-mix(in srgb, var(--ink) 70%, var(--paper));
+    --ink-45: color-mix(in srgb, var(--ink) 45%, var(--paper));
+    --paper-hoch: color-mix(in srgb, var(--paper) 82%, #FFFFFF);
+    --imperativ-weich: color-mix(in srgb, var(--imperativ) 12%, var(--paper));
+    --deklarativ-weich: color-mix(in srgb, var(--deklarativ) 14%, var(--paper));
+    --verstoss-weich: color-mix(in srgb, var(--verstoss) 12%, var(--paper));
+    --gruen: #2F6B4F;
+
+    /* Typografie — nur Systemschriften, bewusst gesetzt. */
+    --font-display: ui-sans-serif, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+    --font-body:    ui-sans-serif, "Segoe UI", system-ui, sans-serif;
+    --font-mono:    ui-monospace, "Cascadia Mono", "SF Mono", "DejaVu Sans Mono", monospace;
+
+    --display-size: clamp(2rem, 1.2rem + 2.6vw, 3.25rem);
+    --display-weight: 680;
+    --display-tracking: -0.022em;
+    --display-leading: 1.05;
+
+    --body-size: 1.0625rem;
+    --body-leading: 1.6;
+    --mass: 62ch;
+
+    --label-size: 0.75rem;
+    --label-tracking: 0.08em;
+
+    /* 8px-Raster — die imperative Seite haelt sich strikt daran. */
+    --r1: 8px;  --r2: 16px; --r3: 24px; --r4: 32px;
+    --r6: 48px; --r8: 64px;
+
+    --haarlinie: 1px;
+    --radius: 2px;
+    --radius-weich: 14px;
+
+    --takt-schnell: 140ms;
+    --takt-pfad: 600ms;
+    --ease-weich: cubic-bezier(.22, .61, .36, 1);
+  }
+
+  /* Vortragsmodus: alles eine Stufe groesser, gleiche Proportionen. */
+  :root.vortrag {
+    --body-size: 1.25rem;
+    --display-size: clamp(2.6rem, 1.6rem + 3.2vw, 4rem);
+    --label-size: 0.875rem;
+  }
+}

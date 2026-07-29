@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Handlungsraum-Sandbox — Regeln statt Prozessvarianten</title>
+<meta name="description" content="Interaktive Demo zu agentischer KI und Prozess-Governance: imperatives Prozessmodell gegen deklarativen Handlungsraum, am Beispiel einer Reisekostenabrechnung.">
+<meta name="color-scheme" content="light">
+
+<!-- CSS: eine Datei je Zustaendigkeit, Reihenfolge ueber @layer geregelt -->
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/layout.css">
+<link rel="stylesheet" href="styles/imperativ.css">
+<link rel="stylesheet" href="styles/deklarativ.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/screens.css">
+</head>
+<body>
+
+<a class="sprungmarke" href="#hauptinhalt">Zum Inhalt springen</a>
+
+<header class="kopf" role="banner">
+  <div class="kopf__marke">
+    <span class="kopf__titel">Handlungsraum-Sandbox</span>
+    <span class="kopf__unterzeile">Reisekostenabrechnung als Testfall</span>
+  </div>
+  <div class="kopf__rechts">
+    <nav class="schrittnav" id="schrittnav" aria-label="Bildschirme"></nav>
+    <span class="pille" id="modus-pille" aria-live="polite">Modus: Demo (skriptiert)</span>
+  </div>
+</header>
+
+<main id="hauptinhalt" class="buehne" role="main">
+  <section class="screen" id="screen-1" data-screen="1" aria-labelledby="screen-1-titel"></section>
+  <section class="screen" id="screen-2" data-screen="2" aria-labelledby="screen-2-titel" hidden></section>
+  <section class="screen" id="screen-3" data-screen="3" aria-labelledby="screen-3-titel" hidden></section>
+  <section class="screen" id="screen-4" data-screen="4" aria-labelledby="screen-4-titel" hidden></section>
+</main>
+
+<footer class="fuss" role="contentinfo">
+  <p>
+    <a href="DATENSCHUTZ.md">Datenschutz</a>
+    <span aria-hidden="true">·</span>
+    <a href="#" id="impressum-link">Impressum (Platzhalter)</a>
+    <span aria-hidden="true">·</span>
+    <a href="tests.html">Tests</a>
+  </p>
+  <p class="fuss__hinweis">Alle Buchungen, Belege und Erstattungen sind simuliert. Es wird nichts gebucht, gesendet oder gezahlt.</p>
+</footer>
+
+<!-- LADEREIHENFOLGE — identisch in tests.html spiegeln. Kein type="module": file:// -->
+<script src="src/config.js"></script>
+<script src="src/domain/tools.js"></script>
+<script src="src/domain/imperative.js"></script>
+<script src="src/domain/constraints.js"></script>
+<script src="src/domain/compiler.js"></script>
+<script src="src/domain/checker.js"></script>
+<script src="src/domain/guardrail.js"></script>
+<script src="src/domain/freedom.js"></script>
+<script src="src/domain/tokens.js"></script>
+<script src="src/agent/runner.js"></script>
+<script src="src/agent/mockRunner.js"></script>
+<script src="src/agent/liveRunner.js"></script>
+<script src="src/state/store.js"></script>
+<script src="src/logging.js"></script>
+<script src="src/ui/copy.de.js"></script>
+<script src="src/ui/render.js"></script>
+<script src="src/ui/components/handlungsraum.js"></script>
+<script src="src/ui/components/fsmDiagramm.js"></script>
+<script src="src/ui/components/zaehler.js"></script>
+<script src="src/ui/components/plot.js"></script>
+<script src="src/ui/components/logTabelle.js"></script>
+<script src="src/ui/screens/clash.js"></script>
+<script src="src/ui/screens/preis.js"></script>
+<script src="src/ui/screens/regeln.js"></script>
+<script src="src/ui/screens/audit.js"></script>
+<script src="src/main.js"></script>
+<!-- ENDE LADEREIHENFOLGE -->
+
+</body>
+</html>
