@@ -98,6 +98,13 @@
     s.spalten.forEach(function (n) { h.push('<th scope="col">' + e(n) + '</th>'); });
     h.push('</tr></thead><tbody>');
 
+    /*
+     * Die Spaltenmarke am einzelnen Feld. Auf schmalen Flaechen bricht die
+     * Tabelle in Karten um; dann steht sie als `content: attr(data-label)`
+     * vor dem Wert. Der Text kommt aus copy.de.js, nicht von hier.
+     */
+    function marke(n) { return HR.render.attr('data-label', s.spalten[n]); }
+
     (traj || []).forEach(function (schritt) {
       var checks = checksFuerSchritt(schritt, traj, constraints);
       var geblockt = !!(schritt.guardrail && schritt.guardrail.blocked);
@@ -107,22 +114,22 @@
       h.push('<tr class="logzeile' + (geblockt ? ' ist-geblockt' : '') + '"' +
         (aufklappbar ? ' data-aktion="zeile" data-wert="' + schritt.i + '" tabindex="0"' +
           ' aria-expanded="' + (istOffen ? 'true' : 'false') + '"' : '') + '>');
-      h.push('<td class="mono">' + (schritt.i + 1) + '</td>');
-      h.push('<td class="mono">' + e(HR.copy.zeit(schritt.t)) + '</td>');
-      h.push('<td>' + e(s.akteur[schritt.actor] || schritt.actor) + '</td>');
-      h.push('<td>' + e(geblockt ? s.geblockt : (s.aktion[schritt.action] || schritt.action)) + '</td>');
-      h.push('<td class="mono">' + e(schritt.tool) + '</td>');
-      h.push('<td class="mono logtabelle__input">' + e(kurzInput(schritt.input)) + '</td>');
+      h.push('<td class="mono"' + marke(0) + '>' + (schritt.i + 1) + '</td>');
+      h.push('<td class="mono"' + marke(1) + '>' + e(HR.copy.zeit(schritt.t)) + '</td>');
+      h.push('<td' + marke(2) + '>' + e(s.akteur[schritt.actor] || schritt.actor) + '</td>');
+      h.push('<td' + marke(3) + '>' + e(geblockt ? s.geblockt : (s.aktion[schritt.action] || schritt.action)) + '</td>');
+      h.push('<td class="mono"' + marke(4) + '>' + e(schritt.tool) + '</td>');
+      h.push('<td class="mono logtabelle__input"' + marke(5) + '>' + e(kurzInput(schritt.input)) + '</td>');
       var ort = platzierungFuerSchritt(schritt, checks);
-      h.push('<td class="logtabelle__ort' + (ort ? ' ist-' + ort : '') + '">' +
+      h.push('<td class="logtabelle__ort' + (ort ? ' ist-' + ort : '') + '"' + marke(6) + '>' +
         e(platzierungText(ort)) + '</td>');
-      h.push('<td class="mono">' + (checks.length
+      h.push('<td class="mono"' + marke(7) + '>' + (checks.length
         ? checks.map(function (c) {
             return '<span class="check check--' + c.status + '">' + e(c.id) + ' ' +
               e(HR.copy.status[c.status]) + '</span>';
           }).join(' ')
         : '<span class="check check--leer">' + e(s.keinCheck) + '</span>') + '</td>');
-      h.push('<td class="mono">' + e(schritt.output && schritt.output.status) + '</td>');
+      h.push('<td class="mono"' + marke(8) + '>' + e(schritt.output && schritt.output.status) + '</td>');
       h.push('</tr>');
 
       if (istOffen) {

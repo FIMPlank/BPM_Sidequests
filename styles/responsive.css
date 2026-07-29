@@ -1,0 +1,332 @@
+/*
+ * Zugaenglichkeit und schmale Flaechen.
+ *
+ * Diese Datei kommt zuletzt und aendert die Zeichensprache nicht: gleiche
+ * Palette, gleiche Schriftrollen, gleiche Proportionen. Sie sorgt nur dafuer,
+ * dass die Zeichnung auch bei 390 px, bei 200 % Zoom und ohne Farbwahrnehmung
+ * lesbar bleibt.
+ *
+ * Vier Anliegen, in dieser Reihenfolge:
+ *   1. Bedienflaechen — nichts Anklickbares unter 44 x 44 px.
+ *   2. Zweiter Kanal — keine Aussage haengt allein an der Farbe.
+ *   3. Kontrast und Fokus — 4.5:1 fuer Text, sichtbarer Ring fuer Tastatur.
+ *   4. Umbruch — eine Spalte statt gequetschter Tabellen, nie Querlauf der Seite.
+ */
+@layer responsive;
+
+@layer responsive {
+
+  :root {
+    /* Kleinste Bedienflaeche. Eine Zahl, damit sie ueberall dieselbe ist. */
+    --ziel: 44px;
+    /* Rand einer leisen Bedienflaeche: leiser als --ink-leise, aber ueber 3:1.
+       --raster (1.25:1) traegt Trennlinien, keine Knopfkanten. */
+    --raster-kante: color-mix(in srgb, var(--ink) 50%, var(--paper));  /* ~3.3:1 */
+  }
+
+  /* — 1. Bedienflaechen ————————————————————————————————————————
+   * Gewachsen wird ueber Innenabstand. Die Schriftgroessen bleiben, wie sie
+   * waren; die Flaeche darum herum wird groesser, nicht der Text.
+   */
+
+  .knopf {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--ziel);
+    padding-block: 10px;
+  }
+  /* Der kleine Knopf bleibt klein im Satzbild und ist trotzdem zu treffen. */
+  .knopf--klein {
+    padding: 6px var(--r2);
+    min-height: var(--ziel);
+  }
+
+  .aktleiste { gap: 0; }
+  .aktleiste__punkt {
+    min-height: var(--ziel);
+    min-width: var(--ziel);
+    justify-content: center;
+    padding: 6px var(--r2);
+  }
+  .aktleiste__nr { border-color: var(--raster-kante); }
+  .aktleiste__punkt.ist-aktiv .aktleiste__nr { border-color: var(--ink); }
+
+  .editor__feld { min-height: var(--ziel); }
+
+  /* Die aufklappbare Zeile ist der Schalter des Audits — sie braucht Hoehe. */
+  .logzeile[data-aktion] > td { padding-block: 11px; }
+
+  .sprungmarke {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--ziel);
+  }
+
+  /* Verweise in der Fusszeile stehen einzeln, nicht im Fliesstext:
+     sie duerfen die volle Flaeche bekommen. */
+  .fuss p a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--ziel);
+  }
+
+  /* — 2. Zweiter Kanal ————————————————————————————————————————
+   * Jede Aussage, die bisher nur an einer Farbe hing, bekommt eine Form,
+   * ein Zeichen oder ein Wort dazu. Die Zeichen sind fuer das Auge; die
+   * Vorlesesoftware bekommt sie ueber die Alternative leer gestellt.
+   */
+
+  /* Verstoss im imperativen Modell: rot UND gestrichelt.
+     Der laufende Schritt bleibt durchgezogen — so sind beide zu trennen,
+     auch wenn Blau und Rot gleich aussehen. */
+  .fsm__knoten.ist-verstoss {
+    stroke-dasharray: 4 2;
+    shape-rendering: auto;
+  }
+
+  /* Besuchte Ankerpunkte sind gefuellt, unbesuchte offen. Fuellung statt
+     Farbton — und der offene Ring liegt zugleich ueber 3:1 zur Flaeche. */
+  .raum__anker {
+    fill: none;
+    stroke: var(--ink-leise);
+    stroke-width: 1.2;
+  }
+  .raum__anker.ist-besucht {
+    fill: var(--deklarativ);
+    stroke: var(--deklarativ-text);
+  }
+
+  /* Constraint-Check im Audit: das Wort stand schon da, das Zeichen kommt dazu. */
+  .check::before {
+    content: "· ";
+    content: "· " / "";
+  }
+  .check--erfuellt::before {
+    content: "\2713\00a0";
+    content: "\2713\00a0" / "";
+  }
+  .check--verletzt::before {
+    content: "\2717\00a0";
+    content: "\2717\00a0" / "";
+  }
+  .check--nicht_anwendbar::before {
+    content: "\2013\00a0";
+    content: "\2013\00a0" / "";
+  }
+  .check--leer::before { content: none; }
+
+  /* Abgelehnter Aufruf: das Kreuz steht schon in der Spur (spur__abweisung),
+     im Protokoll bekommt die Zeile dasselbe Zeichen. */
+  .logzeile.ist-geblockt > td:first-child::before,
+  .ablauf__zeile.ist-geblockt .ablauf__nr::before {
+    content: "\2717\00a0";
+    content: "\2717\00a0" / "";
+    color: var(--verstoss);
+  }
+
+  /* Abweichende Zeile im Vergleich zweier Laeufe: bisher nur ein Farbfeld. */
+  .logtabelle--diff tr.ist-anders td:first-child::before {
+    content: "\2260\00a0";
+    content: "\2260\00a0" / "";
+    color: var(--deklarativ-text);
+  }
+
+  /* Warnzahlen: die Ziffer wird rot, das Ausrufezeichen kommt dazu. */
+  .instrument.ist-warn .instrument__name::after,
+  .grosszahl.ist-warn .grosszahl__name::after,
+  .pruefpanel.ist-verletzt .pruefpanel__label::after {
+    content: " (!)";
+    content: " (!)" / "";
+    color: var(--verstoss);
+    font-weight: 700;
+  }
+
+  /* Vermerke. Der Text sagt es, das Zeichen wiederholt es kurz. */
+  .badge--gut::before {
+    content: "\2713\00a0";
+    content: "\2713\00a0" / "";
+  }
+  .badge--verstoss::before {
+    content: "\2717\00a0";
+    content: "\2717\00a0" / "";
+  }
+
+  /* Der abgelehnte Entwurf: Farbe und Strichart am selben Rand. */
+  .entwurf--fehler { border-left-style: dashed; }
+
+  /* Gedrueckter Zustand: bisher nur ein Farbfeld. Jetzt zusaetzlich eine
+     zweite, innen liegende Kante — Strichstaerke statt Farbton. */
+  .knopf[aria-pressed="true"] {
+    box-shadow: inset 0 0 0 2px var(--imperativ);
+  }
+
+  /* Der Plot fuehrt zwei Reihen. Kosten laufen gestrichelt mit offenen
+     Punkten, Verstoesse durchgezogen mit vollen — die Form traegt, nicht
+     die Farbe. */
+  .plot__reihe.ist-kosten {
+    stroke-dasharray: 5 3;
+  }
+  .plot__punkt.ist-kosten {
+    fill: var(--paper);
+    stroke: var(--deklarativ);
+    stroke-width: 2;
+  }
+  .plot__legende { align-items: center; }
+  .plot__key { display: inline-flex; align-items: center; gap: 6px; }
+  .plot__key::before {
+    content: "";
+    display: inline-block;
+    width: 1.6em;
+    border-top: 2px solid currentColor;
+  }
+  .plot__key.ist-kosten::before { border-top-style: dashed; }
+
+  /* — 3. Kontrast und Fokus ————————————————————————————————————— */
+
+  /* Ocker traegt als Flaeche, nicht als Text: 3.5:1 reicht fuer eine
+     Beschriftung nicht. Der abgedunkelte Ton steht auf 5.1:1. */
+  .panel--deklarativ .panel__label { color: var(--deklarativ-text); }
+
+  /* Die zurueckgenommene Seite wurde bisher als Ganzes durchsichtig gestellt.
+     Damit fiel jeder Text darin unter 3.4:1 — die leisen Toene sogar unter
+     2:1. Die Ruecknahme liegt jetzt auf der Zeichnung, nicht auf der Schrift;
+     dass die Seite passiv ist, sagt ohnehin die Wahlmarke im Klartext. */
+  .panel.ist-zurueckgenommen { opacity: 1; }
+  .panel.ist-zurueckgenommen .fsm,
+  .panel.ist-zurueckgenommen .raum { opacity: 0.55; }
+  .panel.ist-zurueckgenommen:hover .fsm,
+  .panel.ist-zurueckgenommen:hover .raum,
+  .panel.ist-zurueckgenommen:focus-within .fsm,
+  .panel.ist-zurueckgenommen:focus-within .raum { opacity: 1; }
+
+  /* Der leise Knopf blieb mit --raster (1.25:1) fast randlos. */
+  .knopf--still { border-color: var(--raster-kante); }
+
+  /* Abgeschaltete Knoepfe sind von der Kontrastregel ausgenommen; bei 0.45
+     war die Beschriftung trotzdem nicht mehr zu lesen. 0.6 haelt 4.5:1. */
+  .knopf:disabled { opacity: 0.6; }
+
+  /* Aufklappbare Zeilen: der Ring lag innen und nur 2 px stark. */
+  .logzeile[data-aktion]:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: -3px;
+    background: var(--paper-hoch);
+  }
+
+  /* — 4. Umbruch ————————————————————————————————————————————————
+   * Nichts darf die Seite quer schieben. Was zweidimensional bleiben muss,
+   * scrollt in seinem eigenen Rahmen.
+   */
+
+  html, body { overflow-x: clip; }
+
+  .logtabelle__rahmen { max-width: 100%; overflow-x: auto; }
+
+  /* Der Vergleich hat drei Spalten. Er braucht die 760 px des Audits nicht. */
+  .logtabelle--diff { min-width: 0; }
+
+  /* Zeichnungen skalieren mit, statt ihre feste Breite durchzudruecken. */
+  .fsm, .raum, .plot, .fusion .raum { max-width: 100%; }
+  .plot-panel, .fusion { max-width: min(420px, 100%); }
+  .fusion { max-width: min(340px, 100%); }
+
+  /* Lange Kennungen und Formeln brechen, statt den Rahmen zu sprengen. */
+  .regelkarte__form,
+  .regelsatz__form,
+  .entwurf__text .mono,
+  .muster__satz { overflow-wrap: anywhere; }
+
+  @media (max-width: 860px) {
+    /* Die Aktleiste zeigt auf schmalen Flaechen nur die Ziffern —
+       dann duerfen die Ziffern nicht die ganze Zeile fuellen. */
+    .aktleiste { gap: 2px; }
+    .aktleiste__punkt { padding: 6px var(--r1); }
+  }
+
+  @media (max-width: 760px) {
+    /*
+     * Die Zuordnungsmatrix in Akt 4: drei Regeln mal drei Orte. Als Tabelle
+     * braucht sie rund 470 px. Darunter wird jede Zeile zu einer Karte —
+     * Regel oben, die drei Orte darunter. Die Knoepfe tragen den Namen des
+     * Orts selbst, deshalb braucht die Karte keine Spaltenkoepfe.
+     */
+    .zuordnung,
+    .zuordnung thead,
+    .zuordnung tbody,
+    .zuordnung tr,
+    .zuordnung th,
+    .zuordnung td { display: block; width: auto; }
+
+    .zuordnung thead {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+    .zuordnung tbody tr {
+      border-bottom: var(--haarlinie) solid var(--raster);
+      padding: var(--r2) 0;
+    }
+    .zuordnung tbody tr:last-child { border-bottom: 0; }
+    .zuordnung th, .zuordnung td { border-bottom: 0; padding: 0; }
+    .zuordnung__regel { margin-bottom: var(--r2); }
+    .zuordnung__zelle { margin-top: var(--r1); }
+    .zuordnung__zelle .knopf { width: 100%; justify-content: flex-start; }
+
+    /*
+     * Das Audit-Protokoll: neun Spalten, rund 990 px. Auf 390 px waeren das
+     * zweieinhalb Bildbreiten Querlauf je Zeile. Darunter wird jede Zeile zu
+     * einem Block; die Spaltennamen stehen als Marke vor dem Wert. Sie kommen
+     * aus data-label und damit aus copy.de.js — hier steht kein deutscher Text.
+     */
+    .logtabelle:not(.logtabelle--diff) { min-width: 0; }
+    .logtabelle:not(.logtabelle--diff),
+    .logtabelle:not(.logtabelle--diff) thead,
+    .logtabelle:not(.logtabelle--diff) tbody,
+    .logtabelle:not(.logtabelle--diff) tr,
+    .logtabelle:not(.logtabelle--diff) td { display: block; width: auto; }
+
+    .logtabelle:not(.logtabelle--diff) thead {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+    .logtabelle:not(.logtabelle--diff) tbody tr {
+      border-bottom: var(--haarlinie) solid var(--raster);
+      padding: var(--r1) 0;
+    }
+    .logtabelle:not(.logtabelle--diff) tbody tr:last-child { border-bottom: 0; }
+    .logtabelle:not(.logtabelle--diff) td {
+      border-bottom: 0;
+      padding: 3px var(--r1);
+      display: grid;
+      grid-template-columns: 10.5em 1fr;
+      gap: var(--r1);
+      align-items: baseline;
+    }
+    .logtabelle:not(.logtabelle--diff) td[data-label]::before {
+      content: attr(data-label);
+      font-family: var(--font-body);
+      font-size: var(--label-size);
+      letter-spacing: var(--label-tracking);
+      text-transform: uppercase;
+      color: var(--ink-leise);
+    }
+    /* Der Beleg klappt unter der ganzen Karte auf und braucht keine Marke. */
+    .logtabelle:not(.logtabelle--diff) .logzeile__beleg td { display: block; }
+    .logtabelle:not(.logtabelle--diff) .logtabelle__input { max-width: none; }
+    .logtabelle:not(.logtabelle--diff) .logtabelle__ort { white-space: normal; }
+    .logzeile[data-aktion] > td { padding-block: 3px; }
+    .logtabelle:not(.logtabelle--diff) .logzeile[data-aktion] { padding-block: var(--r2); }
+  }
+
+  @media (max-width: 460px) {
+    /* Ganz schmal traegt die Marke keine eigene Spalte mehr. */
+    .logtabelle:not(.logtabelle--diff) td {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .instrumente { grid-template-columns: 1fr; }
+    .instrument:last-child { grid-column: auto; }
+  }
+}
