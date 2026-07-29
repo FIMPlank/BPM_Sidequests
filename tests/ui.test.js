@@ -598,6 +598,247 @@
     });
   });
 
+  /* — Staffelung, Aufklapper und die staendige Navigation ————————— */
+
+  describe('Aufklapper', function () {
+    var d = HR.komponenten.disclosure;
+
+    it('baut ein natives details/summary und keinen Nachbau', function () {
+      var h = d.zeichnen({ inhalt: '<p>x</p>' });
+      expect(h).toContain('<details class="aufklapper"');
+      expect(h).toContain('<summary class="aufklapper__kopf">');
+      expect(h.indexOf('role="button"')).toBe(-1);
+      expect(h.indexOf('aria-expanded')).toBe(-1);
+    });
+    it('ist von Haus aus zu', function () {
+      expect(d.zeichnen({ inhalt: 'x' }).indexOf(' open')).toBe(-1);
+      expect(d.zeichnen({ inhalt: 'x', offen: true })).toContain(' open');
+    });
+    it('nimmt die Beschriftung aus der Textdatei', function () {
+      expect(d.zeichnen({ inhalt: 'x' })).toContain('Technische Details anzeigen');
+      expect(d.zeichnen({ inhalt: 'x', titel: 'Eigener Titel' })).toContain('Eigener Titel');
+    });
+    it('maskiert die Beschriftung, nicht den Inhalt', function () {
+      var h = d.zeichnen({ titel: '<b>', inhalt: '<p class="roh"></p>' });
+      expect(h).toContain('&lt;b&gt;');
+      expect(h).toContain('<p class="roh">');
+    });
+    it('macht aus Saetzen Absaetze und laesst Leeres weg', function () {
+      var h = d.absaetze(['eins', '', null, 'zwei']);
+      expect(h.split('aufklapper__satz').length - 1).toBe(2);
+    });
+    it('fuellt Vorlagen aus der Textdatei', function () {
+      expect(HR.copy.interaktion.fuellen('{a} und {b}', { a: '1', b: '2' })).toBe('1 und 2');
+      expect(HR.copy.interaktion.fuellen('{fehlt}', {})).toBe('{fehlt}');
+    });
+  });
+
+  describe('Zeichnungen in Worten', function () {
+    var sys = HR.compiler.systemRegeln();
+    var schwelle = HR.compiler.uebersetzen('Buchungen über 200 € pro Nacht brauchen eine Freigabe').constraint;
+
+    it('beschreibt das feste Modell mit echtem Text, nicht nur mit aria-label', function () {
+      var h = HR.komponenten.fsmDiagramm.textFassung(HR.imperative.neu());
+      expect(h).toContain('<details');
+      expect(h).toContain('sechs Schritte');
+      expect(h).toContain('Bisher ist kein Schritt erledigt');
+    });
+    it('nennt den erledigten und den naechsten Schritt', function () {
+      var a = HR.imperative.neu();
+      HR.imperative.senden(a, 'antrag_stellen');
+      var h = HR.komponenten.fsmDiagramm.textFassung(a);
+      expect(h).toContain('Antrag stellen');
+      expect(h).toContain('An der Reihe ist');
+    });
+    it('sagt in Worten, warum die Kette steht', function () {
+      var a = HR.imperative.neu();
+      HR.imperative.senden(a, 'beleg_fehlt');
+      expect(HR.komponenten.fsmDiagramm.textFassung(a)).toContain('kein Übergang vorgesehen');
+    });
+    it('beschreibt den Handlungsraum ohne Spur', function () {
+      var h = HR.komponenten.handlungsraum.textFassung({ regeln: sys, trajektorie: [] });
+      expect(h).toContain('Im Raum gelten 3 Regeln');
+      expect(h).toContain('noch nicht gelaufen');
+    });
+    it('zaehlt die Spur auf und nennt die Abweisung', function () {
+      var e = HR.agent.mock.laufSynchron(HR.agent.anfrage({
+        disturbances: ['hotel_ausgebucht', 'genehmiger_urlaub'],
+        constraints: sys.concat([schwelle]), enforcement: 'runtime'
+      }));
+      var h = HR.komponenten.handlungsraum.textFassung({
+        regeln: sys.concat([schwelle]), trajektorie: e.trajectory
+      });
+      expect(h).toContain('Abgewiesen wurde dabei');
+      expect(h).toContain('Die Spur endet bei');
+      expect(h.indexOf('Kein Aufruf wurde abgewiesen')).toBe(-1);
+    });
+    it('nennt die harten Schranken, wenn welche stehen', function () {
+      var h = HR.komponenten.handlungsraum.textFassung({
+        regeln: sys, trajektorie: [], kontrollpunkte: [{ id: 'U-1', target: 'hotel_buchen' }]
+      });
+      expect(h).toContain('Als harte Schranke steht im Raum: Hotel.');
+    });
+    it('haengt beide Fassungen an ihre Zeichnung in Akt 1', function () {
+      var h = HR.screens[1].zeichnen(anfang());
+      expect(h).toContain('data-aufklapper="fsm"');
+      expect(h).toContain('data-aufklapper="raum"');
+    });
+  });
+
+  describe('Akt 3 in fuenf Schritten', function () {
+    function html(z) { return HR.screens[3].zeichnen(z); }
+    var satz = 'Buchungen über 200 € pro Nacht brauchen eine Freigabe';
+    function mitEntwurf() {
+      return red(anfang(), { typ: 'entwurf', constraint: HR.compiler.uebersetzen(satz).constraint });
+    }
+    function mitRegel() { return red(mitEntwurf(), { typ: 'regel_uebernehmen' }); }
+    function nachLauf() {
+      var z = mitRegel();
+      var e = HR.agent.mock.laufSynchron(HR.agent.anfrage({
+        disturbances: HR.screens[2].STOERUNGEN, constraints: z.regeln, enforcement: 'runtime'
+      }));
+      return red(z, { typ: 'lauf_fertig', ergebnis: e,
+        kontext: { regeln: z.regeln, screen: 3, mitNutzerregel: true } });
+    }
+
+    it('liest die Stufe aus dem Zustand, ohne zweiten Speicher', function () {
+      expect(HR.screens[3].stufe(anfang())).toBe(1);
+      expect(HR.screens[3].stufe(mitEntwurf())).toBe(2);
+      expect(HR.screens[3].stufe(mitRegel())).toBe(3);
+      expect(HR.screens[3].stufe(nachLauf())).toBe(4);
+    });
+    it('faellt bei einer abgelehnten Eingabe auf Schritt 2', function () {
+      expect(HR.screens[3].stufe(red(anfang(), { typ: 'entwurf', fehler: { code: 'zu_kurz' } }))).toBe(2);
+    });
+    it('fuehrt alle fuenf Schritte in der Leiste', function () {
+      var h = HR.screens[3].stufenleiste(anfang());
+      expect(h.split('class="stufe ist-').length - 1).toBe(5);
+      expect(HR.copy.interaktion.stufen.namen.length).toBe(5);
+      HR.copy.interaktion.stufen.namen.forEach(function (n) { expect(h).toContain(n); });
+    });
+    it('markiert genau einen Schritt als den aktuellen', function () {
+      var h = HR.screens[3].stufenleiste(mitRegel());
+      expect(h.split('aria-current="step"').length - 1).toBe(1);
+      expect(h.split('ist-erledigt').length - 1).toBe(2);
+    });
+    it('zeigt am Anfang nur den ersten Schritt mit Inhalt', function () {
+      var h = html(anfang());
+      expect(h).toContain('id="regel-eingabe"');
+      // Was noch nicht dran ist, steht als Ansage da — nicht als Flaeche.
+      expect(h).toContain('Schreiben Sie einen Satz und lassen Sie ihn prüfen');
+      expect(h).toContain('Lassen Sie den Fall laufen');
+      expect(h.indexOf('data-aktion="regeln-ausfuehren"')).toBe(-1);
+      expect(h.indexOf('class="ablauf"')).toBe(-1);
+    });
+    it('gibt den Ausfuehren-Knopf erst mit einer eigenen Regel frei', function () {
+      expect(html(mitEntwurf()).indexOf('data-aktion="regeln-ausfuehren"')).toBe(-1);
+      expect(html(mitRegel())).toContain('data-aktion="regeln-ausfuehren"');
+    });
+    it('zeigt den Ablauf erst nach dem Lauf', function () {
+      expect(html(mitRegel()).indexOf('class="ablauf"')).toBe(-1);
+      var h = html(nachLauf());
+      expect(h).toContain('class="ablauf"');
+      expect(h).toContain('Was der Agent getan hat');
+    });
+    it('haelt den zweiten Schritt auch nach der Uebernahme belegt', function () {
+      expect(html(mitRegel())).toContain('entwurf ist-uebernommen');
+    });
+    it('stellt die fuenf Zahlen hinter den Aufklapper, ohne sie wegzunehmen', function () {
+      var h = html(anfang());
+      expect(h).toContain('data-aufklapper="akt3-zahlen"');
+      expect(h).toContain('Freiheitsgrade');
+      // Der Aufklapper ist zu: die Zahlen stehen nicht neben allem anderen.
+      var vorZahl = h.indexOf('data-aufklapper="akt3-zahlen"');
+      expect(vorZahl).toBeLessThan(h.indexOf('Freiheitsgrade'));
+      expect(h.slice(vorZahl, vorZahl + 60).indexOf(' open')).toBe(-1);
+    });
+    it('legt die Textfassung des Raums neben die Zeichnung', function () {
+      expect(html(mitRegel())).toContain('data-aufklapper="raum"');
+    });
+  });
+
+  describe('Akt 4 zeigt drei Zahlen und haelt den Rest bereit', function () {
+    function html(z) { return HR.screens[4].zeichnen(z); }
+
+    it('laesst die drei Leitzahlen offen stehen', function () {
+      var h = html(anfang());
+      var vorAufklapper = h.slice(0, h.indexOf('aufklapper--ort'));
+      expect(vorAufklapper).toContain('Durchlaufzeit');
+      expect(vorAufklapper).toContain('Kosten je Lauf');
+      expect(vorAufklapper).toContain('Restrisiko');
+    });
+    it('gibt jedem Ort einen eigenen Aufklapper', function () {
+      var h = html(anfang());
+      HR.platzierung.PLATZIERUNGEN.forEach(function (ort) {
+        expect(h).toContain('data-aufklapper="ort-' + ort + '"');
+      });
+    });
+    it('stellt Aufschluesselung und Mechanik dahinter', function () {
+      var h = html(anfang());
+      expect(h).toContain('Schritte im Lauf');
+      expect(h).toContain('Anteil Kontext');
+      expect(h).toContain('Ein Mensch gibt frei');
+      expect(h.indexOf('Ein Mensch gibt frei')).toBeGreaterThan(h.indexOf('aufklapper--ort'));
+    });
+    it('legt den rohen Werkzeug-Input hinter einen Aufklapper', function () {
+      var z = red(anfang(), { typ: 'platzierung', wert: 'leitplanke' });
+      var h = html(z);
+      expect(h).toContain('data-aufklapper="akt4-ablauf"');
+      expect(h.indexOf('class="ablauf"')).toBeGreaterThan(h.indexOf('data-aufklapper="akt4-ablauf"'));
+    });
+    it('beschreibt die verschmolzene Flaeche zusaetzlich in Worten', function () {
+      expect(html(anfang())).toContain('data-aufklapper="raum"');
+    });
+  });
+
+  describe('Hilfe, Startseite und Zuruecksetzen', function () {
+    var markup = HR.komponenten.globalNav.markup();
+
+    it('fuehrt genau drei Bedienelemente', function () {
+      expect(markup).toContain('data-aktion="nav-startseite"');
+      expect(markup).toContain('data-aktion="nav-zuruecksetzen"');
+      expect(markup).toContain('data-aufklapper="hilfe"');
+    });
+    it('macht beide Wege zu echten Knoepfen', function () {
+      expect(markup.split('<button').length - 1).toBe(2);
+      expect(markup.indexOf('<a ')).toBe(-1);
+    });
+    it('erklaert die Seite in der Hilfe, ohne Dialog', function () {
+      expect(markup).toContain('Diese Seite ist eine Simulation');
+      expect(markup).toContain('<details');
+      expect(markup.indexOf('role="dialog"')).toBe(-1);
+      expect(markup.indexOf('aria-modal')).toBe(-1);
+    });
+    it('fragt vor dem Zuruecksetzen nicht nach', function () {
+      expect(markup.indexOf('bestaetig')).toBe(-1);
+      expect(markup.toLowerCase().indexOf('wirklich')).toBe(-1);
+    });
+    it('setzt aus jedem Akt heraus vollstaendig zurueck', function () {
+      var c = HR.compiler.uebersetzen('Buchungen über 200 € pro Nacht brauchen eine Freigabe').constraint;
+      var z = red(red(anfang(), { typ: 'entwurf', constraint: c }), { typ: 'regel_uebernehmen' });
+      z = red(z, { typ: 'akt', n: 4 });
+      z = red(z, { typ: 'platzierung', wert: 'leitplanke' });
+      var n = red(z, { typ: 'reset' });
+      expect(n.akt).toBe(0);
+      expect(n.regeln.length).toBe(3);
+      expect(n.platzierung).toBe(null);
+      expect(n.historie.length).toBe(0);
+    });
+    it('fuehrt die Startseite auf Akt 0 zurueck, ohne sonst etwas zu loeschen', function () {
+      var z = red(anfang(), { typ: 'akt', n: 4 });
+      z = red(z, { typ: 'platzierung', wert: 'leitplanke' });
+      var n = red(z, { typ: 'akt', n: 0 });
+      expect(n.akt).toBe(0);
+      expect(n.platzierung).toBe('leitplanke');
+    });
+    it('haengt die Leiste in den Kopf, nicht in einen Akt', function () {
+      for (var i = 0; i <= 5; i++) {
+        expect(HR.screens[i].zeichnen(anfang()).indexOf('data-aktion="nav-startseite"')).toBe(-1);
+      }
+      expect(typeof HR.komponenten.globalNav.einhaengen).toBe('function');
+    });
+  });
+
   describe('Vortragsmodus', function () {
     it('nennt die Bedienung fuer beide Akte', function () {
       var t = HR.copy.seite.vortragHinweis;
