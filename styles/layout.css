@@ -43,6 +43,22 @@
   }
   .aktleiste__punkt.ist-aktiv .aktleiste__nr { border-color: var(--ink); }
 
+  /*
+   * Zwei Zeilen je Punkt: was in dem Akt geschieht, darunter sein Name.
+   * Davor steht, der wievielte Schritt von fuenf gerade laeuft.
+   */
+  .aktleiste__text { display: flex; flex-direction: column; align-items: flex-start; }
+  .aktleiste__untertitel { font-size: 0.6875rem; color: var(--ink-leise); }
+  .aktleiste__punkt.ist-aktiv .aktleiste__untertitel { color: var(--ink-mittel); }
+  .aktleiste__schritt {
+    margin: 0;
+    align-self: center;
+    padding-right: var(--r2);
+    color: var(--ink-mittel);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
   .pille {
     font-family: var(--font-mono);
     font-size: 0.75rem;

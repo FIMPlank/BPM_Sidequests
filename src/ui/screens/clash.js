@@ -120,8 +120,11 @@
     }
 
     if (z.stoerungGeworfen) {
+      // Erst der Befund zum Lauf, dann der Weg weiter. Beides in derselben
+      // Form wie in Akt 2 und Akt 4: Beobachtung, Grund, Bedeutung.
+      h.push(HR.render.befundMarkup(HR.copy.befund.akt1));
       h.push('<div class="uebergang"><p>' + e(s.weiterAngebot) + '</p>' +
-        HR.render.knopf('screen', HR.copy.seite.weiter, { wert: 2, klasse: 'knopf--haupt' }) + '</div>');
+        HR.render.knopf('screen', s.weiterZuPreis, { wert: 2, klasse: 'knopf--haupt' }) + '</div>');
     }
     return h.join('');
   }

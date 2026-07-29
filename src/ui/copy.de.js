@@ -12,9 +12,14 @@
       modusMock: 'Modus: Demo (skriptiert)',
       modusLive: 'Modus: Live-Agent',
       modusVortrag: 'Modus: Vortrag',
-      weiter: 'Weiter',
       zurueck: 'Zurück',
       zumInhalt: 'Zum Inhalt springen',
+      /**
+       * Der Fortschritt. Akt 0 ist der Vorspann und traegt keine Schrittzahl —
+       * gezaehlt wird erst ab Akt 1, damit „Schritt 5 von 5" auch der letzte ist.
+       */
+      schritt: 'Schritt {n} von 5',
+      vorspann: 'Vorspann, vor Schritt 1',
       vortragHinweis: 'Pfeiltasten wechseln den Akt. 1 bis 3 wirft in Akt 1 eine Störung ein und wählt in Akt 4 einen Ort. r setzt zurück.'
     },
 
@@ -29,8 +34,14 @@
       dauer: '2 Nächte'
     },
 
-    /** Die fuenf Akte der Aktleiste. Akt 0 ist der Vorspann und steht nicht darin. */
-    akte: ['Der Clash', 'Der Preis der Autonomie', 'Sie modellieren', 'Die Architektur', 'Der Audit'],
+    /**
+     * Die fuenf Akte der Aktleiste. Akt 0 ist der Vorspann und steht nicht darin.
+     * `akte` sagt, was in dem Akt geschieht — das ist die Beschriftung, nach der
+     * jemand sucht, der wissen will, wo er ist. Der dramatische Name steht als
+     * Unterzeile daneben; er bleibt, er fuehrt nur nicht mehr.
+     */
+    akte: ['Vergleich', 'Freier Lauf', 'Ihre Regel', 'Ort der Regel', 'Protokoll'],
+    akteUntertitel: ['Der Clash', 'Der Preis der Autonomie', 'Sie modellieren', 'Die Architektur', 'Der Audit'],
 
     /**
      * Je Akt ein Rahmensatz zu Beginn (hoechstens zwoelf Woerter) und eine
@@ -57,6 +68,42 @@
       'Der Ort einer Regel bestimmt Dauer, Kosten und das, was offen bleibt.',
       'Jeder Schritt ist nachlesbar: Zeit, Werkzeug, geprüfte Regel und Ort der Prüfung.'
     ],
+
+    /**
+     * Der Befund nach einem Lauf. Immer dieselben drei Zeilen, immer in
+     * derselben Reihenfolge: was zu sehen war, warum es so kam, was daraus
+     * folgt. Das Muster steht einmal in render.js und wird ueberall
+     * wiederverwendet — Akt 1 und Akt 4 rufen es selbst auf, Akt 2 bekommt es
+     * aus der Huelle, damit seine Datei unangetastet bleibt.
+     */
+    befundLabel: {
+      titel: 'Kurz zusammengefasst',
+      beobachtung: 'Beobachtung',
+      grund: 'Grund',
+      bedeutung: 'Bedeutung'
+    },
+
+    befund: {
+      akt1: {
+        mitTitel: true,
+        beobachtung: 'Das feste Modell ist an der Störung stehen geblieben. Der Agent hat weitergearbeitet und den Fall zu Ende gebracht.',
+        grund: 'Im festen Ablauf ist für genau diesen Fall kein Übergang modelliert. Der Agent kennt nur das Ziel und die drei Regeln und darf den Weg dorthin selbst wählen.',
+        bedeutung: 'Jede weitere Störung verlangt im festen Modell eine weitere Prozessvariante. Im Regelmodell bleibt die Zahl der Regeln dieselbe.'
+      },
+      // Akt 2 sagt nach, was auf der Fläche steht. Keine Wertung, kein Hinweis,
+      // keine Vorwegnahme dessen, was in Akt 3 kommt.
+      akt2: {
+        beobachtung: 'Der Agent hat das Ziel erreicht. Die Erstattung ist ausgezahlt, die Prüfung meldet null Verstöße.',
+        grund: 'Er hat jede hinterlegte Regel eingehalten. Für die Schritte, die er zusätzlich gewählt hat, ist keine Regel hinterlegt.',
+        bedeutung: 'Geprüft wird, was hinterlegt ist. Erwartungen, die nirgends hinterlegt sind, kommen in der Prüfung nicht vor.'
+      },
+      akt4: {
+        mitTitel: true,
+        beobachtung: 'Dieselbe Regel führt an den drei Orten zu drei verschiedenen Läufen — mit unterschiedlicher Dauer, unterschiedlichen Kosten und unterschiedlich viel, was ungeprüft bleibt.',
+        grund: 'Der Ort entscheidet, wann geprüft wird: vorher durch einen Menschen, währenddessen an der Werkzeuggrenze oder erst hinterher im Protokoll.',
+        bedeutung: 'Nicht die Regel allein ist die Entscheidung, sondern ihr Ort. Er bestimmt, was ein Lauf an Zeit und Geld kostet und was ungeprüft durchgeht.'
+      }
+    },
 
     label: { imperativ: 'IMPERATIV', deklarativ: 'DEKLARATIV' },
 
@@ -100,7 +147,9 @@
       },
       raumTitel: 'Handlungsraum',
       raumHinweis: 'Die Fläche zeigt, was erlaubt ist. Die Linie zeigt, was der Agent tatsächlich getan hat.',
-      weiterAngebot: 'Der Agent kommt mit jeder Störung zurecht. Was kostet das?'
+      weiterAngebot: 'Der Agent kommt mit jeder Störung zurecht. Was kostet das?',
+      /** Jeder Weiterknopf nennt sein Ziel. „Weiter" allein sagt nichts. */
+      weiterZuPreis: 'Weiter zu Akt 2: Der Preis der Autonomie'
     },
 
     screen2: {
@@ -136,7 +185,8 @@
       erkannt: 'Erkannt',
       uebernehmen: 'Regel übernehmen',
       verwerfen: 'Verwerfen',
-      erneutAusfuehren: 'Erneut ausführen',
+      erneutAusfuehren: 'Denselben Fall mit Ihren Regeln laufen lassen',
+      weiterZuArchitektur: 'Weiter zu Akt 4: Die Architektur',
       regelnTitel: 'Hinterlegte Regeln',
       keineRegeln: 'Noch keine eigene Regel.',
       entfernen: 'Entfernen',
@@ -147,13 +197,18 @@
         threshold: 'Schwellenwert-Regel',
         existence: 'Pflicht-Regel'
       },
+      /**
+       * Erst die Alltagssprache, dann das Fachwort in Klammern. Wer den Begriff
+       * kennt, findet ihn; wer ihn nicht kennt, versteht die Zeile trotzdem.
+       */
       zaehler: {
         regeln: 'Regeln',
-        tokens: 'Kontext-Token je Lauf',
+        tokens: 'Mitgeschickter Text je Lauf (Kontext-Token)',
         kosten: 'Kosten je Lauf',
-        freiheit: 'Freiheitsgrade',
+        freiheit: 'Verbleibender Handlungsspielraum (Freiheitsgrade)',
         verstoesse: 'Verstöße im letzten Lauf'
       },
+      zaehlerHinweis: 'Jede Regel schränkt den Handlungsspielraum ein: Freiheitsgrade sind der Anteil der Schritte, die dem Agenten noch erlaubt sind. Kontext-Token sind der Text, den das Modell bei jedem Lauf mitliest — er kostet Geld.',
       einheitCent: 'Cent',
       plotTitel: 'Regeln gegen Verstöße und Kosten',
       plotX: 'Regeln',
@@ -161,8 +216,8 @@
       plotKosten: 'Kosten (Cent)',
       plotLeer: 'Führen Sie einen Lauf aus, um den ersten Punkt zu setzen.',
       durchsetzungTitel: 'Autonomie vorne — Kontrolle hinten?',
-      posthoc: 'Prüfung im Nachgang',
-      runtime: 'Leitplanke zur Laufzeit',
+      posthoc: 'Hinterher prüfen (Prüfung im Nachgang)',
+      runtime: 'Währenddessen abweisen (Leitplanke zur Laufzeit)',
       posthocHinweis: 'Der Agent läuft frei. Der Checker bewertet die Trajektorie hinterher.',
       runtimeHinweis: 'Die Regel steht im Systemprompt und wird an der Werkzeuggrenze hart geprüft.',
       ablehnung: {
@@ -181,6 +236,15 @@
     /** Akt 0 — der Vorspann. Eine Ansage, zwei Wege, keine dritte Option. */
     akt0: {
       titel: 'Der Auftrag',
+      /**
+       * Die Einleitung vor der Wahl. Sie sagt in zwei Saetzen, was hier
+       * verglichen wird, wie lange es dauert und dass niemand hier etwas
+       * falsch machen kann. Ohne diesen Absatz beginnt die Demo mit einer
+       * Entscheidung, deren Folgen der Besucher nicht abschaetzen kann.
+       */
+      einleitung: 'Diese Demo stellt zwei Arten gegenüber, denselben Vorgang zu erledigen: einen festen Ablauf, in dem jeder Schritt vorher feststeht — und einen Agenten, dem Sie nur das Ziel und ein paar Regeln geben und der den Weg dorthin selbst sucht. Beide bearbeiten hier denselben Fall.',
+      dauer: 'Fünf Akte, rund vier Minuten.',
+      keineFalscheWahl: 'Sie können hier nichts falsch machen: Beide Wege führen durch dieselben fünf Akte, nichts wird bewertet, und Sie können jeden Akt über die Leiste oben erneut aufrufen.',
       rolle: 'Leiterin Finanzen, Montagmorgen',
       ansage: 'Frau Berger war beim Kunden. Sorgen Sie dafür, dass sie ihr Geld zurückbekommt — regelkonform, und ohne dass ich jeden Beleg selbst ansehe.',
       frage: 'Wie soll das laufen?',
@@ -201,26 +265,42 @@
       regelLabel: 'Ihre Regel',
       ersatzregel: 'Sie haben noch keine eigene Regel geschrieben. Solange gilt die Beispielregel.',
       gleicheLage: 'Alle drei Läufe bekommen denselben Fall und dieselben zwei Störungen.',
+      /**
+       * Der Fachbegriff allein — er steht in Spaltenköpfen und im Protokoll,
+       * wo Platz für einen Satz fehlt und wo er wörtlich so gebraucht wird
+       * wie im Whitepaper.
+       */
       orte: {
         imperativ: 'Imperativer Kontrollpunkt',
         leitplanke: 'Leitplanke zur Laufzeit',
         nachgang: 'Prüfung im Nachgang'
       },
-      ortHinweis: {
-        imperativ: 'Ein Mensch gibt frei, bevor gebucht wird. Das ist eine weitere Prozessvariante.',
-        leitplanke: 'Die Werkzeuggrenze weist den Aufruf ab. Der Agent sucht einen anderen Weg.',
-        nachgang: 'Niemand hält etwas auf. Der Verstoß steht hinterher im Protokoll.'
+      /**
+       * Dieselben drei Orte als Überschrift der Karten: erst der Zeitpunkt in
+       * Alltagssprache — vorher, währenddessen, hinterher —, dann der Begriff.
+       */
+      orteLang: {
+        imperativ: 'Vorher freigeben — Imperativer Kontrollpunkt',
+        leitplanke: 'Währenddessen abweisen — Leitplanke zur Laufzeit',
+        nachgang: 'Hinterher prüfen — Prüfung im Nachgang'
       },
+      ortHinweis: {
+        imperativ: 'Der Lauf hält an und wartet: ein Mensch gibt frei, bevor gebucht wird. Das ist eine weitere Prozessvariante.',
+        leitplanke: 'Die Werkzeuggrenze weist den Aufruf ab, während der Agent läuft. Niemand muss warten, der Agent sucht einen anderen Weg.',
+        nachgang: 'Niemand hält etwas auf. Der Verstoß fällt erst danach auf und steht im Protokoll.'
+      },
+      masseHinweis: 'Die drei Maße je Karte beantworten dieselbe Frage aus drei Richtungen: wie lange ein Lauf dauert, was er an Geld kostet und wie viel bereits ausgezahlt war, bevor jemand hingesehen hat.',
       masse: {
         zeit: 'Durchlaufzeit',
         kosten: 'Kosten je Lauf',
-        risiko: 'Restrisiko'
+        risiko: 'Ungeprüft ausgezahlt (Restrisiko)'
       },
-      kontextanteil: 'davon Kontext',
+      kontextanteil: 'davon mitgeschickter Text (Kontext)',
       schritteEinheit: 'Schritte',
       risikoKeins: 'nichts offen',
       risikoOffen: 'ausgezahlt, bevor jemand hinsah',
       waehlen: 'Diesen Ort wählen',
+      weiterZuAudit: 'Weiter zu Akt 5: Der Audit',
       gewaehlt: 'Ihr Ort',
       ablaufTitel: 'Was in diesem Lauf passiert ist',
       kontrollpunktSchritt: 'Freigabe durch einen Menschen',
@@ -277,6 +357,11 @@
       titel: 'Der Audit',
       frage: 'Könnten Sie das im Audit belegen?',
       spalten: ['#', 'Zeit', 'Akteur', 'Aktion', 'Tool', 'Input (gekürzt)', 'Platzierung', 'Constraint-Check', 'Ergebnis'],
+      /**
+       * Die Spaltenköpfe bleiben technisch — sie gehen so in den Export und in
+       * eine Prüfung. Der Satz darüber sagt in Alltagssprache, was sie meinen.
+       */
+      spaltenHinweis: 'Zwei Spalten sind Fachsprache: „Platzierung" ist der Ort, an dem eine Regel gegriffen hat — vorher durch einen Menschen, währenddessen an der Werkzeuggrenze oder erst hinterher. „Constraint-Check" ist die Regelprüfung: welche Regel bei diesem Schritt geprüft wurde und wie sie ausging.',
       akteur: { agent: 'Agent', system: 'System', leitplanke: 'Leitplanke' },
       aktion: { werkzeug_aufruf: 'Werkzeugaufruf', abgelehnt: 'abgelehnt' },
       geblockt: 'abgelehnt',

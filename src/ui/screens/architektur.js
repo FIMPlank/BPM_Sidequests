@@ -69,7 +69,7 @@
     h.push('<section class="ort' + (gewaehlt ? ' ist-gewaehlt' : '') +
       '" aria-labelledby="' + titelId + '">');
     if (gewaehlt) h.push('<p class="ort__marke">' + e(s.gewaehlt) + '</p>');
-    h.push('<h3 class="ort__titel" id="' + titelId + '">' + e(s.orte[lauf.ort]) + '</h3>');
+    h.push('<h3 class="ort__titel" id="' + titelId + '">' + e(s.orteLang[lauf.ort]) + '</h3>');
     h.push('<p class="ort__hinweis">' + e(s.ortHinweis[lauf.ort]) + '</p>');
 
     h.push('<dl class="masse">');
@@ -262,7 +262,11 @@
     h.push('</div>');
 
     // Die drei Orte sind eine Wahl: die Frage des Akts beschriftet sie.
-    var karten = ['<p class="hinweis">' + e(s.gleicheLage) + '</p>', '<div class="orte">'];
+    var karten = [
+      '<p class="hinweis">' + e(s.gleicheLage) + '</p>',
+      '<p class="hinweis">' + e(s.masseHinweis) + '</p>',
+      '<div class="orte">'
+    ];
     alle.forEach(function (lauf) { karten.push(ortkarte(z, lauf)); });
     karten.push('</div>');
     h.push(HR.a11y.gruppe('<h2 class="abschnitt__titel">' + e(s.frage) + '</h2>', karten.join('')));
@@ -272,6 +276,8 @@
     if (gewaehlt) {
       h.push('<h2 class="abschnitt__titel">' + e(s.ablaufTitel) + '</h2>');
       h.push(HR.komponenten.logTabelle.kurz(gewaehlt.trajektorie));
+      // Dieselbe Form wie in Akt 1 und Akt 2: Beobachtung, Grund, Bedeutung.
+      h.push(HR.render.befundMarkup(HR.copy.befund.akt4));
     }
 
     h.push(kombination(z));
@@ -285,7 +291,7 @@
     h.push('<div class="plot-panel">' + HR.komponenten.plot.zeichnen(z.historie) + '</div>');
 
     h.push('<div class="steuerung">');
-    h.push(HR.render.knopf('akt', HR.copy.screen4.titel, { wert: 5 }));
+    h.push(HR.render.knopf('akt', s.weiterZuAudit, { wert: 5 }));
     h.push('</div>');
 
     return h.join('');

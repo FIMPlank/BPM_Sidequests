@@ -99,7 +99,7 @@
       if (marke) letzteMarke = marke;
       // Rahmensatz und Ruecknahme kommen aus der Huelle, nicht aus dem Akt.
       // So bekommt auch Akt 2 beide Zeilen, ohne dass seine Datei angefasst wird.
-      el.innerHTML = rahmenMarkup(n) + modul.zeichnen(zustand) + rueckblickMarkup(n);
+      el.innerHTML = rahmenMarkup(n) + modul.zeichnen(zustand) + rueckblickMarkup(n, zustand);
       if (modul.nach) modul.nach(el, zustand);
       fokusSetzen(el, wechsel, marke, verloren);
     }
@@ -133,29 +133,76 @@
     return '<p class="aktrahmen">' + esc(text) + '</p>';
   }
 
+  /**
+   * Beobachtung, Grund, Bedeutung — das eine Muster fuer die Zusammenfassung
+   * nach einem Lauf. Es steht hier und nur hier; die Akte rufen es auf, statt
+   * sich je eine eigene Form auszudenken.
+   * @param {?Object} befund aus HR.copy.befund
+   * @returns {string} HTML, leer wenn kein Befund vorliegt
+   */
+  function befundMarkup(befund) {
+    if (!befund) return '';
+    var l = HR.copy.befundLabel;
+    var h = ['<div class="befund">'];
+    if (befund.mitTitel) h.push('<p class="befund__titel">' + esc(l.titel) + '</p>');
+    ['beobachtung', 'grund', 'bedeutung'].forEach(function (schluessel) {
+      if (!befund[schluessel]) return;
+      h.push('<p class="befund__zeile befund__zeile--' + schluessel + '">' +
+        '<span class="befund__label">' + esc(l[schluessel]) + '</span> ' +
+        '<span class="befund__text">' + esc(befund[schluessel]) + '</span></p>');
+    });
+    h.push('</div>');
+    return h.join('');
+  }
+
+  /**
+   * Akt 2 bekommt seinen Befund aus der Huelle — seine eigene Datei bleibt
+   * unangetastet. Er erscheint erst, wenn der Besucher den Lauf selbst
+   * ausgeloest hat: vorher gaebe es nichts zu beobachten.
+   */
+  function akt2Gelaufen(zustand) {
+    if (!zustand) return true;   // ohne Zustand (Tests) steht das Muster da
+    return !!(zustand.lauf && zustand.laufKontext && zustand.laufKontext.screen === 2);
+  }
+
   /** Die Ruecknahme am Ende: was der Besucher gerade gesehen hat, ohne Fachsprache. */
-  function rueckblickMarkup(akt) {
+  function rueckblickMarkup(akt, zustand) {
     var text = HR.copy.rueckblick[akt];
     if (!text) return '';
+    var befund = (akt === 2 && akt2Gelaufen(zustand)) ? befundMarkup(HR.copy.befund.akt2) : '';
     return '<aside class="rueckblick">' +
       '<p class="rueckblick__frage">' + esc(HR.copy.rahmenFrage) + '</p>' +
-      '<p class="rueckblick__text">' + esc(text) + '</p></aside>';
+      '<p class="rueckblick__text">' + esc(text) + '</p>' + befund + '</aside>';
+  }
+
+  /**
+   * Wo der Besucher steht. Akt 0 ist der Vorspann und bekommt keine Zahl —
+   * gezaehlt wird ab Akt 1, damit „Schritt 5 von 5" auch wirklich der letzte ist.
+   */
+  function schrittMarkup(zustand) {
+    var s = HR.copy.seite;
+    var text = zustand.akt === 0 ? s.vorspann : s.schritt.replace('{n}', String(zustand.akt));
+    return '<p class="aktleiste__schritt">' + esc(text) + '</p>';
   }
 
   /**
    * Die Aktleiste zeigt die fuenf Akte. Akt 0 ist der Vorspann und steht nicht
    * darin; solange er laeuft, ist kein Punkt als aktuell markiert.
+   * Jeder Punkt traegt zwei Zeilen: was dort geschieht, und darunter den Namen
+   * des Akts. Die Beschriftung fuehrt, der Name bleibt.
    * @returns {string} HTML, auch fuer die Tests
    */
   function aktleisteMarkup(zustand) {
-    var html = '';
+    var html = schrittMarkup(zustand);
     for (var i = 1; i <= HR.store.AKT_MAX; i++) {
       var aktuell = zustand.akt === i;
       html += '<button type="button" class="aktleiste__punkt' +
         (aktuell ? ' ist-aktiv' : '') + '" data-aktion="akt" data-wert="' + i + '"' +
         ' aria-current="' + (aktuell ? 'step' : 'false') + '">' +
         '<span class="aktleiste__nr">' + i + '</span>' +
-        '<span class="aktleiste__text">' + esc(HR.copy.akte[i - 1]) + '</span></button>';
+        '<span class="aktleiste__text">' + esc(HR.copy.akte[i - 1]) +
+        '<span class="aktleiste__untertitel">' + esc(HR.copy.akteUntertitel[i - 1]) +
+        '</span></span></button>';
     }
     return html;
   }
@@ -188,8 +235,10 @@
     bildschirm: bildschirm,
     zeichnen: zeichnen,
     aktleisteMarkup: aktleisteMarkup,
+    schrittMarkup: schrittMarkup,
     rahmenMarkup: rahmenMarkup,
     rueckblickMarkup: rueckblickMarkup,
+    befundMarkup: befundMarkup,
     bewegungErlaubt: bewegungErlaubt
   };
 })(window.HR = window.HR || {});

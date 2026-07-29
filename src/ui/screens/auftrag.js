@@ -23,6 +23,13 @@
 
     h.push('<h1 id="akt-0-titel" tabindex="-1">' + e(s.titel) + '</h1>');
 
+    // Erst erklaeren, dann entscheiden lassen: was verglichen wird, wie lange
+    // es dauert, und dass hier niemand etwas falsch machen kann.
+    h.push('<div class="einleitung">');
+    h.push('<p class="einleitung__text">' + e(s.einleitung) + '</p>');
+    h.push('<p class="einleitung__dauer">' + e(s.dauer) + '</p>');
+    h.push('</div>');
+
     h.push('<blockquote class="auftrag">');
     h.push('<p class="auftrag__text">' + e(s.ansage) + '</p>');
     h.push('<footer class="auftrag__rolle">' + e(s.rolle) + '</footer>');
@@ -36,6 +43,7 @@
       wahlkarte('agent', s.agent, s.agentHinweis) +
       '</div>',
       { legendeKlasse: 'auftrag__frage' }));
+    h.push('<p class="wahl__freibrief">' + e(s.keineFalscheWahl) + '</p>');
 
     return h.join('');
   }

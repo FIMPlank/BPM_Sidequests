@@ -88,6 +88,38 @@
       var markup = HR.render.aktleisteMarkup(anfang());
       HR.copy.akte.forEach(function (name) { expect(markup).toContain(name); });
     });
+    it('beschriftet jeden Akt danach, was dort geschieht', function () {
+      // Die fuehrende Beschriftung ist beschreibend, nicht dramatisch.
+      expect(HR.copy.akte.length).toBe(HR.copy.akteUntertitel.length);
+      var markup = HR.render.aktleisteMarkup(anfang());
+      expect(markup.split('aktleiste__untertitel').length - 1).toBe(5);
+      expect(markup).toContain('Ihre Regel');
+      expect(markup).toContain('Ort der Regel');
+    });
+    it('behaelt die dramatischen Namen als Unterzeile', function () {
+      var markup = HR.render.aktleisteMarkup(anfang());
+      ['Der Clash', 'Der Preis der Autonomie', 'Sie modellieren', 'Die Architektur', 'Der Audit']
+        .forEach(function (name) {
+          expect(HR.copy.akteUntertitel).toContain(name);
+          expect(markup).toContain(name);
+        });
+    });
+    it('sagt in jedem Akt, der wievielte von fuenf er ist', function () {
+      for (var i = 1; i <= 5; i++) {
+        expect(HR.render.schrittMarkup(red(anfang(), { typ: 'akt', n: i })))
+          .toContain('Schritt ' + i + ' von 5');
+      }
+    });
+    it('zaehlt den Vorspann nicht als Schritt', function () {
+      var markup = HR.render.schrittMarkup(anfang());
+      expect(markup).toContain('Vorspann');
+      expect(markup.indexOf('Schritt 0')).toBe(-1);
+    });
+    it('stellt den Schrittzaehler vor die Punkte der Leiste', function () {
+      var markup = HR.render.aktleisteMarkup(red(anfang(), { typ: 'akt', n: 2 }));
+      expect(markup.indexOf('aktleiste__schritt')).toBeLessThan(markup.indexOf('aktleiste__punkt'));
+      expect(markup).toContain('Schritt 2 von 5');
+    });
     it('haelt die Fallzeile ueber alle Akte konstant', function () {
       var zeile = HR.copy.fallZeile();
       for (var i = 0; i <= 5; i++) {
@@ -173,8 +205,126 @@
     });
   });
 
+  describe('Befund — Beobachtung, Grund, Bedeutung', function () {
+    var TEILE = ['Beobachtung', 'Grund', 'Bedeutung'];
+
+    it('fuehrt in jedem Befund dieselben drei Zeilen in derselben Reihenfolge', function () {
+      ['akt1', 'akt2', 'akt4'].forEach(function (schluessel) {
+        var markup = HR.render.befundMarkup(HR.copy.befund[schluessel]);
+        var vorher = -1;
+        TEILE.forEach(function (label) {
+          var pos = markup.indexOf(label);
+          expect(pos).toBeGreaterThan(vorher);
+          vorher = pos;
+        });
+      });
+    });
+    it('bleibt ohne Befund stumm', function () {
+      expect(HR.render.befundMarkup(null)).toBe('');
+    });
+    it('zeigt den Befund in Akt 1 erst nach einer Stoerung', function () {
+      expect(HR.screens[1].zeichnen(anfang()).indexOf('class="befund"')).toBe(-1);
+      var z = red(anfang(), { typ: 'stoerung', id: 'beleg_fehlt' });
+      expect(HR.screens[1].zeichnen(z)).toContain('class="befund"');
+    });
+    it('zeigt den Befund in Akt 4 erst nach der Wahl eines Orts', function () {
+      expect(HR.screens[4].zeichnen(anfang()).indexOf('class="befund"')).toBe(-1);
+      var z = red(anfang(), { typ: 'platzierung', wert: 'nachgang' });
+      expect(HR.screens[4].zeichnen(z)).toContain('class="befund"');
+    });
+    it('reicht den Befund zu Akt 2 durch die Huelle, nicht durch seine Datei', function () {
+      // preis.js bleibt unangetastet: die Zusammenfassung kommt aus render.js.
+      expect(HR.screens[2].zeichnen(anfang()).indexOf('class="befund"')).toBe(-1);
+      expect(HR.render.rueckblickMarkup(2)).toContain('class="befund"');
+      expect(HR.render.rueckblickMarkup(1).indexOf('class="befund"')).toBe(-1);
+    });
+    it('haelt den Befund zu Akt 2 zurueck, solange dort nichts gelaufen ist', function () {
+      expect(HR.render.rueckblickMarkup(2, anfang()).indexOf('class="befund"')).toBe(-1);
+      var sys = HR.compiler.systemRegeln();
+      var e = HR.agent.mock.laufSynchron(HR.agent.anfrage({
+        disturbances: HR.screens[2].STOERUNGEN, constraints: sys, enforcement: 'runtime' }));
+      var z = red(anfang(), { typ: 'lauf_fertig', ergebnis: e,
+        kontext: { regeln: sys, screen: 2, vergleichsbasis: true } });
+      expect(HR.render.rueckblickMarkup(2, z)).toContain('class="befund"');
+    });
+    it('warnt auch im Befund zu Akt 2 an keiner Stelle', function () {
+      var b = HR.copy.befund.akt2;
+      var text = (b.beobachtung + ' ' + b.grund + ' ' + b.bedeutung).toLowerCase();
+      ['achtung', 'warnung', 'vorsicht', 'problem', 'gefahr', 'aber', 'obwohl', 'trotzdem']
+        .forEach(function (w) { expect(text.indexOf(w)).toBe(-1); });
+      expect(text.indexOf('!')).toBe(-1);
+    });
+  });
+
+  describe('Beschriftungen mit Ziel', function () {
+    it('nennt an jedem Weiterknopf, wohin er fuehrt', function () {
+      var akt1 = HR.screens[1].zeichnen(red(anfang(), { typ: 'stoerung', id: 'beleg_fehlt' }));
+      expect(akt1).toContain('Weiter zu Akt 2');
+      expect(akt1.indexOf('>Weiter<')).toBe(-1);
+
+      var akt4 = HR.screens[4].zeichnen(anfang());
+      expect(akt4).toContain('Weiter zu Akt 5');
+    });
+    it('fuehrt aus Akt 3 in den vierten Akt, nicht an ihm vorbei', function () {
+      var sys = HR.compiler.systemRegeln();
+      var e = HR.agent.mock.laufSynchron(HR.agent.anfrage({ constraints: sys }));
+      var z = red(anfang(), { typ: 'lauf_fertig', ergebnis: e, kontext: { regeln: sys, screen: 3 } });
+      var h = HR.screens[3].zeichnen(z);
+      expect(h).toContain('Weiter zu Akt 4');
+      expect(h).toContain('data-aktion="akt" data-wert="4"');
+    });
+    it('kommt in der ganzen Textdatei ohne blankes „Weiter" aus', function () {
+      expect(HR.copy.seite.weiter).toBe(undefined);
+    });
+  });
+
+  describe('Fachsprache mit Uebersetzung', function () {
+    it('stellt vor jedes Fachwort eine Alltagsbeschreibung', function () {
+      var z = HR.copy.screen3.zaehler;
+      expect(z.freiheit.indexOf('Handlungsspielraum')).toBeLessThan(z.freiheit.indexOf('Freiheitsgrade'));
+      expect(z.tokens.indexOf('Text')).toBeLessThan(z.tokens.indexOf('Kontext-Token'));
+      var o = HR.copy.akt4.orteLang;
+      expect(o.leitplanke.indexOf('Währenddessen')).toBeLessThan(o.leitplanke.indexOf('Leitplanke'));
+      expect(o.nachgang.indexOf('Hinterher')).toBeLessThan(o.nachgang.indexOf('Nachgang'));
+    });
+    it('erklaert die Anzeigen in Akt 3 in einem Satz', function () {
+      var h = HR.screens[3].zeichnen(anfang());
+      expect(h).toContain('Freiheitsgrade sind der Anteil');
+      expect(h).toContain('Kontext-Token sind der Text');
+    });
+    it('erklaert die beiden Fachspalten des Protokolls', function () {
+      var sys = HR.compiler.systemRegeln();
+      var e = HR.agent.mock.laufSynchron(HR.agent.anfrage({ constraints: sys }));
+      var z = red(anfang(), { typ: 'lauf_fertig', ergebnis: e, kontext: { regeln: sys, screen: 4 } });
+      var h = HR.screens[5].zeichnen(z);
+      expect(h).toContain('ist der Ort, an dem eine Regel gegriffen hat');
+      expect(h).toContain('ist die Regelprüfung');
+    });
+    it('laesst die technischen Spaltenkoepfe unveraendert', function () {
+      // Der Export gehoert einer Pruefung: die Koepfe bleiben, wie sie waren.
+      expect(HR.copy.screen4.spalten).toContain('Platzierung');
+      expect(HR.copy.screen4.spalten).toContain('Constraint-Check');
+      expect(HR.copy.akt4.orte.imperativ).toBe('Imperativer Kontrollpunkt');
+    });
+  });
+
   describe('Akt 0 — Der Auftrag', function () {
     function html(z) { return HR.screens[0].zeichnen(z); }
+
+    it('erklaert vor der Wahl, was hier verglichen wird', function () {
+      var h = html(anfang());
+      expect(h).toContain('festen Ablauf');
+      expect(h).toContain('Agenten');
+      expect(h).toContain('denselben Fall');
+    });
+    it('nennt die ungefaehre Dauer', function () {
+      expect(html(anfang())).toContain('vier Minuten');
+    });
+    it('sagt ausdruecklich, dass man nichts falsch machen kann', function () {
+      var h = html(anfang());
+      expect(h).toContain('nichts falsch machen');
+      expect(h).toContain('nichts wird bewertet');
+    });
 
     it('stellt die Ansage in die Worte einer Vorgesetzten', function () {
       var h = html(anfang());
@@ -422,7 +572,7 @@
 
     it('zeigt alle fuenf Anzeigen', function () {
       var h = html(anfang());
-      ['Regeln', 'Kontext-Token je Lauf', 'Kosten je Lauf', 'Freiheitsgrade', 'Verstöße im letzten Lauf']
+      ['Regeln', 'Kontext-Token', 'Kosten je Lauf', 'Freiheitsgrade', 'Verstöße im letzten Lauf']
         .forEach(function (n) { expect(h).toContain(n); });
     });
     it('zeigt Kosten mit drei Nachkommastellen', function () {
