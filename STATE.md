@@ -12,7 +12,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 | V2-04 | done | 03 | Akt 1 — Störung vor dem Lauf | 2026-07-29 | 6 Dateien |
 | V2-05 | done | 01 | Akt 3 — eine große Zahl | 2026-07-29 | 5 Dateien |
 | V2-06 | done | 00 | `src/domain/latency.js` | 2026-07-29 | 4 Dateien |
-| V2-07 | todo | 05, 06 | Akt 4, Teil 1 — Platzierung | | |
+| V2-07 | wip  | 05, 06 | Akt 4, Teil 1 — Platzierung | | |
 | V2-08 | todo | 07 | Akt 4, Teil 2 — Kombination und Muster | | |
 | V2-09 | todo | 07 | Die Verschmelzung zu einer Fläche | | |
 | V2-10 | todo | 08 | Plot nach Akt 4 | | |
