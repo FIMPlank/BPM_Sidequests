@@ -94,7 +94,9 @@
   function voll(traj, constraints, offen) {
     var e = HR.render.esc;
     var s = HR.copy.screen4;
-    var h = ['<div class="logtabelle__rahmen"><table class="logtabelle"><thead><tr>'];
+    var h = ['<div class="logtabelle__rahmen"><table class="logtabelle">'];
+    h.push('<caption class="nur-screenreader">' + e(HR.copy.a11y.auditTabelle) + '</caption>');
+    h.push('<thead><tr>');
     s.spalten.forEach(function (n) { h.push('<th scope="col">' + e(n) + '</th>'); });
     h.push('</tr></thead><tbody>');
 
@@ -103,10 +105,18 @@
       var geblockt = !!(schritt.guardrail && schritt.guardrail.blocked);
       var aufklappbar = checks.length > 0;
       var istOffen = !!(offen && offen[schritt.i]);
+      var belegId = 'beleg-' + schritt.i;
 
+      // Die Zeile selbst klappt ihren Beleg auf. Damit sie sich ansagen laesst,
+      // bekommt sie einen Namen, der sagt, was sie tut und woran.
       h.push('<tr class="logzeile' + (geblockt ? ' ist-geblockt' : '') + '"' +
         (aufklappbar ? ' data-aktion="zeile" data-wert="' + schritt.i + '" tabindex="0"' +
-          ' aria-expanded="' + (istOffen ? 'true' : 'false') + '"' : '') + '>');
+          ' aria-expanded="' + (istOffen ? 'true' : 'false') + '"' +
+          // aria-controls nur, solange es den Beleg wirklich gibt.
+          (istOffen ? ' aria-controls="' + belegId + '"' : '') +
+          ' aria-label="' + e(HR.a11y.fuellen(
+            istOffen ? HR.copy.a11y.belegSchliessen : HR.copy.a11y.belegOeffnen,
+            { n: schritt.i + 1 })) + '"' : '') + '>');
       h.push('<td class="mono">' + (schritt.i + 1) + '</td>');
       h.push('<td class="mono">' + e(HR.copy.zeit(schritt.t)) + '</td>');
       h.push('<td>' + e(s.akteur[schritt.actor] || schritt.actor) + '</td>');
@@ -128,7 +138,7 @@
       if (istOffen) {
         var belege = checks.filter(function (c) { return c.status === 'verletzt'; });
         if (!belege.length) belege = checks;
-        h.push('<tr class="logzeile__beleg"><td colspan="' + s.spalten.length + '">');
+        h.push('<tr class="logzeile__beleg" id="' + belegId + '"><td colspan="' + s.spalten.length + '">');
         h.push('<ul class="beleg">' + belege.map(function (c) {
           return '<li class="mono">' + e(c.id) + ' — ' + e(HR.copy.status[c.status]) +
             ': ' + e(c.feld === null || c.feld === undefined ? '' : c.feld) +

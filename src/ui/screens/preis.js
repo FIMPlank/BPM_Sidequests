@@ -18,7 +18,7 @@
     var s = HR.copy.screen2;
     var h = [];
 
-    h.push('<h1 id="screen-2-titel">' + e(s.titel) + '</h1>');
+    h.push('<h1 id="screen-2-titel" tabindex="-1">' + e(s.titel) + '</h1>');
     h.push('<p class="lead">' + e(s.lead) + '</p>');
 
     h.push('<p class="steuerung__titel">' + e(s.stoerungTitel) + '</p>');
@@ -38,8 +38,9 @@
     var lauf = z.lauf;
     var verstoesse = HR.checker.zaehleVerstoesse(lauf.violations);
 
-    h.push('<div class="ergebnis">');
-    h.push('<p class="badge badge--gut" role="status">' + e(s.zielErreicht) + '</p>');
+    // Ergebnis und Betrag gehoeren zusammen: eine Ansage, nicht zwei.
+    h.push('<div class="ergebnis" role="status">');
+    h.push('<p class="badge badge--gut">' + e(s.zielErreicht) + '</p>');
     h.push('<p class="ergebnis__betrag"><span class="ergebnis__label">' + e(s.betragLabel) +
       '</span> <span class="mono">' + e(HR.copy.euro(lauf.result.betrag)) + '</span></p>');
     h.push('</div>');
@@ -47,18 +48,21 @@
     h.push('<h2 class="abschnitt__titel">' + e(s.ablaufTitel) + '</h2>');
     h.push(HR.komponenten.logTabelle.kurz(lauf.trajectory));
 
-    h.push('<div class="pruefpanel">');
+    h.push('<div class="pruefpanel" role="status">');
     h.push('<p class="pruefpanel__label">' + e(s.pruefungTitel) + '</p>');
     h.push('<p class="pruefpanel__wert mono">' + verstoesse + '</p>');
     h.push('<p class="pruefpanel__text">' + e(s.pruefungOk) + '</p>');
     h.push('</div>');
 
+    // Ja und Nein sind zwei Antworten auf dieselbe Frage: die Frage beschriftet sie.
     h.push('<div class="frage">');
-    h.push('<p class="frage__text">' + e(s.frage) + '</p>');
-    h.push('<div class="frage__knoepfe">');
-    h.push(HR.render.knopf('preis-antwort', s.ja, { wert: 'ja' }));
-    h.push(HR.render.knopf('preis-antwort', s.nein, { wert: 'nein' }));
-    h.push('</div></div>');
+    h.push(HR.a11y.gruppe(e(s.frage),
+      '<div class="frage__knoepfe">' +
+      HR.render.knopf('preis-antwort', s.ja, { wert: 'ja' }) +
+      HR.render.knopf('preis-antwort', s.nein, { wert: 'nein' }) +
+      '</div>',
+      { legendeKlasse: 'frage__text' }));
+    h.push('</div>');
 
     if (z.antwort2 === 'ja') {
       h.push('<div class="uebergang"><p>' + e(s.antwortJa) + '</p>' +

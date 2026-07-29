@@ -16,12 +16,20 @@
     return (wert === null || wert === undefined || wert === false) ? '' : ' ' + name + '="' + esc(wert) + '"';
   }
 
+  /**
+   * @param {string} aktion Kennung fuer die Delegation
+   * @param {string} beschriftung sichtbarer Text
+   * @param {{klasse?:string, wert?:string, deaktiviert?:boolean, gedrueckt?:boolean,
+   *          label?:string}} [opt] `label` nur, wo der sichtbare Text fuer sich
+   *          genommen mehrdeutig waere; er muss darin enthalten bleiben.
+   */
   function knopf(aktion, beschriftung, opt) {
     opt = opt || {};
     return '<button type="button" class="knopf' + (opt.klasse ? ' ' + opt.klasse : '') + '"' +
       attr('data-aktion', aktion) + attr('data-wert', opt.wert) +
       (opt.deaktiviert ? ' disabled' : '') +
       attr('aria-pressed', opt.gedrueckt === undefined ? null : String(opt.gedrueckt)) +
+      attr('aria-label', opt.label) +
       '>' + esc(beschriftung) + '</button>';
   }
 
@@ -68,7 +76,16 @@
     HR.screens[n] = modul;   // fuer Tests und den Vortragsmodus zugaenglich
   }
 
+  /**
+   * Der zuletzt gezeichnete Akt und die zuletzt bekannte Fokusstelle.
+   * Beides zusammen entscheidet, wo der Fokus nach dem Neuzeichnen steht:
+   * nach einem Aktwechsel auf der Ueberschrift, sonst dort, wo er vorher war.
+   */
+  var letzterAkt = null;
+  var letzteMarke = null;
+
   function zeichnen(zustand) {
+    var wechsel = letzterAkt !== null && letzterAkt !== zustand.akt;
     for (var n = HR.store.AKT_MIN; n <= HR.store.AKT_MAX; n++) {
       var el = document.getElementById('akt-' + n);
       if (!el) continue;
@@ -77,13 +94,36 @@
       if (!aktiv) continue;
       var modul = bildschirme[n];
       if (!modul) continue;
+      var verloren = HR.a11y ? HR.a11y.fokusVerloren() : true;
+      var marke = HR.a11y ? HR.a11y.fokusMerken(el) : null;
+      if (marke) letzteMarke = marke;
       // Rahmensatz und Ruecknahme kommen aus der Huelle, nicht aus dem Akt.
       // So bekommt auch Akt 2 beide Zeilen, ohne dass seine Datei angefasst wird.
       el.innerHTML = rahmenMarkup(n) + modul.zeichnen(zustand) + rueckblickMarkup(n);
       if (modul.nach) modul.nach(el, zustand);
+      fokusSetzen(el, wechsel, marke, verloren);
     }
+    letzterAkt = zustand.akt;
     aktleisteZeichnen(zustand);
     fallZeileZeichnen();
+  }
+
+  /**
+   * Nach dem Aktwechsel steht der Fokus auf der Ueberschrift des neuen Akts —
+   * gleich, ob per Aktleiste, Tastatur oder Vortragsmodus gewechselt wurde.
+   * Innerhalb eines Akts wird das ersetzte Bedienelement wieder aufgesucht;
+   * war der Fokus schon vorher verloren (etwa weil ein Knopf waehrend des Laufs
+   * gesperrt war), greift die zuletzt bekannte Stelle.
+   */
+  function fokusSetzen(el, wechsel, marke, verloren) {
+    if (!HR.a11y) return;
+    if (wechsel) {
+      letzteMarke = null;
+      HR.a11y.zurUeberschrift(el);
+      return;
+    }
+    if (marke) { HR.a11y.fokusHerstellen(el, marke); return; }
+    if (verloren && letzteMarke) HR.a11y.fokusHerstellen(el, letzteMarke);
   }
 
   /** Ein Satz zu Beginn des Akts. Er sagt, worum es hier geht, und sonst nichts. */

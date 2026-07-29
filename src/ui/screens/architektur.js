@@ -64,10 +64,12 @@
     var r = risikotext(lauf.restrisiko);
     var h = [];
 
+    // Der Name der Karte steht sichtbar in ihrer Ueberschrift — kein zweiter daneben.
+    var titelId = 'ort-' + lauf.ort + '-titel';
     h.push('<section class="ort' + (gewaehlt ? ' ist-gewaehlt' : '') +
-      '" aria-label="' + e(s.orte[lauf.ort]) + '">');
+      '" aria-labelledby="' + titelId + '">');
     if (gewaehlt) h.push('<p class="ort__marke">' + e(s.gewaehlt) + '</p>');
-    h.push('<h3 class="ort__titel">' + e(s.orte[lauf.ort]) + '</h3>');
+    h.push('<h3 class="ort__titel" id="' + titelId + '">' + e(s.orte[lauf.ort]) + '</h3>');
     h.push('<p class="ort__hinweis">' + e(s.ortHinweis[lauf.ort]) + '</p>');
 
     h.push('<dl class="masse">');
@@ -79,10 +81,13 @@
     h.push('</dl>');
 
     h.push('<div class="ort__fuss">');
+    // Dreimal „Diesen Ort wählen" — welcher Ort gemeint ist, steht nur in der Karte.
     h.push(HR.render.knopf('platzierung', s.waehlen, {
       wert: lauf.ort,
       klasse: gewaehlt ? 'knopf--haupt' : '',
-      gedrueckt: gewaehlt
+      gedrueckt: gewaehlt,
+      label: HR.a11y.fuellen(HR.copy.a11y.knopfImKontext,
+        { knopf: s.waehlen, kontext: s.orte[lauf.ort] })
     }));
     h.push('</div>');
     h.push('</section>');
@@ -115,11 +120,15 @@
       '<span class="zuordnung__name">' + e(s.regelnamen[platz]) + '</span>' +
       '<span class="zuordnung__text">' + e(regel.text_de) + '</span></th>');
     HR.platzierung.PLATZIERUNGEN.forEach(function (ort) {
+      // In der Matrix steht derselbe Ortsname in jeder Zeile: erst die Regel
+      // dazu macht den Knopf eindeutig.
       h.push('<td class="zuordnung__zelle">' +
         HR.render.knopf('zuordnung', s.orte[ort], {
           wert: platz + ':' + ort,
           klasse: 'knopf--klein',
-          gedrueckt: gesetzt === ort
+          gedrueckt: gesetzt === ort,
+          label: HR.a11y.fuellen(HR.copy.a11y.knopfImKontext,
+            { knopf: s.orte[ort], kontext: s.regelnamen[platz] })
         }) + '</td>');
     });
     h.push('</tr>');
@@ -154,19 +163,24 @@
     var regeln = kombiRegeln(z);
     var h = [];
 
-    h.push('<h2 class="abschnitt__titel">' + e(s.kombiTitel) + '</h2>');
-    h.push('<p class="hinweis">' + e(s.kombiLead) + '</p>');
-
-    h.push('<div class="logtabelle__rahmen"><table class="zuordnung"><thead><tr>');
-    h.push('<th scope="col">' + e(s.spalteRegel) + '</th>');
+    var tabelle = [];
+    tabelle.push('<p class="hinweis">' + e(s.kombiLead) + '</p>');
+    tabelle.push('<div class="logtabelle__rahmen"><table class="zuordnung">');
+    tabelle.push('<caption class="nur-screenreader">' + e(HR.copy.a11y.zuordnungTabelle) + '</caption>');
+    tabelle.push('<thead><tr>');
+    tabelle.push('<th scope="col">' + e(s.spalteRegel) + '</th>');
     HR.platzierung.PLATZIERUNGEN.forEach(function (ort) {
-      h.push('<th scope="col">' + e(s.orte[ort]) + '</th>');
+      tabelle.push('<th scope="col">' + e(s.orte[ort]) + '</th>');
     });
-    h.push('</tr></thead><tbody>');
+    tabelle.push('</tr></thead><tbody>');
     HR.muster.REGELPLAETZE.forEach(function (platz) {
-      h.push(zuordnungszeile(z, platz, regeln[platz]));
+      tabelle.push(zuordnungszeile(z, platz, regeln[platz]));
     });
-    h.push('</tbody></table></div>');
+    tabelle.push('</tbody></table></div>');
+
+    // Die Ueberschrift beschriftet zugleich die Gruppe der Zuordnungsknoepfe.
+    h.push(HR.a11y.gruppe('<h2 class="abschnitt__titel">' + e(s.kombiTitel) + '</h2>',
+      tabelle.join('')));
 
     h.push(musterkarte(z));
 
@@ -238,7 +252,7 @@
     var alle = laeufe(z);
     var h = [];
 
-    h.push('<h1 id="akt-4-titel">' + e(s.titel) + '</h1>');
+    h.push('<h1 id="akt-4-titel" tabindex="-1">' + e(s.titel) + '</h1>');
 
     h.push('<div class="regelkarte">');
     h.push('<p class="regelkarte__label">' + e(s.regelLabel) + '</p>');
@@ -247,12 +261,11 @@
     if (!wahl.eigen) h.push('<p class="hinweis">' + e(s.ersatzregel) + '</p>');
     h.push('</div>');
 
-    h.push('<h2 class="abschnitt__titel">' + e(s.frage) + '</h2>');
-    h.push('<p class="hinweis">' + e(s.gleicheLage) + '</p>');
-
-    h.push('<div class="orte">');
-    alle.forEach(function (lauf) { h.push(ortkarte(z, lauf)); });
-    h.push('</div>');
+    // Die drei Orte sind eine Wahl: die Frage des Akts beschriftet sie.
+    var karten = ['<p class="hinweis">' + e(s.gleicheLage) + '</p>', '<div class="orte">'];
+    alle.forEach(function (lauf) { karten.push(ortkarte(z, lauf)); });
+    karten.push('</div>');
+    h.push(HR.a11y.gruppe('<h2 class="abschnitt__titel">' + e(s.frage) + '</h2>', karten.join('')));
 
     var gewaehlt = null;
     alle.forEach(function (l) { if (l.ort === z.platzierung) gewaehlt = l; });

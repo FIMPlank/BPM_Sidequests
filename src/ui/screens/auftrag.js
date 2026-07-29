@@ -21,18 +21,21 @@
     var s = HR.copy.akt0;
     var h = [];
 
-    h.push('<h1 id="akt-0-titel">' + e(s.titel) + '</h1>');
+    h.push('<h1 id="akt-0-titel" tabindex="-1">' + e(s.titel) + '</h1>');
 
     h.push('<blockquote class="auftrag">');
     h.push('<p class="auftrag__text">' + e(s.ansage) + '</p>');
     h.push('<footer class="auftrag__rolle">' + e(s.rolle) + '</footer>');
     h.push('</blockquote>');
 
-    h.push('<p class="auftrag__frage">' + e(s.frage) + '</p>');
-    h.push('<div class="wahl">');
-    h.push(wahlkarte('heute', s.heute, s.heuteHinweis));
-    h.push(wahlkarte('agent', s.agent, s.agentHinweis));
-    h.push('</div>');
+    // Die beiden Wege sind eine Wahl, keine zwei Knoepfe nebeneinander:
+    // die Frage steht als Legende ueber der Gruppe, die sie beschriftet.
+    h.push(HR.a11y.gruppe(e(s.frage),
+      '<div class="wahl">' +
+      wahlkarte('heute', s.heute, s.heuteHinweis) +
+      wahlkarte('agent', s.agent, s.agentHinweis) +
+      '</div>',
+      { legendeKlasse: 'auftrag__frage' }));
 
     return h.join('');
   }

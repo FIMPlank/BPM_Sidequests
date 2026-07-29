@@ -7,12 +7,16 @@
   'use strict';
 
   var EINGABE_ID = 'regel-eingabe';
+  var HILFE_ID = 'regel-hilfe';
+  var FEHLER_ID = 'regel-fehler';
 
   function entwurfKarte(z) {
     var e = HR.render.esc;
     var s = HR.copy.screen3;
     if (z.entwurfFehler) {
-      return '<div class="entwurf entwurf--fehler" role="status">' +
+      // Eine abgewiesene Regel ist ein Fehler am Feld, keine Beilaeufigkeit:
+      // role="alert" meldet sie sofort, aria-errormessage haengt sie ans Feld.
+      return '<div class="entwurf entwurf--fehler" id="' + FEHLER_ID + '" role="alert">' +
         '<p class="entwurf__text">' + e(s.ablehnung[z.entwurfFehler.code] || s.ablehnung.nicht_darstellbar) + '</p>' +
         '<p class="entwurf__beispiel">' + e(s.ablehnungBeispiel) + '</p></div>';
     }
@@ -55,16 +59,21 @@
     var s = HR.copy.screen3;
     var h = [];
 
-    h.push('<h1 id="akt-3-titel">' + e(s.titel) + '</h1>');
+    h.push('<h1 id="akt-3-titel" tabindex="-1">' + e(s.titel) + '</h1>');
     h.push('<p class="lead">' + e(s.lead) + '</p>');
 
     h.push(HR.komponenten.zaehler.zeichnen(z));
 
     h.push('<div class="editor">');
     h.push('<label class="editor__label" for="' + EINGABE_ID + '">' + e(s.eingabeLabel) + '</label>');
+    // Der Platzhalter verschwindet beim Tippen; die Hilfe bleibt stehen und
+    // haengt ueber aria-describedby am Feld.
+    h.push('<p class="hinweis editor__hilfe" id="' + HILFE_ID + '">' + e(HR.copy.a11y.regelHilfe) + '</p>');
     h.push('<div class="editor__zeile">');
     h.push('<input class="editor__feld" type="text" id="' + EINGABE_ID + '" name="regel" ' +
-      'data-enter="regel-pruefen" autocomplete="off" placeholder="' + e(s.platzhalter) + '">');
+      'data-enter="regel-pruefen" autocomplete="off" aria-describedby="' + HILFE_ID + '"' +
+      (z.entwurfFehler ? ' aria-invalid="true" aria-errormessage="' + FEHLER_ID + '"' : '') +
+      ' placeholder="' + e(s.platzhalter) + '">');
     h.push(HR.render.knopf('regel-pruefen', s.pruefen));
     h.push('</div>');
     h.push(entwurfKarte(z));
@@ -159,5 +168,10 @@
   HR.render.auf('regel-entfernen', function (id) { HR.store.senden({ typ: 'regel_entfernen', id: id }); });
   HR.render.auf('regeln-ausfuehren', ausfuehren);
 
-  HR.render.bildschirm(3, { zeichnen: zeichnen, EINGABE_ID: EINGABE_ID });
+  HR.render.bildschirm(3, {
+    zeichnen: zeichnen,
+    EINGABE_ID: EINGABE_ID,
+    HILFE_ID: HILFE_ID,
+    FEHLER_ID: FEHLER_ID
+  });
 })(window.HR = window.HR || {});

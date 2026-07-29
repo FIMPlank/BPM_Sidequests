@@ -20,7 +20,7 @@
 
 <a class="sprungmarke" href="#hauptinhalt">Zum Inhalt springen</a>
 
-<header class="kopf" role="banner">
+<header class="kopf">
   <div class="kopf__oben">
     <div class="kopf__marke">
       <span class="kopf__titel">Handlungsraum-Sandbox</span>
@@ -31,7 +31,7 @@
   <nav class="aktleiste" id="aktleiste" aria-label="Akte"></nav>
 </header>
 
-<main id="hauptinhalt" class="buehne" role="main">
+<main id="hauptinhalt" class="buehne">
   <section class="screen" id="akt-0" data-akt="0" aria-labelledby="akt-0-titel"></section>
   <section class="screen" id="akt-1" data-akt="1" aria-labelledby="akt-1-titel" hidden></section>
   <!-- Akt 2 ist unantastbar: seine Ueberschriftskennung bleibt, wie sie war. -->
@@ -41,7 +41,7 @@
   <section class="screen" id="akt-5" data-akt="5" aria-labelledby="akt-5-titel" hidden></section>
 </main>
 
-<footer class="fuss" role="contentinfo">
+<footer class="fuss">
   <p>
     <a href="DATENSCHUTZ.md" rel="license">Datenschutz</a>
     <span aria-hidden="true">·</span>
@@ -53,7 +53,8 @@
   </p>
   <p class="fuss__hinweis">Alle Buchungen, Belege und Erstattungen sind simuliert. Es wird nichts gebucht, gesendet oder gezahlt.</p>
   <!-- Der Modus gehoert in die Fusszeile: er ist eine Fussnote, keine Ueberschrift. -->
-  <p><span class="pille" id="modus-pille" aria-live="polite">Modus: Demo (skriptiert)</span></p>
+  <!-- Der Modus steht einmal fest: keine Live-Region fuer einen Text, der sich nicht aendert. -->
+  <p><span class="pille" id="modus-pille">Modus: Demo (skriptiert)</span></p>
 </footer>
 
 <!-- LADEREIHENFOLGE — identisch in tests.html spiegeln. Kein type="module": file:// -->
@@ -82,6 +83,7 @@
 <script src="src/ui/components/zaehler.js"></script>
 <script src="src/ui/components/plot.js"></script>
 <script src="src/ui/components/logTabelle.js"></script>
+<script src="src/ui/a11y.js"></script>
 <script src="src/ui/screens/auftrag.js"></script>
 <script src="src/ui/screens/clash.js"></script>
 <script src="src/ui/screens/preis.js"></script>

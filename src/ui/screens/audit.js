@@ -124,7 +124,9 @@
       return '<p class="hinweis">' + e(s.diffLeer) + '</p>';
     }
     var zeilen = diffZeilen(z.laufOhneRegel, z.laufMitRegel);
-    var h = ['<div class="logtabelle__rahmen"><table class="logtabelle logtabelle--diff"><thead><tr>'];
+    var h = ['<div class="logtabelle__rahmen"><table class="logtabelle logtabelle--diff">'];
+    h.push('<caption class="nur-screenreader">' + e(s.diffTitel) + '</caption>');
+    h.push('<thead><tr>');
     h.push('<th scope="col">#</th><th scope="col">' + e(s.laufA) + '</th><th scope="col">' + e(s.laufB) + '</th></tr></thead><tbody>');
     zeilen.forEach(function (r) {
       h.push('<tr class="' + (r.anders ? 'ist-anders' : '') + '">' +
@@ -141,7 +143,7 @@
     var s = HR.copy.screen4;
     var h = [];
 
-    h.push('<h1 id="akt-5-titel">' + e(s.titel) + '</h1>');
+    h.push('<h1 id="akt-5-titel" tabindex="-1">' + e(s.titel) + '</h1>');
     h.push('<p class="frage__text">' + e(s.frage) + '</p>');
 
     if (!z.lauf) {
