@@ -18,7 +18,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 | V2-10 | done | 08 | Plot nach Akt 4 | 2026-07-29 | 4 Dateien |
 | V2-11 | done | 08 | Akt 5 — Spalte Platzierung, A/B-Vergleich | 2026-07-29 | 6 Dateien |
 | V2-12 | done | 11 | Vortragsmodus über fünf Akte | 2026-07-29 | 5 Dateien |
-| V2-13 | todo | 12 | Textdurchgang | | |
+| V2-13 | wip  | 12 | Textdurchgang | | |
 | V2-14 | todo | 13 | `DEMO.md`, `HANDOVER.md`, `README.md` | | |
 
 ## Notizen
