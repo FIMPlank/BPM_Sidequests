@@ -10,7 +10,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 | V2-02 | done | 01 | Rahmensatz- und Rückblick-Slots | 2026-07-29 | 4 Dateien |
 | V2-03 | done | 01 | Akt 0 — Der Auftrag | 2026-07-29 | 6 Dateien |
 | V2-04 | done | 03 | Akt 1 — Störung vor dem Lauf | 2026-07-29 | 6 Dateien |
-| V2-05 | wip  | 01 | Akt 3 — eine große Zahl | | |
+| V2-05 | done | 01 | Akt 3 — eine große Zahl | 2026-07-29 | 5 Dateien |
 | V2-06 | todo | 00 | `src/domain/latency.js` | | |
 | V2-07 | todo | 05, 06 | Akt 4, Teil 1 — Platzierung | | |
 | V2-08 | todo | 07 | Akt 4, Teil 2 — Kombination und Muster | | |
@@ -29,3 +29,4 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 - V2-02: Beide Zeilen setzt die Huelle, damit Akt 2 unberuehrt bleibt. 249 Tests, 0 Fehler.
 - V2-03: Wahl fuehrt nach Akt 1, gewaehlte Seite vorn, andere zurueckgenommen, Lauf startet mit. Im Browser geklickt geprueft. 258 Tests, 0 Fehler.
 - V2-04: Auswahl vor dem Lauf, Leitzahl Varianten bei 52 px. Im Browser geklickt geprueft. 261 Tests, 0 Fehler.
+- V2-05: Eine Leitzahl, vier Nebenwerte; Schalter und Plot raus. 261 Tests, 0 Fehler.

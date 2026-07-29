@@ -47,18 +47,8 @@
     return h.join('');
   }
 
-  function durchsetzung(z) {
-    var e = HR.render.esc;
-    var s = HR.copy.screen3;
-    return '<div class="durchsetzung">' +
-      '<h2 class="durchsetzung__titel">' + e(s.durchsetzungTitel) + '</h2>' +
-      '<div class="durchsetzung__schalter" role="group" aria-label="' + e(s.durchsetzungTitel) + '">' +
-      HR.render.knopf('durchsetzung', s.posthoc, { wert: 'posthoc', gedrueckt: z.enforcement === 'posthoc' }) +
-      HR.render.knopf('durchsetzung', s.runtime, { wert: 'runtime', gedrueckt: z.enforcement === 'runtime' }) +
-      '</div>' +
-      '<p class="durchsetzung__hinweis">' +
-      e(z.enforcement === 'posthoc' ? s.posthocHinweis : s.runtimeHinweis) + '</p></div>';
-  }
+  // Der Schalter fuer den Ort der Durchsetzung ist nach Akt 4 gewandert.
+  // Hier wird die Regel geschrieben; wo sie greift, ist eine eigene Frage.
 
   function zeichnen(z) {
     var e = HR.render.esc;
@@ -81,7 +71,7 @@
     h.push('</div>');
 
     h.push('<div class="regelspalten">');
-    h.push('<div class="regelspalte">' + regelliste(z) + durchsetzung(z) + '</div>');
+    h.push('<div class="regelspalte">' + regelliste(z) + '</div>');
     h.push('<div class="regelspalte">');
     h.push('<h2 class="abschnitt__titel">' + e(HR.copy.screen1.raumTitel) + '</h2>');
     h.push(HR.komponenten.handlungsraum.zeichnen({
@@ -103,8 +93,7 @@
       h.push(HR.komponenten.logTabelle.kurz(z.lauf.trajectory));
     }
 
-    h.push('<h2 class="abschnitt__titel">' + e(s.plotTitel) + '</h2>');
-    h.push('<div class="plot-panel">' + HR.komponenten.plot.zeichnen(z.historie) + '</div>');
+    // Der Plot steht jetzt in Akt 4: er sammelt ueber die ganze Sitzung.
 
     h.push(HR.logging.zustimmungsmarkup(z));
     return h.join('');
@@ -168,7 +157,6 @@
   HR.render.auf('regel-uebernehmen', function () { HR.store.senden({ typ: 'regel_uebernehmen' }); });
   HR.render.auf('regel-verwerfen', function () { HR.store.senden({ typ: 'entwurf' }); });
   HR.render.auf('regel-entfernen', function (id) { HR.store.senden({ typ: 'regel_entfernen', id: id }); });
-  HR.render.auf('durchsetzung', function (wert) { HR.store.senden({ typ: 'enforcement', wert: wert }); });
   HR.render.auf('regeln-ausfuehren', ausfuehren);
 
   HR.render.bildschirm(3, { zeichnen: zeichnen, EINGABE_ID: EINGABE_ID });

@@ -394,7 +394,38 @@
         .forEach(function (n) { expect(h).toContain(n); });
     });
     it('zeigt Kosten mit drei Nachkommastellen', function () {
-      expect(/instrument__wert mono[^>]*>\d+,\d{3}/.test(html(anfang()))).toBeTruthy();
+      expect(/nebenwert__wert mono[^>]*>\d+,\d{3}/.test(html(anfang()))).toBeTruthy();
+    });
+    it('fuehrt genau eine Leitzahl, und zwar die Verstoesse', function () {
+      var h = html(anfang());
+      expect(h.split('grosszahl__wert').length - 1).toBe(1);
+      expect(h).toContain('Verstöße im letzten Lauf');
+      expect(h.split('nebenwert__wert').length - 1).toBe(4);
+    });
+    it('nimmt den Schalter fuer den Ort der Durchsetzung heraus', function () {
+      var h = html(anfang());
+      expect(h.indexOf('data-aktion="durchsetzung"')).toBe(-1);
+      expect(h.indexOf('Autonomie vorne')).toBe(-1);
+    });
+    it('nimmt den Plot heraus', function () {
+      var z = red(anfang(), { typ: 'lauf_fertig',
+        ergebnis: HR.agent.mock.laufSynchron(HR.agent.anfrage({ constraints: HR.compiler.systemRegeln() })),
+        kontext: { regeln: HR.compiler.systemRegeln(), screen: 3 } });
+      expect(html(z).indexOf('class="plot')).toBe(-1);
+      expect(html(z).indexOf('plot-panel')).toBe(-1);
+    });
+    it('laesst den Regeleditor unveraendert uebersetzen und durchsetzen', function () {
+      var c = HR.compiler.uebersetzen(satz).constraint;
+      expect(c.kind).toBe('threshold');
+      var sys = HR.compiler.systemRegeln();
+      var frei = HR.agent.mock.laufSynchron(HR.agent.anfrage({
+        disturbances: ['hotel_ausgebucht', 'genehmiger_urlaub'], constraints: sys, enforcement: 'runtime' }));
+      var eng = HR.agent.mock.laufSynchron(HR.agent.anfrage({
+        disturbances: ['hotel_ausgebucht', 'genehmiger_urlaub'],
+        constraints: sys.concat([c]), enforcement: 'runtime' }));
+      var geblockt = eng.trajectory.filter(function (t) { return t.guardrail && t.guardrail.blocked; });
+      expect(geblockt.length).toBeGreaterThan(0);
+      expect(eng.trajectory.length).toBeGreaterThan(frei.trajectory.length);
     });
     it('zeigt vor dem ersten Lauf keinen Verstosswert', function () {
       expect(html(anfang())).toContain('>—<');
@@ -431,21 +462,6 @@
       var ohne = HR.freedom.freiheitsgrade(anfang().regeln).prozent;
       var mit = HR.freedom.freiheitsgrade(red(mitEntwurf(), { typ: 'regel_uebernehmen' }).regeln).prozent;
       expect(mit).toBeLessThan(ohne);
-    });
-    it('markiert den aktiven Durchsetzungspunkt', function () {
-      expect(html(anfang())).toContain('data-wert="runtime" aria-pressed="true"');
-      var z = red(anfang(), { typ: 'enforcement', wert: 'posthoc' });
-      expect(html(z)).toContain('data-wert="posthoc" aria-pressed="true"');
-    });
-    it('erklaert beide Durchsetzungspunkte unterschiedlich', function () {
-      expect(html(anfang())).toContain('an der Werkzeuggrenze hart geprüft');
-      expect(html(red(anfang(), { typ: 'enforcement', wert: 'posthoc' }))).toContain('läuft frei');
-    });
-    it('stellt die Frage nach dem Ort der Kontrolle', function () {
-      expect(html(anfang())).toContain('Autonomie vorne — Kontrolle hinten?');
-    });
-    it('zeigt statt des Plots einen Hinweis, solange kein Lauf vorliegt', function () {
-      expect(html(anfang())).toContain('Führen Sie einen Lauf aus');
     });
     it('zeichnet je Lauf einen Punkt je Reihe', function () {
       var svg = HR.komponenten.plot.zeichnen([

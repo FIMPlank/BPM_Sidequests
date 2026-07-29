@@ -285,3 +285,28 @@
   .steuerung--wahl { border-top: 0; margin-top: var(--r3); padding-bottom: 0; }
   .steuerung__erklaerung { color: var(--ink-leise); font-size: 0.875rem; }
 }
+
+@layer screens {
+  /* Akt 3 — eine Leitzahl, vier Nebenwerte in einer ruhigen Zeile. */
+  .anzeigen {
+    display: flex; flex-wrap: wrap; align-items: flex-end;
+    gap: var(--r3) var(--r5);
+    margin: var(--r3) 0 var(--r4);
+  }
+  .anzeigen .grosszahl { margin-top: 0; padding-top: 0; border-top: 0; }
+  .grosszahl.ist-warn .grosszahl__wert { color: var(--verstoss, var(--ink)); }
+
+  .nebenwerte {
+    display: flex; flex-wrap: wrap; gap: var(--r1) var(--r3);
+    margin: 0 0 4px;
+  }
+  .nebenwert { display: flex; align-items: baseline; gap: 6px; }
+  .nebenwert__name { color: var(--ink-leise); font-size: 0.8125rem; }
+  .nebenwert__wert {
+    margin: 0;
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-mittel);
+  }
+  .nebenwert__einheit { color: var(--ink-leise); font-size: 0.75rem; margin-left: 2px; }
+}

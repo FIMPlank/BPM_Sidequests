@@ -93,3 +93,8 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Die Stoerungsknoepfe sind jetzt eine **Auswahl**, kein Ausloeser: sie sind von Anfang an bedienbar, tragen `aria-pressed` und aendern fuer sich genommen nichts. Erst der eine Startknopf laesst laufen, und er sagt an, was er mitbringt. Ein zweites Anklicken derselben Stoerung nimmt die Wahl zurueck.
 - Der Grundlauf ohne Stoerung bleibt erhalten und wird weiterhin von der Wahl in Akt 0 ausgeloest. Er ist der Beleg fuer „bisher kein Unterschied“ — ohne ihn haette die erste Stoerung nichts, wogegen sie sich abheben koennte.
 - `Modellierte Varianten` steht als Leitzahl (52 px) unter dem imperativen Modell. Je Akt gibt es genau eine solche Zahl; der Test zaehlt sie.
+
+## v2 — V2-05 (Akt 3)
+- Fuenf gleich grosse Zahlen sind ein Armaturenbrett und sagen nichts. Es fuehrt jetzt eine: `Verstoesse im letzten Lauf` — sie ist das, was eine Regel bewirkt. Die vier anderen bleiben vollstaendig lesbar, aber als ruhige Zeile daneben.
+- Der Schalter fuer den Ort der Durchsetzung ist ersatzlos aus Akt 3 verschwunden. Er war dort eine Nebenfrage; in Akt 4 ist er die Hauptfrage. `z.enforcement` bleibt im Speicher und steht weiterhin auf `runtime`.
+- Der Plot verschwindet aus Akt 3, ohne Ersatz. Er zeigte je Akt nur ein Bruchstueck; in Akt 4 sammelt er ueber die ganze Sitzung (V2-10).
