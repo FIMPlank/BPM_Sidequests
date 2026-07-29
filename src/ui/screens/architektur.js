@@ -72,7 +72,7 @@
 
     h.push('<dl class="masse">');
     h.push(mass(s.masse.zeit, HR.latency.text(lauf.zeit.minuten),
-      lauf.zeit.schritte + ' Schritte'));
+      lauf.zeit.schritte + ' ' + s.schritteEinheit));
     h.push(mass(s.masse.kosten, HR.copy.euro(lauf.centGesamt / 100),
       s.kontextanteil + ' ' + HR.tokens.centText(lauf.centKontext) + ' ' + HR.copy.screen3.einheitCent));
     h.push(mass(s.masse.risiko, r.wert, r.zusatz));

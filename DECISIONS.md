@@ -143,3 +143,8 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - In Akt 1 waehlt eine Ziffer die Stoerung **und** startet den Lauf. Im Vortrag soll ein Tastendruck einen Schritt der Erzaehlung tun; zwei Tasten fuer einen Gedanken waeren eine Bedienungsanleitung.
 - Die Modus-Pille steht jetzt in der Fusszeile. Sie ist eine Fussnote — im Kopf hat sie mit der Fallzeile um Aufmerksamkeit konkurriert.
 - Nachgemessen im Browser mit echten Tastenereignissen: Wahl → Akt 1, `2` wirft `beleg_fehlt` ein (Varianten 2), dreimal rechts → Akt 4, `1` und `3` waehlen Orte, rechts → Akt 5 und dort Anschlag, sechsmal links → Akt 0.
+
+## v2 — V2-13 (Textdurchgang)
+- Die Ruecknahme zu **Akt 2** sagt ausschliesslich nach, was ohnehin auf der Flaeche steht („Ziel erreicht“, „keine Regel verletzt“). Sie darf nichts andeuten: §6 verbietet Hinweis, Warnung und Vorgriff, und die Zeile steht direkt unter „Sind Sie damit einverstanden?“. Ein Test verbietet dort ausdruecklich `achtung`, `warnung`, `vorsicht`, `problem`, `gefahr` und auch die einschraenkenden `aber`, `obwohl`, `trotzdem`.
+- Zusaetzlich zu den Laengengrenzen pruefen Tests jetzt: Satzschreibung (kein Wort in Versalien), Punkt am Ende, kein Ausrufezeichen, und eine Sperrliste gegen Werbesprache (`einfach`, `mühelos`, `revolution`, `innovativ`, …). Die beiden Versalwoerter `IMPERATIV` und `DEKLARATIV` bleiben — sie sind ein bewusstes Gestaltungsmittel der ersten Fassung und dort eigens getestet.
+- Die letzte Zeichenkette ausserhalb von `copy.de.js` (`' Schritte'` in Akt 4) ist umgezogen. Die alte Vierer-Liste `copy.schritte` ist entfallen, nachdem `copy.akte` sie abgeloest hatte.

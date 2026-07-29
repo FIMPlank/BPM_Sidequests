@@ -35,31 +35,28 @@
     /**
      * Je Akt ein Rahmensatz zu Beginn (hoechstens zwoelf Woerter) und eine
      * Ruecknahme am Ende (hoechstens zwanzig Woerter, ohne Fachsprache).
-     * Vorlaeufige Fassung — der Textdurchgang in V2-13 schreibt sie neu,
-     * wenn das Verhalten aller Akte feststeht. Index gleich Aktnummer.
+     * Index gleich Aktnummer. Die Ruecknahme zu Akt 2 sagt nur nach, was auf
+     * der Flaeche steht — sie warnt nicht und deutet nichts an.
      */
     rahmenFrage: 'Was ist gerade passiert?',
 
     rahmen: [
-      'Ein Vorgang, zwei Wege. Sie entscheiden, welcher zuerst läuft.',
-      'Derselbe Vorgang, links vorgeschrieben, rechts als Raum beschrieben.',
+      'Ein Auftrag, zwei Wege. Sie entscheiden, welcher zuerst läuft.',
+      'Links steht der Ablauf fest. Rechts steht nur, was gelten muss.',
       'Zwei Störungen auf einmal. Der Agent bekommt nur ein Ziel.',
-      'Sie schreiben eine Regel. In Ihren Worten, nicht in Syntax.',
-      'Wo soll Ihre Regel greifen? Drei Orte, drei Ergebnisse.',
+      'Sie schreiben eine Regel, in Ihren Worten.',
+      'Dieselbe Regel an drei Orten. Der Ort entscheidet.',
       'Der ganze Lauf, Schritt für Schritt, mit Beleg.'
     ],
 
     rueckblick: [
-      'Sie haben einen Weg gewählt. Beide führen durch denselben Fall.',
-      'Das feste Modell blieb stehen, der Agent plante um und kam ans Ziel.',
-      'Der Agent hat das Ziel erreicht und keine hinterlegte Regel verletzt.',
-      'Ihre Regel ist jetzt Teil des Raums und wird bei jedem Lauf geprüft.',
-      'Der Ort der Regel ändert Dauer, Kosten und das, was übrig bleibt.',
-      'Jeder Schritt ist nachlesbar, mit Zeit, Werkzeug und geprüfter Regel.'
+      'Sie haben gewählt. Beide Wege bearbeiten denselben Fall.',
+      'Das feste Modell blieb stehen. Der Agent plante um und erreichte das Ziel.',
+      'Der Agent hat das Ziel erreicht. Keine der hinterlegten Regeln wurde verletzt.',
+      'Ihre Regel gehört jetzt zum Raum und wird bei jedem Lauf geprüft.',
+      'Der Ort einer Regel bestimmt Dauer, Kosten und das, was offen bleibt.',
+      'Jeder Schritt ist nachlesbar: Zeit, Werkzeug, geprüfte Regel und Ort der Prüfung.'
     ],
-
-    /** Alte Vierer-Beschriftung, bis der Textdurchgang sie ersetzt. */
-    schritte: ['Der Clash', 'Der Preis der Autonomie', 'Sie modellieren', 'Der Audit'],
 
     label: { imperativ: 'IMPERATIV', deklarativ: 'DEKLARATIV' },
 
@@ -220,6 +217,7 @@
         risiko: 'Restrisiko'
       },
       kontextanteil: 'davon Kontext',
+      schritteEinheit: 'Schritte',
       risikoKeins: 'nichts offen',
       risikoOffen: 'ausgezahlt, bevor jemand hinsah',
       waehlen: 'Diesen Ort wählen',

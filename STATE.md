@@ -18,7 +18,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 | V2-10 | done | 08 | Plot nach Akt 4 | 2026-07-29 | 4 Dateien |
 | V2-11 | done | 08 | Akt 5 — Spalte Platzierung, A/B-Vergleich | 2026-07-29 | 6 Dateien |
 | V2-12 | done | 11 | Vortragsmodus über fünf Akte | 2026-07-29 | 5 Dateien |
-| V2-13 | wip  | 12 | Textdurchgang | | |
+| V2-13 | done | 12 | Textdurchgang | 2026-07-29 | 3 Dateien |
 | V2-14 | todo | 13 | `DEMO.md`, `HANDOVER.md`, `README.md` | | |
 
 ## Notizen
@@ -37,3 +37,4 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 - V2-10: Plot sammelt ueber die ganze Sitzung, in Akt 4. 329 Tests, 0 Fehler.
 - V2-11: Spalte Platzierung in Tabelle, CSV und JSON; Vergleich Akt 2 gegen die Architektur. 339 Tests, 0 Fehler, 42 Suiten geladen.
 - V2-12: Tastaturlauf im Browser durchgespielt, Pille in der Fusszeile. 343 Tests, 0 Fehler.
+- V2-13: Alle zwoelf Zeilen geschrieben und geprueft; Akt 2 bleibt ohne jeden Vorgriff. 348 Tests, 0 Fehler.

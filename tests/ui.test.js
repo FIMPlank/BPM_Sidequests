@@ -139,6 +139,38 @@
       expect(HR.copy.rahmen.length).toBe(6);
       expect(HR.copy.rueckblick.length).toBe(6);
     });
+    it('schreibt beide Zeilen in Satzschreibung, ohne Versalwoerter', function () {
+      HR.copy.rahmen.concat(HR.copy.rueckblick).forEach(function (satz) {
+        satz.split(/\s+/).forEach(function (w) {
+          var rein = w.replace(/[^A-Za-zÄÖÜäöüß]/g, '');
+          if (rein.length < 2) return;
+          expect(rein === rein.toUpperCase()).toBeFalsy();
+        });
+      });
+    });
+    it('kommt ohne Werbesprache aus', function () {
+      var verboten = ['einfach', 'mühelos', 'revolution', 'innovativ', 'intelligent',
+        'nahtlos', 'leistungsstark', 'optimal', 'perfekt', 'bahnbrechend'];
+      HR.copy.rahmen.concat(HR.copy.rueckblick).forEach(function (satz) {
+        var klein = satz.toLowerCase();
+        verboten.forEach(function (w) { expect(klein.indexOf(w)).toBe(-1); });
+      });
+    });
+    it('warnt in Akt 2 an keiner Stelle', function () {
+      var beide = (HR.copy.rahmen[2] + ' ' + HR.copy.rueckblick[2]).toLowerCase();
+      ['achtung', 'warnung', 'vorsicht', 'problem', 'gefahr', 'aber', 'obwohl', 'trotzdem']
+        .forEach(function (w) { expect(beide.indexOf(w)).toBe(-1); });
+    });
+    it('endet jede Zeile als Aussagesatz', function () {
+      HR.copy.rahmen.concat(HR.copy.rueckblick).forEach(function (satz) {
+        expect(satz.charAt(satz.length - 1)).toBe('.');
+      });
+    });
+    it('haelt alle sichtbaren Zeichenketten in copy.de.js', function () {
+      // Stichprobe: die Masse in Akt 4 kommen vollstaendig aus der Textdatei.
+      expect(HR.copy.akt4.schritteEinheit).toBe('Schritte');
+      expect(HR.screens[4].zeichnen(anfang())).toContain('Schritte');
+    });
   });
 
   describe('Akt 0 — Der Auftrag', function () {
