@@ -209,6 +209,23 @@
     color: var(--ink-leise);
   }
   .rueckblick__text { margin: 0; max-width: 60ch; color: var(--ink-mittel); }
+
+  /*
+   * Der Befund: Beobachtung, Grund, Bedeutung. Dieselbe Form in Akt 1, 2 und 4.
+   * Bewusst karg — das Feilen an Typografie und Kontrast gehoert nicht hierher.
+   */
+  .befund { margin-top: var(--r2); max-width: 60ch; }
+  .befund__titel {
+    margin: 0 0 var(--r1);
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--ink-leise);
+  }
+  .befund__zeile { margin: 0 0 var(--r1); font-size: 0.9375rem; }
+  .befund__zeile:last-child { margin-bottom: 0; }
+  .befund__label { color: var(--ink); font-weight: 600; }
+  .befund__text { color: var(--ink-mittel); }
 }
 
 @layer screens {

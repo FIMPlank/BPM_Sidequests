@@ -59,6 +59,8 @@
     h.push('<p class="lead">' + e(s.lead) + '</p>');
 
     h.push(HR.komponenten.zaehler.zeichnen(z));
+    // Zwei der vier Anzeigen tragen Fachwoerter. Ein Satz sagt, was sie messen.
+    h.push('<p class="hinweis">' + e(s.zaehlerHinweis) + '</p>');
 
     h.push('<div class="editor">');
     h.push('<label class="editor__label" for="' + EINGABE_ID + '">' + e(s.eingabeLabel) + '</label>');
@@ -84,7 +86,9 @@
     h.push('<div class="steuerung">');
     h.push(HR.render.knopf('regeln-ausfuehren', s.erneutAusfuehren, { klasse: 'knopf--haupt', deaktiviert: z.laeuft }));
     if (z.lauf && z.laufKontext && z.laufKontext.screen === 3) {
-      h.push(HR.render.knopf('screen', HR.copy.screen4.titel, { wert: 4 }));
+      // Der Weg fuehrt in den naechsten Akt, nicht am vierten vorbei: die
+      // Beschriftung nennt das Ziel, und das Ziel ist Akt 4.
+      h.push(HR.render.knopf('akt', s.weiterZuArchitektur, { wert: 4 }));
     }
     h.push('</div>');
 

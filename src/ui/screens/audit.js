@@ -147,6 +147,8 @@
     if (!z.lauf) {
       h.push('<p class="hinweis">' + e(HR.copy.screen3.plotLeer) + '</p>');
     } else {
+      // Die Spaltenkoepfe bleiben technisch. Ein Satz davor sagt, was sie meinen.
+      h.push('<p class="hinweis">' + e(s.spaltenHinweis) + '</p>');
       h.push(HR.komponenten.logTabelle.voll(z.lauf.trajectory, regelnDesLaufs(z), z.offeneZeilen));
       h.push('<div class="steuerung">');
       h.push(HR.render.knopf('export-json', s.jsonExport));
