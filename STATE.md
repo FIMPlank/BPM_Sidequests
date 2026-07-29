@@ -7,7 +7,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 |---|---|---|---|---|---|
 | V2-00 | done | — | Headless-Testlauf `tests/run-node.js` | 2026-07-29 | 2 Dateien |
 | V2-01 | done | 00 | Aktleiste und feste Fallzeile | 2026-07-29 | 11 Dateien |
-| V2-02 | todo | 01 | Rahmensatz- und Rückblick-Slots | | |
+| V2-02 | wip  | 01 | Rahmensatz- und Rückblick-Slots | | |
 | V2-03 | todo | 01 | Akt 0 — Der Auftrag | | |
 | V2-04 | todo | 03 | Akt 1 — Störung vor dem Lauf | | |
 | V2-05 | todo | 01 | Akt 3 — eine große Zahl | | |
