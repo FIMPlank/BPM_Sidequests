@@ -104,3 +104,12 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Als Freigabe zaehlt `genehmigung_anfordern` sowie jeder Schritt mit `action: 'freigabe'`. Letzteres ist der Haken, an dem der imperative Kontrollpunkt aus V2-07 haengt.
 - Ein **abgewiesener** Aufruf zaehlt als Schritt, aber nicht als Freigabe: die Leitplanke hat entschieden, kein Mensch. Genau daran wird die Leitplanke spaeter schneller als der Kontrollpunkt.
 - `latency.js` ist die einzige neue Datei unter `src/domain/` und die einzige, die §6 dort zulaesst.
+
+## v2 — V2-07 (Akt 4, Teil 1: Platzierung)
+- Neue Ablage `src/v2/` fuer Logik, die weder Domaene noch Oberflaeche ist. `src/domain/` ist nach §6 gesperrt (ausser `latency.js`), `src/agent/` ebenso — die Platzierungslogik brauchte einen eigenen, klar unbeteiligten Ort.
+- **Der Kontrollpunkt wird der fertigen Trajektorie vorangestellt, nicht im Agenten erzeugt.** `src/agent/mockRunner.js` ist unantastbar. Der Freigabeschritt (`actor: system`, `action: freigabe`, `tool: kontrollpunkt`) wird vor den ersten Aufruf des geregelten Werkzeugs gesetzt und die Nummerierung neu gezogen. Ein Test haelt fest, dass der Agent selbst unveraendert dieselbe Trajektorie liefert.
+- Die drei Orte unterscheiden sich nicht durch Beschriftung, sondern durch Mechanik: `imperativ` und `leitplanke` laufen mit `runtime` (die Leitplanke weist ab, der Agent plant um), `nachgang` mit `posthoc` (niemand haelt etwas auf). Der Kontrollpunkt kommt beim ersten obendrauf. Ergebnis sind drei verschiedene Wege — 9, 8 und 7 Schritte.
+- **Kosten je Lauf** sind Kontextkosten plus 3,50 € Sachbearbeitung je menschlicher Freigabe. Ohne den menschlichen Anteil waeren alle drei Orte praktisch gleich teuer, und der Akt haette keine Aussage. Der Kontextanteil steht als Nebenzeile daneben, damit die Groessenordnung ehrlich bleibt.
+- **Restrisiko** ist der ausgezahlte Betrag, wenn der Checker Verstoesse findet, sonst null. Konkret statt „hoch/mittel/niedrig“: im Nachgang stehen 520,00 € offen, an den beiden anderen Orten nichts.
+- Die guenstige Stelle (Leitplanke: schnell, billig, nichts offen) wird **nicht** beschriftet — dieselbe Zurueckhaltung wie beim Plot in der ersten Fassung. Sie soll sich aus den Zahlen ergeben.
+- Ohne eigene Regel greift der Akt auf die Beispielregel zurueck, damit `?akt=4` ohne Vorlauf funktioniert. Ein Hinweis sagt das an.

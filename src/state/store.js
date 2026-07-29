@@ -42,7 +42,9 @@
       /** Die Wahl aus Akt 0: 'heute' (imperativ) oder 'agent' (deklarativ). */
       wahl: null,
       /** In Akt 1 gewaehlte, noch nicht eingeworfene Stoerung. */
-      stoerungWahl: null
+      stoerungWahl: null,
+      /** Der in Akt 4 gewaehlte Ort der Regel. */
+      platzierung: null
     };
   }
 
@@ -150,6 +152,11 @@
 
       case 'enforcement':
         n = kopie(z); n.enforcement = a.wert; return n;
+
+      case 'platzierung':
+        n = kopie(z);
+        n.platzierung = HR.platzierung.PLATZIERUNGEN.indexOf(a.wert) === -1 ? null : a.wert;
+        return n;
 
       case 'antwort2':
         n = kopie(z); n.antwort2 = a.wert; return n;

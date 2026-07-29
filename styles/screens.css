@@ -310,3 +310,75 @@
   }
   .nebenwert__einheit { color: var(--ink-leise); font-size: 0.75rem; margin-left: 2px; }
 }
+
+@layer screens {
+  /* Akt 4 — drei Orte fuer dieselbe Regel, nebeneinander lesbar. */
+  .regelkarte {
+    border-left: 2px solid var(--ink);
+    padding-left: var(--r3);
+    margin: var(--r3) 0 var(--r4);
+    max-width: 60ch;
+  }
+  .regelkarte__label {
+    margin: 0 0 4px;
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--ink-leise);
+  }
+  .regelkarte__text { margin: 0 0 4px; font-size: 1.0625rem; }
+  .regelkarte__form { margin: 0; color: var(--ink-leise); font-size: 0.8125rem; }
+
+  .orte {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin: var(--r3) 0 var(--r4);
+    border-top: var(--haarlinie) solid var(--raster);
+    border-bottom: var(--haarlinie) solid var(--raster);
+  }
+  .ort {
+    padding: var(--r3);
+    border-left: var(--haarlinie) solid var(--raster);
+    display: flex; flex-direction: column; gap: var(--r2);
+  }
+  .ort:first-child { border-left: 0; }
+  .ort.ist-gewaehlt { background: var(--paper-hoch); }
+  .ort__marke {
+    margin: 0;
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .ort__titel { margin: 0; font-size: 1rem; font-weight: 650; }
+  .ort__hinweis { margin: 0; color: var(--ink-mittel); font-size: 0.875rem; }
+  .ort__fuss { margin-top: auto; }
+
+  .masse { margin: 0; display: flex; flex-direction: column; gap: var(--r2); }
+  .mass { display: flex; flex-direction: column; gap: 1px; }
+  .mass__name {
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--ink-leise);
+  }
+  .mass__wert {
+    margin: 0;
+    font-size: 1.25rem;
+    font-variant-numeric: tabular-nums;
+    display: flex; flex-direction: column; gap: 1px;
+  }
+  .mass__zusatz {
+    font-family: var(--font-text, inherit);
+    font-size: 0.75rem;
+    color: var(--ink-leise);
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 860px) {
+    .orte { grid-template-columns: 1fr; }
+    .ort { border-left: 0; border-top: var(--haarlinie) solid var(--raster); }
+    .ort:first-child { border-top: 0; }
+  }
+}

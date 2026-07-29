@@ -197,9 +197,35 @@
       seitePassiv: 'Der andere Weg'
     },
 
-    /** Akt 4 — die Architektur. Inhalt kommt in V2-07 und V2-08. */
+    /** Akt 4 — die Architektur. Der Ort einer Regel ist die eigentliche Entscheidung. */
     akt4: {
-      titel: 'Die Architektur'
+      titel: 'Die Architektur',
+      frage: 'Wo soll diese Regel greifen?',
+      regelLabel: 'Ihre Regel',
+      ersatzregel: 'Sie haben noch keine eigene Regel geschrieben. Solange gilt die Beispielregel.',
+      gleicheLage: 'Alle drei Läufe bekommen denselben Fall und dieselben zwei Störungen.',
+      orte: {
+        imperativ: 'Imperativer Kontrollpunkt',
+        leitplanke: 'Leitplanke zur Laufzeit',
+        nachgang: 'Prüfung im Nachgang'
+      },
+      ortHinweis: {
+        imperativ: 'Ein Mensch gibt frei, bevor gebucht wird. Das ist eine weitere Prozessvariante.',
+        leitplanke: 'Die Werkzeuggrenze weist den Aufruf ab. Der Agent sucht einen anderen Weg.',
+        nachgang: 'Niemand hält etwas auf. Der Verstoß steht hinterher im Protokoll.'
+      },
+      masse: {
+        zeit: 'Durchlaufzeit',
+        kosten: 'Kosten je Lauf',
+        risiko: 'Restrisiko'
+      },
+      kontextanteil: 'davon Kontext',
+      risikoKeins: 'nichts offen',
+      risikoOffen: 'ausgezahlt, bevor jemand hinsah',
+      waehlen: 'Diesen Ort wählen',
+      gewaehlt: 'Ihr Ort',
+      ablaufTitel: 'Was in diesem Lauf passiert ist',
+      kontrollpunktSchritt: 'Freigabe durch einen Menschen'
     },
 
     screen4: {
