@@ -46,3 +46,10 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Der Export enthaelt bewusst keine Sitzungskennung. Die Datei gehoert dem Besucher; eine Kennung darin waere ohne Zweck.
 - CSV mit Semikolon und CRLF, weil die Datei in Deutschland in Excel geoeffnet wird.
 - Vergleichsgrundlage ist der Lauf von Screen 2 (Lauf A, ohne eigene Regel) gegen den Lauf von Screen 3 (Lauf B, mit eigener Regel). Beide nutzen dieselben zwei Stoerungen, sonst waere der Vergleich wertlos.
+
+## Phase 7
+- Die Edge Function bedient beide Aufgaben ueber denselben Endpunkt: `aufgabe: 'lauf'` (Vertrag aus §8) und `aufgabe: 'regel'` fuer die Regeluebersetzung. Eine zweite Funktion haette einen zweiten Deploy-Schritt im Dashboard bedeutet — genau das, was hier vermieden wird.
+- Die Domaenenlogik (Praedikate, Leitplanke, Checker) ist in der Edge Function knapp nachgebaut, weil Deno die Browser-IIFEs nicht laden kann. Die Semantik ist Zeile fuer Zeile dieselbe; die Tests im Browser sind die Referenz.
+- Das Modell steht als Secret `ANTHROPIC_MODELL` mit Vorgabewert in der Funktion. So laesst es sich im Dashboard wechseln, ohne die Datei erneut einzufuegen.
+- Faellt der Live-Compiler aus (Netz, Kontingent, ungueltige Struktur), uebersetzt die oertliche Heuristik. Der Besucher merkt nur, dass es funktioniert.
+- Die Antwort der Edge Function wird im Browser normalisiert und geprueft, bevor sie den Zustand erreicht. Fremde Felder werden verworfen, fehlende ergaenzt.

@@ -37,3 +37,8 @@ Zusatz: `?screen=N` als Direkteinstieg fuer den Vortrag.
 ## Phase 6 — GRUEN
 Screen 4 (`src/ui/screens/audit.js`), volle Audit-Tabelle mit Belegaufklappung (`components/logTabelle.js`), Export als JSON und CSV ueber `Blob` und `URL.createObjectURL`, A/B-Vergleich, Selbstcheck und Kontakt.
 Gate: **203 Tests, 0 Fehler**. Der JSON-Export laesst sich wieder einlesen (gleiche Schrittzahl, gleiche Werkzeuge, vier Regeln, Ziel erreicht) und traegt keine Sitzungskennung; der Vergleich hebt genau die abweichenden Schritte hervor (Schritt 1 und 2 gleich, ab Schritt 3 abweichend).
+
+## Phase 7 — GRUEN
+`functions/agent-run/index.js` (Deno, **nie lokal ausgefuehrt**, zum Einfuegen in den Supabase-Funktionseditor), `src/agent/liveRunner.js`, Live-Compiler ueber dieselbe Funktion, Anbindung in Screen 3 mit Rueckfall auf die Heuristik.
+Gate: **220 Tests, 0 Fehler**. Eine oertliche Attrappe der Edge-Function-Antwort treibt alle vier Bildschirme durch `liveRunner`: Spur inklusive Abweisung auf Screen 1, Ablauf auf Screen 2, Anzeigen auf Screen 3, Audit-Tabelle und Export auf Screen 4. Kein Netzwerkaufruf, kein Modellaufruf im Test.
+Nebenbefund und behoben: Screen 3 zeigt die Spur vollstaendig (dort wird nicht animiert).

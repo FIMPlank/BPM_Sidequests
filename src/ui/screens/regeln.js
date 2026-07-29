@@ -87,7 +87,7 @@
     h.push(HR.komponenten.handlungsraum.zeichnen({
       regeln: z.regeln,
       trajektorie: z.lauf ? z.lauf.trajectory : [],
-      bisSchritt: z.spurSchritt
+      bisSchritt: null   // Screen 3 animiert nicht: die ganze Spur steht sofort da
     }));
     h.push('</div></div>');
 
@@ -112,16 +112,35 @@
 
   // — Aktionen ————————————————————————————————————————————————
 
-  function pruefen() {
-    var feld = document.getElementById(EINGABE_ID);
-    if (!feld) return;
-    var ergebnis = HR.compiler.uebersetzen(feld.value, { enforcement: HR.store.holen().enforcement });
+  function uebernehmenOderAblehnen(text, ergebnis) {
     if (ergebnis.ok) {
       HR.store.senden({ typ: 'entwurf', constraint: ergebnis.constraint });
     } else {
       HR.store.senden({ typ: 'entwurf', fehler: { code: ergebnis.code, slots: ergebnis.slots } });
     }
-    HR.logging.regelEingabe(feld.value, ergebnis);
+    HR.logging.regelEingabe(text, ergebnis);
+  }
+
+  /**
+   * Im Demo-Modus uebersetzt die Heuristik, im Live-Modus das Modell gegen
+   * dasselbe geschlossene Schema. Faellt der Live-Weg aus, greift die Heuristik.
+   */
+  function pruefen() {
+    var feld = document.getElementById(EINGABE_ID);
+    if (!feld) return;
+    var text = feld.value;
+    var oertlich = function () {
+      return HR.compiler.uebersetzen(text, { enforcement: HR.store.holen().enforcement });
+    };
+    if (HR.config.modus === 'live' && HR.agent.live) {
+      HR.agent.live.regelUebersetzen(text).then(function (r) {
+        uebernehmenOderAblehnen(text, r && r.ok ? r : oertlich());
+      }, function () {
+        uebernehmenOderAblehnen(text, oertlich());
+      });
+      return;
+    }
+    uebernehmenOderAblehnen(text, oertlich());
   }
 
   function ausfuehren() {
