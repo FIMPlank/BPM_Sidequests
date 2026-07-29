@@ -1058,8 +1058,8 @@
       var h = html(anfang());
       expect(h).toContain('Schritte im Lauf');
       expect(h).toContain('Anteil Kontext');
-      expect(h).toContain('Ein Mensch gibt frei');
-      expect(h.indexOf('Ein Mensch gibt frei')).toBeGreaterThan(h.indexOf('aufklapper--ort'));
+      expect(h).toContain('ein Mensch gibt frei');
+      expect(h.indexOf('ein Mensch gibt frei')).toBeGreaterThan(h.indexOf('aufklapper--ort'));
     });
     it('legt den rohen Werkzeug-Input hinter einen Aufklapper', function () {
       var z = red(anfang(), { typ: 'platzierung', wert: 'leitplanke' });
