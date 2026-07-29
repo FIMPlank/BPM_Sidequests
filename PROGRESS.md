@@ -59,3 +59,7 @@ Politur. Manuelle Pruefliste, alle Punkte abgehakt:
 - [x] **Umschalter** melden ihren Zustand ueber `aria-pressed`, die Bildschirmnavigation ueber `aria-current`.
 
 Gate: **234 Tests, 0 Fehler**.
+
+## Phase 10 — GRUEN
+`README.md` (Start per Doppelklick, die vier Bildschirme, Aufrufparameter, Tests, GitHub Pages, optionaler Live-Modus, Aufbau), `DEMO.md` (Vorfuehrung in drei Minuten mit Zeitmarken und Notfallplan), Dokumentationslink im Fuss.
+Gate: **234 Tests, 0 Fehler**. Geprueft: in keiner Dokumentationsdatei steht ein Kommandozeilenbefehl, kein Paketmanager, kein Uebersetzungsschritt. Alle Verweise sind relativ, damit dieselben Dateien von `file://`, aus einem Unterordner und von der Pages-Wurzel funktionieren.
