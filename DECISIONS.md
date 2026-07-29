@@ -79,3 +79,7 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Die Ueberschriftskennungen heissen jetzt `akt-N-titel`. Akt 2 behaelt `screen-2-titel`, weil die Datei nicht angefasst werden darf; `index.html` verweist entsprechend.
 - Akt 0 und Akt 4 bekommen in dieser Aufgabe nur ein Geruest (`auftrag.js`, `architektur.js`), damit „alle fuenf Akte erreichbar“ nicht auf eine leere Flaeche zeigt. V2-03, V2-07 und V2-08 fuellen sie.
 - Das Gatter aus §4 schlaegt auf `index.html` in einem Kommentar an, der `type="module"` nur *erwaehnt* („Kein type=module: file://“). Der Kommentar bleibt; die Pruefung schliesst die Zeile aus.
+
+## v2 — V2-02 (Rahmensatz und Ruecknahme)
+- Beide Zeilen werden von der **Huelle** gesetzt (`HR.render.zeichnen`), nicht von den Aktmodulen. Nur so bekommt Akt 2 seine beiden Zeilen, ohne dass `src/ui/screens/preis.js` angefasst wird — §6 verbietet das. Der Rahmensatz steht als Vorzeile ueber der Ueberschrift, die Ruecknahme als abgesetzter Block darunter.
+- Die Zeilen sind vorlaeufig, halten aber schon die Laengengrenzen ein; Tests pruefen zwoelf und zwanzig Woerter. V2-13 schreibt sie neu, die Tests bleiben das Gatter.

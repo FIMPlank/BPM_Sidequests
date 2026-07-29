@@ -77,11 +77,29 @@
       if (!aktiv) continue;
       var modul = bildschirme[n];
       if (!modul) continue;
-      el.innerHTML = modul.zeichnen(zustand);
+      // Rahmensatz und Ruecknahme kommen aus der Huelle, nicht aus dem Akt.
+      // So bekommt auch Akt 2 beide Zeilen, ohne dass seine Datei angefasst wird.
+      el.innerHTML = rahmenMarkup(n) + modul.zeichnen(zustand) + rueckblickMarkup(n);
       if (modul.nach) modul.nach(el, zustand);
     }
     aktleisteZeichnen(zustand);
     fallZeileZeichnen();
+  }
+
+  /** Ein Satz zu Beginn des Akts. Er sagt, worum es hier geht, und sonst nichts. */
+  function rahmenMarkup(akt) {
+    var text = HR.copy.rahmen[akt];
+    if (!text) return '';
+    return '<p class="aktrahmen">' + esc(text) + '</p>';
+  }
+
+  /** Die Ruecknahme am Ende: was der Besucher gerade gesehen hat, ohne Fachsprache. */
+  function rueckblickMarkup(akt) {
+    var text = HR.copy.rueckblick[akt];
+    if (!text) return '';
+    return '<aside class="rueckblick">' +
+      '<p class="rueckblick__frage">' + esc(HR.copy.rahmenFrage) + '</p>' +
+      '<p class="rueckblick__text">' + esc(text) + '</p></aside>';
   }
 
   /**
@@ -130,6 +148,8 @@
     bildschirm: bildschirm,
     zeichnen: zeichnen,
     aktleisteMarkup: aktleisteMarkup,
+    rahmenMarkup: rahmenMarkup,
+    rueckblickMarkup: rueckblickMarkup,
     bewegungErlaubt: bewegungErlaubt
   };
 })(window.HR = window.HR || {});

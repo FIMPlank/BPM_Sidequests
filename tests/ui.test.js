@@ -109,6 +109,38 @@
     });
   });
 
+  describe('Rahmensatz und Ruecknahme', function () {
+    function woerter(s) { return String(s).trim().split(/\s+/).length; }
+
+    it('gibt jedem Akt einen Rahmensatz', function () {
+      for (var i = 0; i <= 5; i++) {
+        expect(HR.render.rahmenMarkup(i)).toContain('class="aktrahmen"');
+      }
+    });
+    it('gibt jedem Akt die Ruecknahme mit derselben Frage', function () {
+      for (var i = 0; i <= 5; i++) {
+        var h = HR.render.rueckblickMarkup(i);
+        expect(h).toContain('Was ist gerade passiert?');
+        expect(h).toContain('rueckblick__text');
+      }
+    });
+    it('haelt den Rahmensatz bei hoechstens zwoelf Woertern', function () {
+      HR.copy.rahmen.forEach(function (s) { expect(woerter(s)).toBeLessThan(13); });
+    });
+    it('haelt die Ruecknahme bei hoechstens zwanzig Woertern', function () {
+      HR.copy.rueckblick.forEach(function (s) { expect(woerter(s)).toBeLessThan(21); });
+    });
+    it('kommt in beiden Zeilen ohne Ausrufezeichen aus', function () {
+      HR.copy.rahmen.concat(HR.copy.rueckblick).forEach(function (s) {
+        expect(s.indexOf('!')).toBe(-1);
+      });
+    });
+    it('fuehrt fuer jeden der sechs Flaechen beide Zeilen', function () {
+      expect(HR.copy.rahmen.length).toBe(6);
+      expect(HR.copy.rueckblick.length).toBe(6);
+    });
+  });
+
   describe('Renderhilfe', function () {
     it('maskiert spitze Klammern und Anfuehrungszeichen', function () {
       expect(HR.render.esc('<a href="x">')).toBe('&lt;a href=&quot;x&quot;&gt;');

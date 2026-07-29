@@ -187,3 +187,26 @@
     .instrument:last-child { grid-column: 1 / -1; }
   }
 }
+@layer screens {
+  /* Rahmensatz und Ruecknahme. Beide gehoeren der Huelle, nicht dem Akt. */
+  .aktrahmen {
+    margin: 0 0 var(--r2);
+    max-width: 52ch;
+    color: var(--ink-mittel);
+    font-size: 0.9375rem;
+  }
+
+  .rueckblick {
+    margin-top: var(--r5);
+    padding-top: var(--r2);
+    border-top: var(--haarlinie) solid var(--raster);
+  }
+  .rueckblick__frage {
+    margin: 0 0 4px;
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--ink-leise);
+  }
+  .rueckblick__text { margin: 0; max-width: 60ch; color: var(--ink-mittel); }
+}

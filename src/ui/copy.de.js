@@ -32,6 +32,32 @@
     /** Die fuenf Akte der Aktleiste. Akt 0 ist der Vorspann und steht nicht darin. */
     akte: ['Der Clash', 'Der Preis der Autonomie', 'Sie modellieren', 'Die Architektur', 'Der Audit'],
 
+    /**
+     * Je Akt ein Rahmensatz zu Beginn (hoechstens zwoelf Woerter) und eine
+     * Ruecknahme am Ende (hoechstens zwanzig Woerter, ohne Fachsprache).
+     * Vorlaeufige Fassung — der Textdurchgang in V2-13 schreibt sie neu,
+     * wenn das Verhalten aller Akte feststeht. Index gleich Aktnummer.
+     */
+    rahmenFrage: 'Was ist gerade passiert?',
+
+    rahmen: [
+      'Ein Vorgang, zwei Wege. Sie entscheiden, welcher zuerst läuft.',
+      'Derselbe Vorgang, links vorgeschrieben, rechts als Raum beschrieben.',
+      'Zwei Störungen auf einmal. Der Agent bekommt nur ein Ziel.',
+      'Sie schreiben eine Regel. In Ihren Worten, nicht in Syntax.',
+      'Wo soll Ihre Regel greifen? Drei Orte, drei Ergebnisse.',
+      'Der ganze Lauf, Schritt für Schritt, mit Beleg.'
+    ],
+
+    rueckblick: [
+      'Sie haben einen Weg gewählt. Beide führen durch denselben Fall.',
+      'Das feste Modell blieb stehen, der Agent plante um und kam ans Ziel.',
+      'Der Agent hat das Ziel erreicht und keine hinterlegte Regel verletzt.',
+      'Ihre Regel ist jetzt Teil des Raums und wird bei jedem Lauf geprüft.',
+      'Der Ort der Regel ändert Dauer, Kosten und das, was übrig bleibt.',
+      'Jeder Schritt ist nachlesbar, mit Zeit, Werkzeug und geprüfter Regel.'
+    ],
+
     /** Alte Vierer-Beschriftung, bis der Textdurchgang sie ersetzt. */
     schritte: ['Der Clash', 'Der Preis der Autonomie', 'Sie modellieren', 'Der Audit'],
 

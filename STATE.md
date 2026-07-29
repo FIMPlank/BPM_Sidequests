@@ -7,7 +7,7 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 |---|---|---|---|---|---|
 | V2-00 | done | — | Headless-Testlauf `tests/run-node.js` | 2026-07-29 | 2 Dateien |
 | V2-01 | done | 00 | Aktleiste und feste Fallzeile | 2026-07-29 | 11 Dateien |
-| V2-02 | wip  | 01 | Rahmensatz- und Rückblick-Slots | | |
+| V2-02 | done | 01 | Rahmensatz- und Rückblick-Slots | 2026-07-29 | 4 Dateien |
 | V2-03 | todo | 01 | Akt 0 — Der Auftrag | | |
 | V2-04 | todo | 03 | Akt 1 — Störung vor dem Lauf | | |
 | V2-05 | todo | 01 | Akt 3 — eine große Zahl | | |
@@ -26,3 +26,4 @@ Der Ablauf steht in `AGENT.md` §2. Eine Zeile je Aufgabe, Notizen nur unterhalb
 - Aufsetzen: Zweig `v2-narrative` aus `main`, `AGENT.md` und `STATE.md` angelegt.
 - V2-00: Kein Node am Ort. Gatter laeuft ueber kopfloses Chrome auf `tests.html` (234 Tests, 0 Fehler); `tests/run-node.js` zusaetzlich emuliert geprueft. Begruendung in `DECISIONS.md`.
 - V2-01: Akt 0 ist der Vorspann, die Leiste fuehrt Akt 1 bis 5. Fallzeile weicht bewusst von `AGENT.md` §3 ab (Hamburg statt Verona) — siehe `DECISIONS.md`. 243 Tests, 0 Fehler.
+- V2-02: Beide Zeilen setzt die Huelle, damit Akt 2 unberuehrt bleibt. 249 Tests, 0 Fehler.
