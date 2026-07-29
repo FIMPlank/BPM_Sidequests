@@ -98,3 +98,9 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Fuenf gleich grosse Zahlen sind ein Armaturenbrett und sagen nichts. Es fuehrt jetzt eine: `Verstoesse im letzten Lauf` — sie ist das, was eine Regel bewirkt. Die vier anderen bleiben vollstaendig lesbar, aber als ruhige Zeile daneben.
 - Der Schalter fuer den Ort der Durchsetzung ist ersatzlos aus Akt 3 verschwunden. Er war dort eine Nebenfrage; in Akt 4 ist er die Hauptfrage. `z.enforcement` bleibt im Speicher und steht weiterhin auf `runtime`.
 - Der Plot verschwindet aus Akt 3, ohne Ersatz. Er zeigte je Akt nur ein Bruchstueck; in Akt 4 sammelt er ueber die ganze Sitzung (V2-10).
+
+## v2 — V2-06 (Durchlaufzeit)
+- Die Rechnung hat zwei Teile, und das ist der Punkt: zwei Minuten je Maschinenschritt, vier Stunden je menschlicher Freigabe. Wer eine Regel als harten Kontrollpunkt setzt, kauft Sicherheit mit Wartezeit — sichtbar wird das nur, wenn Warten um Groessenordnungen teurer ist als Rechnen. Ein Test haelt dieses Verhaeltnis fest.
+- Als Freigabe zaehlt `genehmigung_anfordern` sowie jeder Schritt mit `action: 'freigabe'`. Letzteres ist der Haken, an dem der imperative Kontrollpunkt aus V2-07 haengt.
+- Ein **abgewiesener** Aufruf zaehlt als Schritt, aber nicht als Freigabe: die Leitplanke hat entschieden, kein Mensch. Genau daran wird die Leitplanke spaeter schneller als der Kontrollpunkt.
+- `latency.js` ist die einzige neue Datei unter `src/domain/` und die einzige, die §6 dort zulaesst.
