@@ -40,3 +40,9 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 - Die Ablehnung des Compilers nennt Grund und ein funktionierendes Beispiel; sie entschuldigt sich nicht.
 - Die guenstige Stelle im Plot bleibt unbeschriftet. Ein Test haelt fest, dass dort weder „Sweet Spot" noch „Optimum" steht.
 - `src/logging.js` liegt in der Ladereihenfolge hinter `render.js`, weil es eine Aktion registriert.
+
+## Phase 6
+- Die Constraint-Spalte wertet die Regeln je Schritt gegen die tatsaechliche Vorgeschichte neu aus, statt nur die Belege des Checkers zu spiegeln. Nur so steht in jeder Zeile, welche Regel geprueft wurde — auch dort, wo sie eingehalten wurde.
+- Der Export enthaelt bewusst keine Sitzungskennung. Die Datei gehoert dem Besucher; eine Kennung darin waere ohne Zweck.
+- CSV mit Semikolon und CRLF, weil die Datei in Deutschland in Excel geoeffnet wird.
+- Vergleichsgrundlage ist der Lauf von Screen 2 (Lauf A, ohne eigene Regel) gegen den Lauf von Screen 3 (Lauf B, mit eigener Regel). Beide nutzen dieselben zwei Stoerungen, sonst waere der Vergleich wertlos.

@@ -132,6 +132,52 @@
   }
   .zustimmung__zusatz { color: var(--ink-45); }
 
+  /* — Screen 4 — */
+  .logtabelle__rahmen { overflow-x: auto; border: var(--haarlinie) solid var(--raster); margin-bottom: var(--r2); }
+  .logtabelle {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 760px;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.8125rem;
+  }
+  .logtabelle th {
+    text-align: left;
+    font-family: var(--font-body);
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--ink-45);
+    font-weight: 600;
+    padding: var(--r1);
+    border-bottom: var(--haarlinie) solid var(--raster);
+    background: var(--paper-hoch);
+    white-space: nowrap;
+  }
+  .logtabelle td { padding: 5px var(--r1); border-bottom: var(--haarlinie) solid var(--raster); vertical-align: top; }
+  .logtabelle__input { max-width: 22ch; overflow-wrap: anywhere; }
+  .logzeile[data-aktion] { cursor: pointer; }
+  .logzeile[data-aktion]:hover { background: var(--paper-hoch); }
+  .logzeile.ist-geblockt td { color: var(--verstoss); }
+  .logzeile__beleg td { background: var(--paper-hoch); }
+  .beleg { list-style: none; margin: 0; padding: 0; }
+  .beleg li { padding: 2px 0; color: var(--ink-70); }
+
+  .check { display: inline-block; white-space: nowrap; }
+  .check--erfuellt { color: var(--gruen); }
+  .check--verletzt { color: var(--verstoss); }
+  .check--nicht_anwendbar, .check--leer { color: var(--ink-45); }
+
+  .logtabelle--diff tr.ist-anders td { background: var(--deklarativ-weich); }
+  .diff__status { color: var(--ink-45); }
+  .diff__leer { color: var(--ink-45); }
+
+  .selbstcheck { margin-top: var(--r8); padding-top: var(--r3); border-top: 2px solid var(--ink); }
+  .selbstcheck__titel { font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.85rem); }
+  .selbstcheck__liste { max-width: var(--mass); padding-left: 1.4em; }
+  .selbstcheck__liste li { margin-bottom: var(--r1); color: var(--ink-70); }
+
   @media (max-width: 860px) {
     .regelspalten { grid-template-columns: 1fr; }
   }

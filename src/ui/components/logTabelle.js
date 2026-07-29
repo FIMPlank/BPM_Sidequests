@@ -30,29 +30,97 @@
     }).join('') + '</ol>';
   }
 
-  /** Welche Regeln wurden fuer diesen Schritt ausgewertet? */
-  function checkFuerSchritt(schritt, ergebnisse) {
+  /**
+   * Welche Regeln waren fuer diesen Schritt einschlaegig, und wie fielen sie aus?
+   * Ausgewertet wird gegen die tatsaechliche Vorgeschichte des Laufs.
+   */
+  function checksFuerSchritt(schritt, traj, constraints) {
     var out = [];
-    (ergebnisse || []).forEach(function (r) {
-      if (r.evidence && r.evidence.step_index === schritt.i) {
-        out.push({ id: r.constraint_id, status: r.status, evidence: r.evidence });
+    if (!schritt.tool) return out;
+    (constraints || []).forEach(function (c) {
+      if (c.target !== schritt.tool) return;
+      if (schritt.guardrail && schritt.guardrail.blocked) {
+        out.push({
+          id: c.id,
+          status: schritt.guardrail.rule_id === c.id ? 'verletzt' : 'nicht_anwendbar',
+          feld: schritt.guardrail.reason,
+          tatsaechlich: null,
+          leitplanke: true
+        });
+        return;
+      }
+      var i = traj.indexOf(schritt);
+      var r = HR.constraints.auswerten(c.predicate, {
+        aufruf: schritt,
+        vorher: traj.slice(0, i),
+        nachher: traj.slice(i + 1),
+        alle: traj
+      });
+      out.push({
+        id: c.id,
+        status: r.nicht_anwendbar ? 'nicht_anwendbar' : (r.wert ? 'erfuellt' : 'verletzt'),
+        feld: r.feld,
+        tatsaechlich: r.tatsaechlich
+      });
+    });
+    return out;
+  }
+
+  /** Vollstaendige Audit-Tabelle mit aufklappbarem Beleg. */
+  function voll(traj, constraints, offen) {
+    var e = HR.render.esc;
+    var s = HR.copy.screen4;
+    var h = ['<div class="logtabelle__rahmen"><table class="logtabelle"><thead><tr>'];
+    s.spalten.forEach(function (n) { h.push('<th scope="col">' + e(n) + '</th>'); });
+    h.push('</tr></thead><tbody>');
+
+    (traj || []).forEach(function (schritt) {
+      var checks = checksFuerSchritt(schritt, traj, constraints);
+      var geblockt = !!(schritt.guardrail && schritt.guardrail.blocked);
+      var aufklappbar = checks.length > 0;
+      var istOffen = !!(offen && offen[schritt.i]);
+
+      h.push('<tr class="logzeile' + (geblockt ? ' ist-geblockt' : '') + '"' +
+        (aufklappbar ? ' data-aktion="zeile" data-wert="' + schritt.i + '" tabindex="0"' +
+          ' aria-expanded="' + (istOffen ? 'true' : 'false') + '"' : '') + '>');
+      h.push('<td class="mono">' + (schritt.i + 1) + '</td>');
+      h.push('<td class="mono">' + e(HR.copy.zeit(schritt.t)) + '</td>');
+      h.push('<td>' + e(s.akteur[schritt.actor] || schritt.actor) + '</td>');
+      h.push('<td>' + e(geblockt ? s.geblockt : (s.aktion[schritt.action] || schritt.action)) + '</td>');
+      h.push('<td class="mono">' + e(schritt.tool) + '</td>');
+      h.push('<td class="mono logtabelle__input">' + e(kurzInput(schritt.input)) + '</td>');
+      h.push('<td class="mono">' + (checks.length
+        ? checks.map(function (c) {
+            return '<span class="check check--' + c.status + '">' + e(c.id) + ' ' +
+              e(HR.copy.status[c.status]) + '</span>';
+          }).join(' ')
+        : '<span class="check check--leer">' + e(s.keinCheck) + '</span>') + '</td>');
+      h.push('<td class="mono">' + e(schritt.output && schritt.output.status) + '</td>');
+      h.push('</tr>');
+
+      if (istOffen) {
+        var belege = checks.filter(function (c) { return c.status === 'verletzt'; });
+        if (!belege.length) belege = checks;
+        h.push('<tr class="logzeile__beleg"><td colspan="' + s.spalten.length + '">');
+        h.push('<ul class="beleg">' + belege.map(function (c) {
+          return '<li class="mono">' + e(c.id) + ' — ' + e(HR.copy.status[c.status]) +
+            ': ' + e(c.feld === null || c.feld === undefined ? '' : c.feld) +
+            ' = ' + e(c.tatsaechlich === null || c.tatsaechlich === undefined ? '—' : c.tatsaechlich) +
+            '</li>';
+        }).join('') + '</ul>');
+        h.push('</td></tr>');
       }
     });
-    if (schritt.guardrail && schritt.guardrail.rule_id) {
-      out.push({
-        id: schritt.guardrail.rule_id,
-        status: schritt.guardrail.blocked ? 'verletzt' : 'erfuellt',
-        evidence: { step_index: schritt.i, field: schritt.guardrail.reason, actual_value: null },
-        leitplanke: true
-      });
-    }
-    return out;
+
+    h.push('</tbody></table></div>');
+    return h.join('');
   }
 
   HR.komponenten = HR.komponenten || {};
   HR.komponenten.logTabelle = {
     kurz: kurz,
+    voll: voll,
     kurzInput: kurzInput,
-    checkFuerSchritt: checkFuerSchritt
+    checksFuerSchritt: checksFuerSchritt
   };
 })(window.HR = window.HR || {});

@@ -307,4 +307,91 @@
     });
   });
 
+
+  describe('Screen 4 — Der Audit', function () {
+    var sys = HR.compiler.systemRegeln();
+    var schwelle = HR.compiler.uebersetzen('Buchungen über 200 € pro Nacht brauchen eine Freigabe', { id: 'U-9' }).constraint;
+    var stoer = ['hotel_ausgebucht', 'genehmiger_urlaub'];
+
+    function lauf(regeln, art) {
+      return HR.agent.mock.laufSynchron(HR.agent.anfrage({
+        disturbances: stoer, constraints: regeln, enforcement: art || 'runtime'
+      }));
+    }
+    function zustandMitLaeufen() {
+      var a = lauf(sys);
+      var b = lauf(sys.concat([schwelle]));
+      var z = red(anfang(), { typ: 'lauf_fertig', ergebnis: a,
+        kontext: { regeln: sys, screen: 2, stoerungen: stoer, vergleichsbasis: true } });
+      z = red(z, { typ: 'lauf_fertig', ergebnis: b,
+        kontext: { regeln: sys.concat([schwelle]), screen: 3, stoerungen: stoer, enforcement: 'runtime', mitNutzerregel: true } });
+      return z;
+    }
+    function html(z) { return HR.screens[4].zeichnen(z); }
+
+    it('stellt die Auditfrage', function () {
+      expect(html(anfang())).toContain('Könnten Sie das im Audit belegen?');
+    });
+    it('zeigt alle acht Spalten', function () {
+      var h = html(zustandMitLaeufen());
+      HR.copy.screen4.spalten.forEach(function (n) { expect(h).toContain(n); });
+    });
+    it('zeigt je Schritt eine Zeile', function () {
+      var z = zustandMitLaeufen();
+      var h = html(z);
+      expect(h.split('class="logzeile').length - 1).toBe(z.lauf.trajectory.length);
+    });
+    it('nennt in der Constraint-Spalte die geprueften Regeln', function () {
+      expect(html(zustandMitLaeufen())).toContain('U-9');
+    });
+    it('markiert den abgelehnten Aufruf', function () {
+      expect(html(zustandMitLaeufen())).toContain('logzeile ist-geblockt');
+    });
+    it('klappt den Beleg einer Zeile auf', function () {
+      var z = zustandMitLaeufen();
+      expect(html(z).indexOf('logzeile__beleg')).toBe(-1);
+      z = red(z, { typ: 'zeile_umschalten', i: 2 });
+      expect(html(z)).toContain('logzeile__beleg');
+    });
+    it('exportiert JSON, das sich wieder einlesen laesst', function () {
+      var z = zustandMitLaeufen();
+      var wieder = JSON.parse(HR.screens[4].alsJson(z));
+      expect(wieder.trajektorie.length).toBe(z.lauf.trajectory.length);
+      expect(wieder.trajektorie[0].tool).toBe(z.lauf.trajectory[0].tool);
+      expect(wieder.regeln.length).toBe(4);
+      expect(wieder.ergebnis.goal_reached).toBeTruthy();
+    });
+    it('nimmt keine Sitzungskennung in den Export', function () {
+      expect(HR.screens[4].alsJson(zustandMitLaeufen()).indexOf(HR.sessionHash)).toBe(-1);
+    });
+    it('exportiert CSV mit Kopfzeile und je Schritt einer Zeile', function () {
+      var z = zustandMitLaeufen();
+      var zeilen = HR.screens[4].alsCsv(z).split(/\r\n/);
+      expect(zeilen.length).toBe(z.lauf.trajectory.length + 1);
+      expect(zeilen[0]).toContain('Constraint-Check');
+    });
+    it('maskiert Anfuehrungszeichen im CSV', function () {
+      expect(HR.screens[4].alsCsv(zustandMitLaeufen()).indexOf('"""')).toBe(-1);
+    });
+    it('verlangt fuer den Vergleich beide Laeufe', function () {
+      expect(html(anfang())).toContain('Für den Vergleich braucht es');
+    });
+    it('richtet die Laeufe nach Schritten aus', function () {
+      var z = zustandMitLaeufen();
+      var zeilen = HR.screens[4].diffZeilen(z.laufOhneRegel, z.laufMitRegel);
+      expect(zeilen.length).toBe(Math.max(z.laufOhneRegel.trajectory.length, z.laufMitRegel.trajectory.length));
+    });
+    it('hebt genau die abweichenden Schritte hervor', function () {
+      var z = zustandMitLaeufen();
+      var zeilen = HR.screens[4].diffZeilen(z.laufOhneRegel, z.laufMitRegel);
+      expect(zeilen[0].anders).toBeFalsy();
+      expect(zeilen[1].anders).toBeFalsy();
+      expect(zeilen[2].anders).toBeTruthy();
+      expect(zeilen.filter(function (r) { return r.anders; }).length).toBeGreaterThan(0);
+    });
+    it('zeigt die fuenf Selbstcheck-Fragen', function () {
+      expect(html(anfang()).split('<li>').length - 1).toBe(5);
+    });
+  });
+
 })(window.HR = window.HR || {});

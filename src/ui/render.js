@@ -40,13 +40,23 @@
       fn(el.getAttribute('data-wert'), ev, el);
     });
     wurzel.addEventListener('keydown', function (ev) {
-      if (ev.key !== 'Enter') return;
       var el = ev.target;
-      if (!el || !el.getAttribute || !el.getAttribute('data-enter')) return;
-      var fn = behandler[el.getAttribute('data-enter')];
-      if (!fn) return;
-      ev.preventDefault();
-      fn(el.value, ev, el);
+      if (!el || !el.getAttribute) return;
+      if (ev.key === 'Enter' && el.getAttribute('data-enter')) {
+        var fnE = behandler[el.getAttribute('data-enter')];
+        if (!fnE) return;
+        ev.preventDefault();
+        fnE(el.value, ev, el);
+        return;
+      }
+      // Aufklappbare Zeilen sind keine Knoepfe, muessen aber wie welche reagieren.
+      if ((ev.key === 'Enter' || ev.key === ' ') && el.getAttribute('data-aktion') &&
+          el.tagName !== 'BUTTON' && el.tagName !== 'A') {
+        var fnA = behandler[el.getAttribute('data-aktion')];
+        if (!fnA) return;
+        ev.preventDefault();
+        fnA(el.getAttribute('data-wert'), ev, el);
+      }
     });
   }
 
