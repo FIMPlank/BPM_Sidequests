@@ -224,4 +224,87 @@
     });
   });
 
+
+  describe('Screen 3 — Sie modellieren', function () {
+    function html(z) { return HR.screens[3].zeichnen(z); }
+    var satz = 'Buchungen über 200 € pro Nacht brauchen eine Freigabe';
+    function mitEntwurf() {
+      return red(anfang(), { typ: 'entwurf', constraint: HR.compiler.uebersetzen(satz).constraint });
+    }
+
+    it('zeigt alle fuenf Anzeigen', function () {
+      var h = html(anfang());
+      ['Regeln', 'Kontext-Token je Lauf', 'Kosten je Lauf', 'Freiheitsgrade', 'Verstöße im letzten Lauf']
+        .forEach(function (n) { expect(h).toContain(n); });
+    });
+    it('zeigt Kosten mit drei Nachkommastellen', function () {
+      expect(/instrument__wert mono[^>]*>\d+,\d{3}/.test(html(anfang()))).toBeTruthy();
+    });
+    it('zeigt vor dem ersten Lauf keinen Verstosswert', function () {
+      expect(html(anfang())).toContain('>—<');
+    });
+    it('bietet das Eingabefeld mit Beispiel an', function () {
+      var h = html(anfang());
+      expect(h).toContain('id="regel-eingabe"');
+      expect(h).toContain('data-enter="regel-pruefen"');
+    });
+    it('liest den Entwurf lesbar zurueck', function () {
+      var h = html(mitEntwurf());
+      expect(h).toContain('Erkannt');
+      expect(h).toContain('Schwellenwert-Regel');
+      expect(h).toContain('preis_pro_nacht &gt; 200');
+    });
+    it('bietet Uebernehmen und Verwerfen an', function () {
+      var h = html(mitEntwurf());
+      expect(h).toContain('data-aktion="regel-uebernehmen"');
+      expect(h).toContain('data-aktion="regel-verwerfen"');
+    });
+    it('nennt bei Ablehnung den Grund und ein Beispiel', function () {
+      var z = red(anfang(), { typ: 'entwurf', fehler: { code: 'kein_werkzeug' } });
+      var h = html(z);
+      expect(h).toContain('Kein Vorgang erkannt');
+      expect(h).toContain('So funktioniert es');
+    });
+    it('fuehrt die uebernommene Regel in der Liste', function () {
+      var z = red(mitEntwurf(), { typ: 'regel_uebernehmen' });
+      var h = html(z);
+      expect(h).toContain(satz);
+      expect(h).toContain('data-aktion="regel-entfernen"');
+    });
+    it('zieht mit der neuen Regel die Freiheitsgrade herunter', function () {
+      var ohne = HR.freedom.freiheitsgrade(anfang().regeln).prozent;
+      var mit = HR.freedom.freiheitsgrade(red(mitEntwurf(), { typ: 'regel_uebernehmen' }).regeln).prozent;
+      expect(mit).toBeLessThan(ohne);
+    });
+    it('markiert den aktiven Durchsetzungspunkt', function () {
+      expect(html(anfang())).toContain('data-wert="runtime" aria-pressed="true"');
+      var z = red(anfang(), { typ: 'enforcement', wert: 'posthoc' });
+      expect(html(z)).toContain('data-wert="posthoc" aria-pressed="true"');
+    });
+    it('erklaert beide Durchsetzungspunkte unterschiedlich', function () {
+      expect(html(anfang())).toContain('an der Werkzeuggrenze hart geprüft');
+      expect(html(red(anfang(), { typ: 'enforcement', wert: 'posthoc' }))).toContain('läuft frei');
+    });
+    it('stellt die Frage nach dem Ort der Kontrolle', function () {
+      expect(html(anfang())).toContain('Autonomie vorne — Kontrolle hinten?');
+    });
+    it('zeigt statt des Plots einen Hinweis, solange kein Lauf vorliegt', function () {
+      expect(html(anfang())).toContain('Führen Sie einen Lauf aus');
+    });
+    it('zeichnet je Lauf einen Punkt je Reihe', function () {
+      var svg = HR.komponenten.plot.zeichnen([
+        { regeln: 3, verstoesse: 1, cent: 0.18 },
+        { regeln: 4, verstoesse: 0, cent: 0.2 }
+      ]);
+      expect(svg.split('plot__punkt').length - 1).toBe(4);
+      expect(svg).toContain('ist-verstoesse');
+      expect(svg).toContain('ist-kosten');
+    });
+    it('beschriftet die guenstige Stelle nicht', function () {
+      var svg = HR.komponenten.plot.zeichnen([{ regeln: 4, verstoesse: 0, cent: 0.2 }]);
+      expect(svg.toLowerCase().indexOf('sweet')).toBe(-1);
+      expect(svg.toLowerCase().indexOf('optimum')).toBe(-1);
+    });
+  });
+
 })(window.HR = window.HR || {});

@@ -34,3 +34,9 @@ Eine Zeile je Entscheidung, die die Spezifikation offen gelassen hat.
 ## Phase 4
 - Der Ablauf des Laufs wird auf Screen 2 vollstaendig und nuechtern aufgelistet. Das Unbehagen entsteht dadurch, dass `selbst_freigeben` einfach dasteht — nicht durch eine Hervorhebung. Ein Test haelt fest, dass die Seite an dieser Stelle nicht warnt.
 - `Nein` fuehrt direkt auf Screen 3, `Ja` blendet erst den Verweis auf die Innenrevision ein und dann den Weiterweg. Beide Wege enden auf Screen 3.
+
+## Phase 5
+- `?screen=N` springt direkt auf einen Bildschirm. Fuer den Vortrag praktisch, fuer die Pruefung der Seite noetig, sonst folgenlos.
+- Die Ablehnung des Compilers nennt Grund und ein funktionierendes Beispiel; sie entschuldigt sich nicht.
+- Die guenstige Stelle im Plot bleibt unbeschriftet. Ein Test haelt fest, dass dort weder „Sweet Spot" noch „Optimum" steht.
+- `src/logging.js` liegt in der Ladereihenfolge hinter `render.js`, weil es eine Aktion registriert.

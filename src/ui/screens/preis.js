@@ -13,30 +13,6 @@
     return z.lauf && z.laufKontext && z.laufKontext.screen === 2;
   }
 
-  function ablauf(traj) {
-    var e = HR.render.esc;
-    return '<ol class="ablauf">' + traj.map(function (s) {
-      var kurz = kurzInput(s.input);
-      return '<li class="ablauf__zeile' + (s.guardrail && s.guardrail.blocked ? ' ist-geblockt' : '') + '">' +
-        '<span class="ablauf__nr mono">' + (s.i + 1) + '</span>' +
-        '<span class="ablauf__tool mono">' + e(s.tool) + '</span>' +
-        '<span class="ablauf__input mono">' + e(kurz) + '</span>' +
-        '<span class="ablauf__ergebnis mono">' + e(s.output && s.output.status) + '</span></li>';
-    }).join('') + '</ol>';
-  }
-
-  function kurzInput(input) {
-    var teile = [];
-    for (var k in input) {
-      if (!Object.prototype.hasOwnProperty.call(input, k)) continue;
-      var v = input[k];
-      if (Array.isArray(v)) v = '[' + v.length + ']';
-      if (typeof v === 'string' && v.length > 22) v = v.slice(0, 21) + '…';
-      teile.push(k + '=' + v);
-    }
-    return teile.join(' ');
-  }
-
   function zeichnen(z) {
     var e = HR.render.esc;
     var s = HR.copy.screen2;
@@ -69,7 +45,7 @@
     h.push('</div>');
 
     h.push('<h2 class="abschnitt__titel">' + e(s.ablaufTitel) + '</h2>');
-    h.push(ablauf(lauf.trajectory));
+    h.push(HR.komponenten.logTabelle.kurz(lauf.trajectory));
 
     h.push('<div class="pruefpanel">');
     h.push('<p class="pruefpanel__label">' + e(s.pruefungTitel) + '</p>');

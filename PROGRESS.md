@@ -28,3 +28,8 @@ Gate: **164 Tests, 0 Fehler**; zusaetzlich per Screenshot geprueft. Beide Paneel
 Screen 2 (`src/ui/screens/preis.js`) plus Stile fuer Chips, Ablaufliste, Pruefpanel und die Frage.
 Gate: **174 Tests, 0 Fehler**. Der Beat sitzt: Ziel erreicht, `selbst_freigeben` sichtbar im Ablauf, Pruefpanel meldet `0`, danach genau eine Frage. Ein Test stellt sicher, dass nirgends gewarnt wird.
 Der Screen-2-Lauf ist zugleich Lauf A fuer den Vergleich auf Screen 4.
+
+## Phase 5 — GRUEN
+Screen 3 (`src/ui/screens/regeln.js`), Anzeigen (`components/zaehler.js`), handgezeichneter Plot (`components/plot.js`), Log-Komponente (`components/logTabelle.js`), Zustimmungs- und Protokollmodul (`src/logging.js`), Stile fuer Editor, Instrumente, Umschalter und Plot.
+Gate: **189 Tests, 0 Fehler**. Der Satz „Buchungen über 200 € pro Nacht brauchen eine Freigabe" wird zu einer gueltigen Schwellenwert-Regel, erscheint lesbar zurueck, senkt die Freiheitsgrade und aendert den Pfad des naechsten Laufs (in Phase 2 belegt).
+Zusatz: `?screen=N` als Direkteinstieg fuer den Vortrag.

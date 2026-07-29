@@ -1,4 +1,156 @@
-/* Platzhalter — wird in einer spaeteren Phase gefuellt. */
+/**
+ * Screen 3 — Sie modellieren jetzt deklarativ.
+ * Freier deutscher Satz hinein, geprueft und lesbar zurueck, dann derselbe Lauf
+ * noch einmal. Das Wort "deklarativ" faellt in der Bedienung nicht.
+ */
 (function (HR) {
-  "use strict";
+  'use strict';
+
+  var EINGABE_ID = 'regel-eingabe';
+
+  function entwurfKarte(z) {
+    var e = HR.render.esc;
+    var s = HR.copy.screen3;
+    if (z.entwurfFehler) {
+      return '<div class="entwurf entwurf--fehler" role="status">' +
+        '<p class="entwurf__text">' + e(s.ablehnung[z.entwurfFehler.code] || s.ablehnung.nicht_darstellbar) + '</p>' +
+        '<p class="entwurf__beispiel">' + e(s.ablehnungBeispiel) + '</p></div>';
+    }
+    if (!z.entwurf) return '';
+    return '<div class="entwurf" role="status">' +
+      '<p class="entwurf__text"><span class="entwurf__label">' + e(s.erkannt) + '</span> ' +
+      '<span class="mono">' + e(HR.copy.regelLesbar(z.entwurf)) + '</span></p>' +
+      '<div class="entwurf__knoepfe">' +
+      HR.render.knopf('regel-uebernehmen', s.uebernehmen, { klasse: 'knopf--haupt' }) +
+      HR.render.knopf('regel-verwerfen', s.verwerfen) +
+      '</div></div>';
+  }
+
+  function regelliste(z) {
+    var e = HR.render.esc;
+    var s = HR.copy.screen3;
+    var eigene = z.regeln.filter(function (r) { return r.source === 'user'; });
+    var h = ['<h2 class="abschnitt__titel">' + e(s.regelnTitel) + '</h2>'];
+    h.push('<ol class="regelsaetze">');
+    z.regeln.forEach(function (r) {
+      h.push('<li class="regelsatz' + (r.source === 'user' ? ' regelsatz--eigen' : '') + '">' +
+        '<span class="regelsatz__id mono">' + e(r.id) + '</span>' +
+        '<span class="regelsatz__text">' + e(r.text_de) +
+        '<span class="regelsatz__form mono">' + e(HR.copy.regelLesbar(r)) + '</span></span>' +
+        (r.source === 'user'
+          ? HR.render.knopf('regel-entfernen', s.entfernen, { wert: r.id, klasse: 'knopf--still knopf--klein' })
+          : '') +
+        '</li>');
+    });
+    h.push('</ol>');
+    if (!eigene.length) h.push('<p class="hinweis">' + e(s.keineRegeln) + '</p>');
+    return h.join('');
+  }
+
+  function durchsetzung(z) {
+    var e = HR.render.esc;
+    var s = HR.copy.screen3;
+    return '<div class="durchsetzung">' +
+      '<h2 class="durchsetzung__titel">' + e(s.durchsetzungTitel) + '</h2>' +
+      '<div class="durchsetzung__schalter" role="group" aria-label="' + e(s.durchsetzungTitel) + '">' +
+      HR.render.knopf('durchsetzung', s.posthoc, { wert: 'posthoc', gedrueckt: z.enforcement === 'posthoc' }) +
+      HR.render.knopf('durchsetzung', s.runtime, { wert: 'runtime', gedrueckt: z.enforcement === 'runtime' }) +
+      '</div>' +
+      '<p class="durchsetzung__hinweis">' +
+      e(z.enforcement === 'posthoc' ? s.posthocHinweis : s.runtimeHinweis) + '</p></div>';
+  }
+
+  function zeichnen(z) {
+    var e = HR.render.esc;
+    var s = HR.copy.screen3;
+    var h = [];
+
+    h.push('<h1 id="screen-3-titel">' + e(s.titel) + '</h1>');
+    h.push('<p class="lead">' + e(s.lead) + '</p>');
+
+    h.push(HR.komponenten.zaehler.zeichnen(z));
+
+    h.push('<div class="editor">');
+    h.push('<label class="editor__label" for="' + EINGABE_ID + '">' + e(s.eingabeLabel) + '</label>');
+    h.push('<div class="editor__zeile">');
+    h.push('<input class="editor__feld" type="text" id="' + EINGABE_ID + '" name="regel" ' +
+      'data-enter="regel-pruefen" autocomplete="off" placeholder="' + e(s.platzhalter) + '">');
+    h.push(HR.render.knopf('regel-pruefen', s.pruefen));
+    h.push('</div>');
+    h.push(entwurfKarte(z));
+    h.push('</div>');
+
+    h.push('<div class="regelspalten">');
+    h.push('<div class="regelspalte">' + regelliste(z) + durchsetzung(z) + '</div>');
+    h.push('<div class="regelspalte">');
+    h.push('<h2 class="abschnitt__titel">' + e(HR.copy.screen1.raumTitel) + '</h2>');
+    h.push(HR.komponenten.handlungsraum.zeichnen({
+      regeln: z.regeln,
+      trajektorie: z.lauf ? z.lauf.trajectory : [],
+      bisSchritt: z.spurSchritt
+    }));
+    h.push('</div></div>');
+
+    h.push('<div class="steuerung">');
+    h.push(HR.render.knopf('regeln-ausfuehren', s.erneutAusfuehren, { klasse: 'knopf--haupt', deaktiviert: z.laeuft }));
+    if (z.lauf && z.laufKontext && z.laufKontext.screen === 3) {
+      h.push(HR.render.knopf('screen', HR.copy.screen4.titel, { wert: 4 }));
+    }
+    h.push('</div>');
+
+    if (z.lauf && z.laufKontext && z.laufKontext.screen === 3) {
+      h.push('<h2 class="abschnitt__titel">' + e(HR.copy.screen2.ablaufTitel) + '</h2>');
+      h.push(HR.komponenten.logTabelle.kurz(z.lauf.trajectory));
+    }
+
+    h.push('<h2 class="abschnitt__titel">' + e(s.plotTitel) + '</h2>');
+    h.push('<div class="plot-panel">' + HR.komponenten.plot.zeichnen(z.historie) + '</div>');
+
+    h.push(HR.logging.zustimmungsmarkup(z));
+    return h.join('');
+  }
+
+  // — Aktionen ————————————————————————————————————————————————
+
+  function pruefen() {
+    var feld = document.getElementById(EINGABE_ID);
+    if (!feld) return;
+    var ergebnis = HR.compiler.uebersetzen(feld.value, { enforcement: HR.store.holen().enforcement });
+    if (ergebnis.ok) {
+      HR.store.senden({ typ: 'entwurf', constraint: ergebnis.constraint });
+    } else {
+      HR.store.senden({ typ: 'entwurf', fehler: { code: ergebnis.code, slots: ergebnis.slots } });
+    }
+    HR.logging.regelEingabe(feld.value, ergebnis);
+  }
+
+  function ausfuehren() {
+    var z = HR.store.holen();
+    var eigene = z.regeln.filter(function (r) { return r.source === 'user'; });
+    HR.store.senden({ typ: 'lauf_start' });
+    HR.agent.aktiver().run(HR.agent.anfrage({
+      disturbances: HR.screens[2].STOERUNGEN,
+      constraints: z.regeln,
+      enforcement: z.enforcement
+    })).then(function (ergebnis) {
+      HR.store.senden({
+        typ: 'lauf_fertig', ergebnis: ergebnis,
+        kontext: {
+          regeln: z.regeln, screen: 3, enforcement: z.enforcement,
+          stoerungen: HR.screens[2].STOERUNGEN,
+          mitNutzerregel: eigene.length > 0
+        }
+      });
+      HR.logging.laufEreignis(ergebnis, z);
+    });
+  }
+
+  HR.render.auf('regel-pruefen', pruefen);
+  HR.render.auf('regel-uebernehmen', function () { HR.store.senden({ typ: 'regel_uebernehmen' }); });
+  HR.render.auf('regel-verwerfen', function () { HR.store.senden({ typ: 'entwurf' }); });
+  HR.render.auf('regel-entfernen', function (id) { HR.store.senden({ typ: 'regel_entfernen', id: id }); });
+  HR.render.auf('durchsetzung', function (wert) { HR.store.senden({ typ: 'enforcement', wert: wert }); });
+  HR.render.auf('regeln-ausfuehren', ausfuehren);
+
+  HR.render.bildschirm(3, { zeichnen: zeichnen, EINGABE_ID: EINGABE_ID });
 })(window.HR = window.HR || {});

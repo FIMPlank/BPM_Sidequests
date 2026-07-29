@@ -6,4 +6,133 @@
     max-width: 58ch;
   }
   .screen p { max-width: var(--mass); }
+
+  /* — Screen 3 — */
+  .instrumente {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--haarlinie);
+    background: var(--raster);
+    border: var(--haarlinie) solid var(--raster);
+    margin: var(--r3) 0 var(--r4);
+  }
+  .instrument { background: var(--paper); padding: var(--r2); }
+  .instrument__name {
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--ink-45);
+  }
+  .instrument__wert {
+    margin: 4px 0 0;
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-weight: var(--display-weight);
+    letter-spacing: var(--display-tracking);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .instrument__einheit {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--ink-45);
+    margin-left: 4px;
+  }
+  .instrument.ist-warn .instrument__wert { color: var(--verstoss); }
+
+  .editor { margin-bottom: var(--r4); }
+  .editor__label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 650;
+    letter-spacing: -0.018em;
+    margin-bottom: var(--r1);
+  }
+  .editor__zeile { display: flex; flex-wrap: wrap; gap: var(--r1); max-width: 720px; }
+  .editor__feld {
+    flex: 1 1 22rem;
+    font: inherit;
+    padding: 9px var(--r2);
+    border: var(--haarlinie) solid var(--ink-45);
+    border-radius: var(--radius);
+    background: var(--paper-hoch);
+    color: var(--ink);
+    min-width: 0;
+  }
+  .editor__feld::placeholder { color: var(--ink-45); }
+
+  .entwurf {
+    margin-top: var(--r2);
+    padding: var(--r2) var(--r3);
+    border-left: 3px solid var(--deklarativ);
+    background: var(--paper-hoch);
+    max-width: 720px;
+  }
+  .entwurf--fehler { border-left-color: var(--verstoss); }
+  .entwurf__label {
+    font-size: var(--label-size);
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--ink-45);
+  }
+  .entwurf__text { margin: 0 0 var(--r2); }
+  .entwurf__beispiel { margin: 0; color: var(--ink-70); font-size: 0.9375rem; }
+  .entwurf__knoepfe { display: flex; gap: var(--r1); flex-wrap: wrap; }
+
+  .regelspalten {
+    display: grid;
+    grid-template-columns: 1fr minmax(240px, 340px);
+    gap: var(--r4);
+    align-items: start;
+  }
+  .regelsatz__form {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--ink-45);
+    margin-top: 2px;
+  }
+  .knopf--klein { padding: 3px var(--r1); font-size: 0.75rem; }
+  .hinweis { color: var(--ink-45); font-size: 0.9375rem; }
+
+  .durchsetzung { margin-top: var(--r4); padding-top: var(--r2); border-top: var(--haarlinie) solid var(--raster); }
+  .durchsetzung__titel {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    letter-spacing: -0.018em;
+    margin-bottom: var(--r2);
+  }
+  .durchsetzung__schalter { display: flex; gap: 0; flex-wrap: wrap; }
+  .durchsetzung__schalter .knopf { border-radius: 0; }
+  .durchsetzung__schalter .knopf + .knopf { border-left: 0; }
+  .durchsetzung__hinweis { color: var(--ink-70); margin-top: var(--r1); font-size: 0.9375rem; }
+
+  .plot-panel { max-width: 420px; }
+  .plot { width: 100%; height: auto; display: block; }
+  .plot__achse { fill: none; stroke: var(--ink-45); stroke-width: 1; }
+  .plot__reihe { fill: none; stroke-width: 2; stroke-linecap: round; }
+  .plot__reihe.ist-verstoesse, .plot__punkt.ist-verstoesse { stroke: var(--verstoss); fill: var(--verstoss); }
+  .plot__reihe.ist-kosten, .plot__punkt.ist-kosten { stroke: var(--deklarativ); fill: var(--deklarativ); }
+  .plot__punkt { stroke: none; }
+  .plot__marke { font-family: var(--font-mono); font-size: 9px; fill: var(--ink-45); }
+  .plot__legende { display: flex; gap: var(--r2); font-size: 0.8125rem; margin-top: 0; }
+  .plot__key.ist-verstoesse { color: var(--verstoss); }
+  .plot__key.ist-kosten { color: var(--deklarativ); }
+  .plot__leer { color: var(--ink-45); }
+
+  .zustimmung {
+    margin-top: var(--r6);
+    padding-top: var(--r2);
+    border-top: var(--haarlinie) solid var(--raster);
+    color: var(--ink-45);
+    font-size: 0.875rem;
+    max-width: none;
+  }
+  .zustimmung__zusatz { color: var(--ink-45); }
+
+  @media (max-width: 860px) {
+    .regelspalten { grid-template-columns: 1fr; }
+  }
 }

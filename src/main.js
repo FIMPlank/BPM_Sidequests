@@ -46,6 +46,9 @@
     HR.store.abonnieren(function (z) { HR.render.zeichnen(z); });
     document.addEventListener('keydown', tastatur);
 
+    if (HR.config.startScreen !== 1) {
+      HR.store.senden({ typ: 'screen', n: HR.config.startScreen });
+    }
     HR.render.zeichnen(HR.store.holen());
   }
 

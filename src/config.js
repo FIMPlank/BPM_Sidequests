@@ -21,6 +21,12 @@
     /** Vortragsmodus: Tastatursteuerung, groessere Typo, kein Logging. */
     vortrag: modus === 'vortrag',
 
+    /** Direkteinstieg fuer den Vortrag: ?screen=3 startet auf Bildschirm 3. */
+    startScreen: (function () {
+      var n = Number(params.get('screen'));
+      return (n >= 1 && n <= 4) ? n : 1;
+    })(),
+
     /** Supabase-Projekt des Betreibers. Vor Live-Betrieb hier eintragen. */
     supabase: {
       url: '',            // z. B. https://xxxxxxxx.supabase.co
