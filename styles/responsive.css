@@ -55,7 +55,7 @@
   .editor__feld { min-height: var(--ziel); }
 
   /* Die aufklappbare Zeile ist der Schalter des Audits — sie braucht Hoehe. */
-  .logzeile[data-aktion] > td { padding-block: 11px; }
+  .logzeile[data-aktion] > td { padding-block: 12px; }
 
   .sprungmarke {
     display: inline-flex;
@@ -223,8 +223,13 @@
 
   .logtabelle__rahmen { max-width: 100%; overflow-x: auto; }
 
-  /* Der Vergleich hat drei Spalten. Er braucht die 760 px des Audits nicht. */
+  /* Der Vergleich hat drei Spalten. Er braucht die 760 px des Audits nicht —
+     und die Werkzeugnamen duerfen brechen, statt die Tabelle aufzuspreizen. */
   .logtabelle--diff { min-width: 0; }
+  .logtabelle--diff td { overflow-wrap: anywhere; }
+  /* Die Spaltenkoepfe des Audits stehen einzeilig; die des Vergleichs sind
+     ganze Halbsaetze und duerfen umbrechen. */
+  .logtabelle--diff th { white-space: normal; }
 
   /* Zeichnungen skalieren mit, statt ihre feste Breite durchzudruecken. */
   .fsm, .raum, .plot, .fusion .raum { max-width: 100%; }
@@ -304,6 +309,16 @@
       gap: var(--r1);
       align-items: baseline;
     }
+    /* Die Marke darf umbrechen — nur der Wert braucht die Breite. */
+    .logtabelle:not(.logtabelle--diff) td[data-label] { overflow-wrap: anywhere; }
+
+    /* In der Karte teilen sich Marke und Kreuz dasselbe ::before. Sie werden
+       zusammengesetzt, sonst verdraengt die Marke das Zeichen. */
+    .logtabelle:not(.logtabelle--diff) .logzeile.ist-geblockt > td[data-label]:first-child::before {
+      content: "\2717\00a0" attr(data-label);
+      content: "\2717\00a0" attr(data-label) / "";
+      color: var(--verstoss);
+    }
     .logtabelle:not(.logtabelle--diff) td[data-label]::before {
       content: attr(data-label);
       font-family: var(--font-body);
@@ -320,13 +335,19 @@
     .logtabelle:not(.logtabelle--diff) .logzeile[data-aktion] { padding-block: var(--r2); }
   }
 
-  @media (max-width: 460px) {
+  @media (max-width: 560px) {
+    /* Die Marke rueckt zusammen, bleibt aber neben dem Wert: eine Karte mit
+       achtzehn Zeilen liest sich schlechter als eine mit neun. */
+    .logtabelle:not(.logtabelle--diff) td { grid-template-columns: 7.5em 1fr; }
+    .instrumente { grid-template-columns: 1fr; }
+    .instrument:last-child { grid-column: auto; }
+  }
+
+  @media (max-width: 340px) {
     /* Ganz schmal traegt die Marke keine eigene Spalte mehr. */
     .logtabelle:not(.logtabelle--diff) td {
       grid-template-columns: 1fr;
       gap: 0;
     }
-    .instrumente { grid-template-columns: 1fr; }
-    .instrument:last-child { grid-column: auto; }
   }
 }
